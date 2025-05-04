@@ -20,7 +20,7 @@
                     <p>Dashboard</p>
                 </a>
             </li>
-            <li class="nav-header">Data Pengguna</li>
+            <li class="nav-header">DATA USER</li>
             <li class="nav-item">
                 <a href="{{ url('/level') }}" class="nav-link {{ ($activeMenu == 'level') ? 'active' : '' }}">
                     <i class="nav-icon fas fa-layer-group"></i>
@@ -30,40 +30,70 @@
             <li class="nav-item">
                 <a href="{{ url('/user') }}" class="nav-link {{ ($activeMenu == 'user') ? 'active' : '' }}">
                     <i class="nav-icon far fa-user"></i>
-                    <p>Data User</p>
+                    <p>Data Admin</p>
                 </a>
             </li>
-            <li class="nav-header">Data Barang</li>
+            <li class="nav-item">
+                <a href="{{ url('/user') }}" class="nav-link {{ ($activeMenu == 'user') ? 'active' : '' }}">
+                    <i class="nav-icon far fa-user"></i>
+                    <p>Data Mahasiswa</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ url('/user') }}" class="nav-link {{ ($activeMenu == 'user') ? 'active' : '' }}">
+                    <i class="nav-icon far fa-user"></i>
+                    <p>Data Dosen</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ url('/user') }}" class="nav-link {{ ($activeMenu == 'user') ? 'active' : '' }}">
+                    <i class="nav-icon far fa-user"></i>
+                    <p>Data Tendik</p>
+                </a>
+            </li>
+            <li class="nav-header">BIODATA PESERTA</li>
             <li class="nav-item">
                 <a href="{{ url('/kategori') }}" class="nav-link {{ ($activeMenu == 'kategori') ? 'active' : '' }}">
                     <i class="nav-icon far fa-bookmark"></i>
-                    <p>Kategori Barang</p>
+                    <p>Peserta Mahasiswa</p>
                 </a>
             </li>
             <li class="nav-item">
                 <a href="{{ url('/barang') }}" class="nav-link {{ ($activeMenu == 'barang') ? 'active' : '' }}">
                     <i class="nav-icon far fa-list-alt"></i>
-                    <p>Data Barang</p>
+                    <p>Peserta Dosen</p>
                 </a>
             </li>
-            <!-- Menu Supplier Barang -->
             <li class="nav-item">
-                <a href="{{ url('/supplier') }}" class="nav-link {{ ($activeMenu == 'supplier') ? 'active' : '' }}">
-                    <i class="nav-icon fas fa-truck"></i>
-                    <p>Supplier Barang</p>
+                <a href="{{ url('/barang') }}" class="nav-link {{ ($activeMenu == 'barang') ? 'active' : '' }}">
+                    <i class="nav-icon far fa-list-alt"></i>
+                    <p>Peserta Tendik</p>
                 </a>
             </li>
-            <li class="nav-header">Data Transaksi</li>
+            <li class="nav-header">PENDAFTARAN</li>
             <li class="nav-item">
                 <a href="{{ url('/stok') }}" class="nav-link {{ ($activeMenu == 'stok') ? 'active' : '' }}">
                     <i class="nav-icon fas fa-cubes"></i>
-                    <p>Stok Barang</p>
+                    <p>Verifikasi Pendaftaran</p>
+                </a>
+            </li>
+            <li class="nav-header">PUSAT INFORMASI</li>
+            <li class="nav-item">
+                <a href="{{ url('/barang') }}" class="nav-link {{ ($activeMenu == 'penjualan') ? 'active' : '' }}">
+                    <i class="nav-icon fas fa-cash-register"></i>
+                    <p>Jadwal</p>
                 </a>
             </li>
             <li class="nav-item">
                 <a href="{{ url('/barang') }}" class="nav-link {{ ($activeMenu == 'penjualan') ? 'active' : '' }}">
                     <i class="nav-icon fas fa-cash-register"></i>
-                    <p>Transaksi Penjualan</p>
+                    <p>Pengumuman</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ url('/barang') }}" class="nav-link {{ ($activeMenu == 'penjualan') ? 'active' : '' }}">
+                    <i class="nav-icon fas fa-cash-register"></i>
+                    <p>Link Zoom Meeting</p>
                 </a>
             </li>
         </ul>
