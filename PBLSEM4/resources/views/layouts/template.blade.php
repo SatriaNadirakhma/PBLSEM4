@@ -5,26 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ config('app.name', 'PWL Laravel Starter Code') }}</title>
 
-    <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+<!-- Google Font: Montserrat -->
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Tagesschrift&display=swap" rel="stylesheet">
+
     <!-- Font Awesome -->
     <link rel="stylesheet" href="{{ asset('adminlte/plugins/fontawesome-free/css/all.min.css') }}">
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('adminlte/dist/css/adminlte.min.css') }}">
 </head>
-<body class="hold-transition sidebar-mini">
+<body class="hold-transition sidebar-mini layout-fixed sidebar-light-primary">
 <!-- Site wrapper -->
 <div class="wrapper">
   <!-- Navbar -->
   @include('layouts.header')
   <!-- /.navbar -->
   
-  <!-- Main Sidebar Container -->
-  <aside class="main-sidebar sidebar-dark-primary elevation-4">
+<aside class="main-sidebar sidebar-dark-primary elevation-4"
+       style="background: linear-gradient(to bottom, #362e6c, #05368b );">
+
       <!-- Brand Logo -->
       <a href="{{ url('/') }}" class="brand-link">
         <img src="{{ asset('adminlte/dist/img/AdminLTELogo.png') }}" alt="AdminLTE Logo" class="brand-image img">
-        <span class="brand-text font-weight-light">PWL - Starter Code</span>
+        <span class="brand-text font-weight-bold text-white">TOEIC Test</span>
         </a>
 
 <!-- Sidebar -->
