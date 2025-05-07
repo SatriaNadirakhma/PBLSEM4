@@ -13,89 +13,137 @@
 
     <!-- Sidebar Menu -->
     <nav class="mt-2">
-        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="true">
             <li class="nav-item">
                 <a href="{{ url('/') }}" class="nav-link {{ ($activeMenu == 'dashboard') ? 'active' : '' }}">
                     <i class="nav-icon fas fa-tachometer-alt"></i>
                     <p>Dashboard</p>
                 </a>
             </li>
-            <li class="nav-header">DATA USER</li>
-            <li class="nav-item">
-                <a href="{{ url('/level') }}" class="nav-link {{ ($activeMenu == 'level') ? 'active' : '' }}">
+            <!-- Dropdown for DATA USER -->
+            <li class="nav-item has-treeview {{ in_array($activeMenu, ['user-admin', 'user-mahasiswa', 'user-dosen', 'user-tendik']) ? 'menu-open' : '' }}">
+                <a href="#" class="nav-link {{ in_array($activeMenu, ['user-admin', 'user-mahasiswa', 'user-dosen', 'user-tendik']) ? 'active' : '' }}">
                     <i class="nav-icon fas fa-layer-group"></i>
-                    <p>Level User</p>
+                    <p>
+                        DATA USER
+                        <i class="fas fa-angle-left right"></i>
+                    </p>
                 </a>
+                <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                        <a href="{{ url('/user/admin') }}" class="nav-link {{ ($activeMenu == 'user-admin') ? 'active' : '' }}">
+                            <i class="nav-icon far fa-user-circle"></i>
+                            <p>Data Admin</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url('/user/mahasiswa') }}" class="nav-link {{ ($activeMenu == 'user-mahasiswa') ? 'active' : '' }}">
+                            <i class="nav-icon far fa-user-circle"></i>
+                            <p>Data Mahasiswa</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url('/user/dosen') }}" class="nav-link {{ ($activeMenu == 'user-dosen') ? 'active' : '' }}">
+                            <i class="nav-icon far fa-user-circle"></i>
+                            <p>Data Dosen</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url('/user/tendik') }}" class="nav-link {{ ($activeMenu == 'user-tendik') ? 'active' : '' }}">
+                            <i class="nav-icon far fa-user-circle"></i>
+                            <p>Data Tendik</p>
+                        </a>
+                    </li>
+                </ul>
             </li>
-            <li class="nav-item">
-                <a href="{{ url('/user') }}" class="nav-link {{ ($activeMenu == 'user') ? 'active' : '' }}">
-                    <i class="nav-icon far fa-user"></i>
-                    <p>Data Admin</p>
+
+            <!-- Dropdown BIODATA -->
+            <li class="nav-item has-treeview {{ in_array($activeMenu, ['peserta-mahasiswa', 'peserta-dosen', 'peserta-tendik']) ? 'menu-open' : '' }}">
+                <a href="#" class="nav-link {{ in_array($activeMenu, ['peserta-mahasiswa', 'peserta-dosen', 'peserta-tendik']) ? 'active' : '' }}">
+                    <i class="nav-icon fas fa-users"></i>
+                    <p>
+                        BIODATA PESERTA
+                        <i class="right fas fa-angle-left"></i>
+                    </p>
                 </a>
+                <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                        <a href="{{ url('/biodata/mahasiswa') }}" class="nav-link {{ ($activeMenu == 'peserta-mahasiswa') ? 'active' : '' }}">
+                            <i class="far fa-user nav-icon"></i>
+                            <p>Peserta Mahasiswa</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url('/biodata/dosen') }}" class="nav-link {{ ($activeMenu == 'peserta-dosen') ? 'active' : '' }}">
+                            <i class="far fa-user nav-icon"></i>
+                            <p>Peserta Dosen</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url('/biodata/tendik') }}" class="nav-link {{ ($activeMenu == 'peserta-tendik') ? 'active' : '' }}">
+                            <i class="far fa-user nav-icon"></i>
+                            <p>Peserta Tendik</p>
+                        </a>
+                    </li>
+                </ul>
             </li>
-            <li class="nav-item">
-                <a href="{{ url('/user') }}" class="nav-link {{ ($activeMenu == 'user') ? 'active' : '' }}">
-                    <i class="nav-icon far fa-user"></i>
-                    <p>Data Mahasiswa</p>
+
+            <!-- Dropdown PENDAFTARAN -->
+            <li class="nav-item has-treeview {{ in_array($activeMenu, ['verifikasi-pendaftaran', 'edit-formulir']) ? 'menu-open' : '' }}">
+                <a href="#" class="nav-link {{ in_array($activeMenu, ['verifikasi-pendaftaran', 'edit-formulir']) ? 'active' : '' }}">
+                    <i class="nav-icon fas fa-clipboard-list"></i>
+                    <p>
+                        PENDAFTARAN
+                        <i class="right fas fa-angle-left"></i>
+                    </p>
                 </a>
+                <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                        <a href="{{ url('/pendaftaran/verifikasi') }}" class="nav-link {{ ($activeMenu == 'verifikasi-pendaftaran') ? 'active' : '' }}">
+                            <i class="fa fa-list nav-icon"></i>
+                            <p>Verifikasi Pendaftaran</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url('/pendaftaran/edit') }}" class="nav-link {{ ($activeMenu == 'edit-formulir') ? 'active' : '' }}">
+                            <i class="fa fa-list nav-icon"></i>
+                            <p>Edit Formulir</p>
+                        </a>
+                    </li>
+                </ul>
             </li>
-            <li class="nav-item">
-                <a href="{{ url('/user') }}" class="nav-link {{ ($activeMenu == 'user') ? 'active' : '' }}">
-                    <i class="nav-icon far fa-user"></i>
-                    <p>Data Dosen</p>
+
+            
+            <li class="nav-item has-treeview {{ in_array($activeMenu, ['info-jadwal', 'info-pengumuman', 'info-zoom']) ? 'menu-open' : '' }}">
+                <a href="#" class="nav-link {{ in_array($activeMenu, ['info-jadwal', 'info-pengumuman', 'info-zoom']) ? 'active' : '' }}">
+                    <i class="nav-icon fas fa-info-circle"></i>
+                    <p>
+                        PUSAT INFORMASI
+                        <i class="right fas fa-angle-left"></i>
+                    </p>
                 </a>
+                <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                        <a href="{{ url('/informasi/jadwal') }}" class="nav-link {{ ($activeMenu == 'info-jadwal') ? 'active' : '' }}">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Jadwal</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url('/informasi/pengumuman') }}" class="nav-link {{ ($activeMenu == 'info-pengumuman') ? 'active' : '' }}">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Pengumuman</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url('/informasi/zoom') }}" class="nav-link {{ ($activeMenu == 'info-zoom') ? 'active' : '' }}">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Link Zoom Meeting</p>
+                        </a>
+                    </li>
+                </ul>
             </li>
-            <li class="nav-item">
-                <a href="{{ url('/user') }}" class="nav-link {{ ($activeMenu == 'user') ? 'active' : '' }}">
-                    <i class="nav-icon far fa-user"></i>
-                    <p>Data Tendik</p>
-                </a>
-            </li>
-            <li class="nav-header">BIODATA PESERTA</li>
-            <li class="nav-item">
-                <a href="{{ url('/kategori') }}" class="nav-link {{ ($activeMenu == 'kategori') ? 'active' : '' }}">
-                    <i class="nav-icon far fa-bookmark"></i>
-                    <p>Peserta Mahasiswa</p>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="{{ url('/barang') }}" class="nav-link {{ ($activeMenu == 'barang') ? 'active' : '' }}">
-                    <i class="nav-icon far fa-list-alt"></i>
-                    <p>Peserta Dosen</p>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="{{ url('/barang') }}" class="nav-link {{ ($activeMenu == 'barang') ? 'active' : '' }}">
-                    <i class="nav-icon far fa-list-alt"></i>
-                    <p>Peserta Tendik</p>
-                </a>
-            </li>
-            <li class="nav-header">PENDAFTARAN</li>
-            <li class="nav-item">
-                <a href="{{ url('/stok') }}" class="nav-link {{ ($activeMenu == 'stok') ? 'active' : '' }}">
-                    <i class="nav-icon fas fa-cubes"></i>
-                    <p>Verifikasi Pendaftaran</p>
-                </a>
-            </li>
-            <li class="nav-header">PUSAT INFORMASI</li>
-            <li class="nav-item">
-                <a href="{{ url('/barang') }}" class="nav-link {{ ($activeMenu == 'penjualan') ? 'active' : '' }}">
-                    <i class="nav-icon fas fa-cash-register"></i>
-                    <p>Jadwal</p>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="{{ url('/barang') }}" class="nav-link {{ ($activeMenu == 'penjualan') ? 'active' : '' }}">
-                    <i class="nav-icon fas fa-cash-register"></i>
-                    <p>Pengumuman</p>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="{{ url('/barang') }}" class="nav-link {{ ($activeMenu == 'penjualan') ? 'active' : '' }}">
-                    <i class="nav-icon fas fa-cash-register"></i>
-                    <p>Link Zoom Meeting</p>
-                </a>
-            </li>
+
         </ul>
     </nav>
 </div>
