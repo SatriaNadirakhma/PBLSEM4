@@ -31,25 +31,25 @@
                 </a>
                 <ul class="nav nav-treeview">
                     <li class="nav-item">
-                        <a href="{{ url('/user/admin') }}" class="nav-link {{ ($activeMenu == 'user-admin') ? 'active' : '' }}">
+                        <a href="{{ route('user-admin') }}" class="nav-link {{ ($activeMenu == 'user-admin') ? 'active' : '' }}">
                             <i class="nav-icon far fa-user-circle"></i>
                             <p>Data Admin</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ url('/user/mahasiswa') }}" class="nav-link {{ ($activeMenu == 'user-mahasiswa') ? 'active' : '' }}">
+                        <a href="{{ route('user-mahasiswa') }}" class="nav-link {{ ($activeMenu == 'user-mahasiswa') ? 'active' : '' }}">
                             <i class="nav-icon far fa-user-circle"></i>
                             <p>Data Mahasiswa</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ url('/user/dosen') }}" class="nav-link {{ ($activeMenu == 'user-dosen') ? 'active' : '' }}">
+                        <a href="{{ route('user-dosen') }}" class="nav-link {{ ($activeMenu == 'user-dosen') ? 'active' : '' }}">
                             <i class="nav-icon far fa-user-circle"></i>
                             <p>Data Dosen</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ url('/user/tendik') }}" class="nav-link {{ ($activeMenu == 'user-tendik') ? 'active' : '' }}">
+                        <a href="{{ route('user-tendik') }}" class="nav-link {{ ($activeMenu == 'user-tendik') ? 'active' : '' }}">
                             <i class="nav-icon far fa-user-circle"></i>
                             <p>Data Tendik</p>
                         </a>
@@ -83,6 +83,43 @@
                         <a href="{{ url('/biodata/tendik') }}" class="nav-link {{ ($activeMenu == 'peserta-tendik') ? 'active' : '' }}">
                             <i class="far fa-user nav-icon"></i>
                             <p>Peserta Tendik</p>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <!-- Dropdown DAFTAR KAMPUS -->
+            <li class="nav-item has-treeview {{ in_array($activeMenu, ['kampus-utama', 'psdku-kediri', 'psdku-lumajang','psdku-pamekasan']) ? 'menu-open' : '' }}">
+                <a href="#" class="nav-link {{ in_array($activeMenu, ['kampus-utama', 'psdku-kediri', 'psdku-lumajang','psdku-pamekasan']) ? 'active' : '' }}">
+                    <i class="nav-icon fas fa-home"></i>
+                    <p>
+                        DAFTAR KAMPUS
+                        <i class="right fas fa-angle-left"></i>
+                    </p>
+                </a>
+                <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                        <a href="{{ url('/kampus/utama') }}" class="nav-link {{ ($activeMenu == 'kampus-utama') ? 'active' : '' }}">
+                            <i class="far fa-building nav-icon"></i>
+                            <p>Kampus Utama</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url('/kampus/psdku-kediri') }}" class="nav-link {{ ($activeMenu == 'psdku-kediri') ? 'active' : '' }}">
+                            <i class="far fa-building nav-icon"></i>
+                            <p>PSDKU Kediri</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url('/kampus/psdku-lumajang') }}" class="nav-link {{ ($activeMenu == 'psdku-lumajang') ? 'active' : '' }}">
+                            <i class="far fa-building nav-icon"></i>
+                            <p>PSDKU Lumajang</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url('/kampus/psdku-pamekasan') }}" class="nav-link {{ ($activeMenu == 'psdku-pamekasan') ? 'active' : '' }}">
+                            <i class="far fa-building nav-icon"></i>
+                            <p>PSDKU Pamekasan</p>
                         </a>
                     </li>
                 </ul>
@@ -138,7 +175,7 @@
                     <li class="nav-item">
                         <a href="{{ url('/informasi/zoom') }}" class="nav-link {{ ($activeMenu == 'info-zoom') ? 'active' : '' }}">
                             <i class="far fa-circle nav-icon"></i>
-                            <p>Link Zoom Meeting</p>
+                            <p>Hasil Ujian</p>
                         </a>
                     </li>
                 </ul>

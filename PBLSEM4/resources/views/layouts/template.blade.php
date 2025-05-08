@@ -24,9 +24,9 @@
        style="background: linear-gradient(to bottom, #362e6c, #05368b );">
 
       <!-- Brand Logo -->
-      <a href="{{ url('/') }}" class="brand-link">
-        <img src="{{ asset('adminlte/dist/img/AdminLTELogo.png') }}" alt="AdminLTE Logo" class="brand-image img">
-        <span class="brand-text font-weight-bold text-white">TOEIC Test</span>
+      <a href="{{ url('/') }}" class="brand-link d-flex align-items-center">
+        <img src="{{ asset('img\logo_sipinta.png') }}" alt="logo sipinta" class="brand-image img">
+        <span class="brand-text font-weight-bold text-white d-none">TOEIC Test</span>
         </a>
 
 <!-- Sidebar -->
