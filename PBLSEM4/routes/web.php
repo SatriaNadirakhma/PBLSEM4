@@ -10,6 +10,7 @@ use App\Http\Controllers\ProdiController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\MahasiswaController;
 use App\Http\Controllers\DosenController;
+use App\Http\Controllers\TendikController;
 use Illuminate\Http\Request;
 
 /*
@@ -60,6 +61,11 @@ Route::post('/register', [AuthController::class, 'postRegister']);
     // Rute Dosen
     Route::prefix('dosen')->group(function () {
         Route::get('/', [DosenController::class, 'index']);
+    });
+
+    // Rute Tendik
+    Route::prefix('tendik')->group(function () {
+        Route::get('/', [TendikController::class, 'index']);
     });
 
     // Rute user
