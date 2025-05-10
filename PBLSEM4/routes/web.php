@@ -9,6 +9,7 @@ use App\Http\Controllers\JurusanController;
 use App\Http\Controllers\ProdiController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\MahasiswaController;
+use App\Http\Controllers\DosenController;
 use Illuminate\Http\Request;
 
 /*
@@ -54,6 +55,11 @@ Route::post('/register', [AuthController::class, 'postRegister']);
     // Rute Mahasiswa
     Route::prefix('mahasiswa')->group(function () {
         Route::get('/', [MahasiswaController::class, 'index']);
+    });
+
+    // Rute Dosen
+    Route::prefix('dosen')->group(function () {
+        Route::get('/', [DosenController::class, 'index']);
     });
 
     // Rute user
