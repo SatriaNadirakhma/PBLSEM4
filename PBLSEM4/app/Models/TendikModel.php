@@ -11,7 +11,7 @@ class TendikModel extends Model
 
     protected $table = 'tendik';
     protected $primaryKey = 'tendik_id';
-    public $timestamps = false;
+    public $timestamps = true;
 
     protected $fillable = [
         'nip', 'nik', 'tendik_nama',
