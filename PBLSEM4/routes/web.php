@@ -8,6 +8,7 @@ use App\Http\Controllers\KampusController;
 use App\Http\Controllers\JurusanController;
 use App\Http\Controllers\ProdiController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\MahasiswaController;
 use Illuminate\Http\Request;
 
 /*
@@ -48,6 +49,11 @@ Route::post('/register', [AuthController::class, 'postRegister']);
     // Rute Admin
     Route::prefix('admin')->group(function () {
         Route::get('/', [AdminController::class, 'index']);
+    });
+
+    // Rute Mahasiswa
+    Route::prefix('mahasiswa')->group(function () {
+        Route::get('/', [MahasiswaController::class, 'index']);
     });
 
     // Rute user
