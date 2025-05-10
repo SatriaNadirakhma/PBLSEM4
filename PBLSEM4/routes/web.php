@@ -7,6 +7,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\KampusController;
 use App\Http\Controllers\JurusanController;
 use App\Http\Controllers\ProdiController;
+use App\Http\Controllers\AdminController;
 use Illuminate\Http\Request;
 
 /*
@@ -39,11 +40,15 @@ Route::post('/register', [AuthController::class, 'postRegister']);
         Route::get('/', [JurusanController::class, 'index']);
     });
 
-    // Rute Jurusan
+    // Rute Prodi
     Route::prefix('prodi')->group(function () {
         Route::get('/', [ProdiController::class, 'index']);
     });
 
+    // Rute Admin
+    Route::prefix('admin')->group(function () {
+        Route::get('/', [AdminController::class, 'index']);
+    });
 
     // Rute user
     Route::prefix('user')->group(function () {
