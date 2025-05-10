@@ -5,6 +5,7 @@ use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\KampusController;
+use App\Http\Controllers\JurusanController;
 use Illuminate\Http\Request;
 
 /*
@@ -31,6 +32,12 @@ Route::post('/register', [AuthController::class, 'postRegister']);
     Route::prefix('kampus')->group(function () {
         Route::get('/', [KampusController::class, 'index']);
     });
+
+    // Rute Jurusan
+    Route::prefix('jurusan')->group(function () {
+        Route::get('/', [JurusanController::class, 'index']);
+    });
+
 
     // Rute user
     Route::prefix('user')->group(function () {
