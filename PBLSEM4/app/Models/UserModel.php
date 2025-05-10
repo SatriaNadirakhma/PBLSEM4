@@ -12,7 +12,7 @@ class UserModel extends Model
 
     protected $table = 'user';
     protected $primaryKey = 'user_id';
-    public $timestamps = false;
+    public $timestamps = true;
 
     protected $fillable = [
         'email', 'username', 'password', 'profile', 'role',
