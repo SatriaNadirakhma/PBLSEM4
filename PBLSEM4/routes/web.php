@@ -30,8 +30,8 @@ Route::get('/register', [AuthController::class, 'register'])->name('register');
 Route::post('/register', [AuthController::class, 'postRegister']);
 
 // Grup rute yang butuh autentikasi
-//Route::middleware(['auth'])->group(function () {
-    Route::get('/', [WelcomeController::class, 'index']);
+Route::middleware(['auth'])->group(function () {
+    Route::get('/', [WelcomeController::class, 'index'])->name('home');
 
     // Rute kampus
     Route::prefix('kampus')->group(function () {
@@ -72,4 +72,4 @@ Route::post('/register', [AuthController::class, 'postRegister']);
     Route::prefix('user')->group(function () {
         Route::get('/', [UserController::class, 'index']);
     });
-//});
+});

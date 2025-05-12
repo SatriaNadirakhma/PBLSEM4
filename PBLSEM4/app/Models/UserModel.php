@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 
-
-class UserModel extends Model
+class UserModel extends Authenticatable
 {
-    use HasFactory;
+    use HasFactory, Notifiable;
 
     protected $table = 'user';
     protected $primaryKey = 'user_id';
@@ -20,19 +20,29 @@ class UserModel extends Model
     ];
 
     // Relasi 
-    public function admin() {
+    public function admin()
+    {
         return $this->belongsTo(AdminModel::class, 'admin_id');
     }
 
-    public function mahasiswa() {
+    public function mahasiswa()
+    {
         return $this->belongsTo(MahasiswaModel::class, 'mahasiswa_id');
     }
 
-    public function dosen() {
+    public function dosen()
+    {
         return $this->belongsTo(DosenModel::class, 'dosen_id');
     }
 
-    public function tendik() {
+    public function tendik()
+    {
         return $this->belongsTo(TendikModel::class, 'tendik_id');
+    }
+
+    // 🔥 Ini untuk fix login pakai kolom username
+    public function getAuthIdentifierName()
+    {
+        return 'username';
     }
 }
