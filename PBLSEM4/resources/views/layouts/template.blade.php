@@ -25,7 +25,7 @@
 
       <!-- Brand Logo -->
       <a href="{{ url('/') }}" class="brand-link d-flex align-items-center">
-        <img src="{{ asset('img\logo_sipinta.png') }}" alt="logo sipinta" class="brand-image img">
+        <img src="{{ asset('img\logowhite.png') }}" alt="logo sipinta" class="brand-image img">
         <span class="brand-text font-weight-bold text-white d-none">TOEIC Test</span>
         </a>
 
