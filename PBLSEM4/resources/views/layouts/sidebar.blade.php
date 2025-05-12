@@ -58,8 +58,8 @@
             </li>
 
             <!-- Dropdown BIODATA -->
-            <li class="nav-item has-treeview {{ in_array($activeMenu, ['peserta-mahasiswa', 'peserta-dosen', 'peserta-tendik']) ? 'menu-open' : '' }}">
-                <a href="#" class="nav-link {{ in_array($activeMenu, ['peserta-mahasiswa', 'peserta-dosen', 'peserta-tendik']) ? 'active' : '' }}">
+            <li class="nav-item has-treeview {{ in_array($activeMenu, ['peserta-mahasiswa', 'peserta-dosen', 'peserta-tendik', 'peserta-admin']) ? 'menu-open' : '' }}">
+                <a href="#" class="nav-link {{ in_array($activeMenu, ['peserta-mahasiswa', 'peserta-dosen', 'peserta-tendik', 'peserta-admin']) ? 'active' : '' }}">
                     <i class="nav-icon fas fa-users"></i>
                     <p>
                         BIODATA PESERTA
@@ -85,41 +85,41 @@
                             <p>Peserta Tendik</p>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a href="{{ url('/biodata/admin') }}" class="nav-link {{ ($activeMenu == 'peserta-admin') ? 'active' : '' }}">
+                            <i class="far fa-user nav-icon"></i>
+                            <p>Peserta Admin</p>
+                        </a>
+                    </li>
                 </ul>
             </li>
 
             <!-- Dropdown DAFTAR KAMPUS -->
-            <li class="nav-item has-treeview {{ in_array($activeMenu, ['kampus-utama', 'psdku-kediri', 'psdku-lumajang','psdku-pamekasan']) ? 'menu-open' : '' }}">
-                <a href="#" class="nav-link {{ in_array($activeMenu, ['kampus-utama', 'psdku-kediri', 'psdku-lumajang','psdku-pamekasan']) ? 'active' : '' }}">
+            <li class="nav-item has-treeview {{ in_array($activeMenu, ['daftar-kampus', 'daftar-jurusan', 'daftar-programstudi']) ? 'menu-open' : '' }}">
+                <a href="#" class="nav-link {{ in_array($activeMenu, ['daftar-kampus', 'daftar-jurusan', 'daftar-programstudi']) ? 'active' : '' }}">
                     <i class="nav-icon fas fa-home"></i>
                     <p>
-                        DAFTAR KAMPUS
+                        KAMPUS
                         <i class="right fas fa-angle-left"></i>
                     </p>
                 </a>
                 <ul class="nav nav-treeview">
                     <li class="nav-item">
-                        <a href="{{ url('/kampus/utama') }}" class="nav-link {{ ($activeMenu == 'kampus-utama') ? 'active' : '' }}">
-                            <i class="far fa-building nav-icon"></i>
-                            <p>Kampus Utama</p>
+                        <a href="{{ url('/kampus/daftarkampus') }}" class="nav-link {{ ($activeMenu == 'daftar-kampus') ? 'active' : '' }}">
+                            <i class="fa fa-list nav-icon"></i>
+                            <p>Daftar Kampus</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ url('/kampus/psdku-kediri') }}" class="nav-link {{ ($activeMenu == 'psdku-kediri') ? 'active' : '' }}">
-                            <i class="far fa-building nav-icon"></i>
-                            <p>PSDKU Kediri</p>
+                        <a href="{{ url('/kampus/jurusan') }}" class="nav-link {{ ($activeMenu == 'daftar-jurusan') ? 'active' : '' }}">
+                            <i class="fa fa-list nav-icon"></i>
+                            <p>Daftar Jurusan</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ url('/kampus/psdku-lumajang') }}" class="nav-link {{ ($activeMenu == 'psdku-lumajang') ? 'active' : '' }}">
-                            <i class="far fa-building nav-icon"></i>
-                            <p>PSDKU Lumajang</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ url('/kampus/psdku-pamekasan') }}" class="nav-link {{ ($activeMenu == 'psdku-pamekasan') ? 'active' : '' }}">
-                            <i class="far fa-building nav-icon"></i>
-                            <p>PSDKU Pamekasan</p>
+                        <a href="{{ url('/kampus/programstudi') }}" class="nav-link {{ ($activeMenu == 'daftar-programstudi') ? 'active' : '' }}">
+                            <i class="fa fa-list nav-icon"></i>
+                            <p>Daftar Program Studi</p>
                         </a>
                     </li>
                 </ul>
