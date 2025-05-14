@@ -62,7 +62,7 @@
                 <a href="#" class="nav-link {{ in_array($activeMenu, ['peserta-mahasiswa', 'peserta-dosen', 'peserta-tendik', 'peserta-admin']) ? 'active' : '' }}">
                     <i class="nav-icon fas fa-users"></i>
                     <p>
-                        BIODATA PESERTA
+                        BIODATA USER
                         <i class="right fas fa-angle-left"></i>
                     </p>
                 </a>
@@ -88,7 +88,7 @@
                     <li class="nav-item">
                         <a href="{{ url('/biodata/admin') }}" class="nav-link {{ ($activeMenu == 'peserta-admin') ? 'active' : '' }}">
                             <i class="far fa-user nav-icon"></i>
-                            <p>Peserta Admin</p>
+                            <p>Admin</p>
                         </a>
                     </li>
                 </ul>
