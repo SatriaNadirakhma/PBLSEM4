@@ -58,13 +58,113 @@ class ProdiController extends Controller
     public function show_ajax(string $id)
     {
         $prodi = ProdiModel::find($id);
-        return view('prodi.show_ajax', ['prodi' => $prodi]);
+        
+        return view('prodi.show_ajax', [
+            'prodi' => $prodi,
+            'jurusan' => JurusanModel::find($prodi->jurusan_id)
+        ]);
     }
 
     // Tambah Data AJAX
     public function create_ajax()
     {
-        return view('prodi.create_ajax');
+        $jurusan = JurusanModel::all();
+        return view('prodi.create_ajax', ['jurusan' => $jurusan]);
     }
 
+    public function store_ajax(Request $request)
+    {
+        if ($request->ajax() || $request->wantsJson()) {
+            $rules = [
+                'prodi_kode' => 'required|string|max:20|unique:prodi,prodi_kode',
+                'prodi_nama' => 'required|string|max:100',
+                'jurusan_id' => 'required|exists:jurusan,jurusan_id',
+            ];
+
+            $validator = Validator::make($request->all(), $rules);
+                
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Validasi Gagal',
+                    'msgField' => $validator->errors(),
+                ]);
+            }
+                
+            try {
+                // Menyimpan data kampus
+                ProdiModel::create($request->all());
+
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Data kampus berhasil disimpan',
+                ]);
+            } catch (\Exception $e) {
+                return response()->json([
+                        'status' => false,
+                        'message' => 'Gagal menyimpan data: ' . $e->getMessage(),
+                    ]);
+                }
+            }
+
+        return redirect('/');
+    }
+
+    public function edit_ajax(string $id)
+    {
+        $prodi = ProdiModel::find($id);
+        $jurusan = JurusanModel::select('jurusan_id', 'jurusan_nama')->get();
+        
+        return view('prodi.edit_ajax', ['prodi' => $prodi, 'jurusan' => $jurusan]);
+    }
+
+    public function update_ajax(Request $request, string $id)
+    {
+        if ($request->ajax() || $request->wantsJson()) {
+            $rules = [
+                'prodi_kode' => 'required|string|max:20|unique:prodi,prodi_kode,' . $id . ',prodi_id',
+                'prodi_nama' => 'required|string|max:100',
+                'jurusan_id' => 'required|exists:jurusan,jurusan_id',
+            ];
+
+            $validator = Validator::make($request->all(), $rules);
+                
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Validasi Gagal',
+                    'msgField' => $validator->errors(),
+                ]);
+            }
+                
+            try {
+                // Menyimpan data kampus
+                ProdiModel::find($id)->update($request->all());
+
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Data kampus berhasil disimpan',
+                ]);
+            } catch (\Exception $e) {
+                return response()->json([
+                        'status' => false,
+                        'message' => 'Gagal menyimpan data: ' . $e->getMessage(),
+                    ]);
+                }
+            }
+
+        return redirect('/');
+    }
+
+    public function confirm_ajax(string $id)
+    {
+        $prodi = ProdiModel::find($id);
+        return view('prodi.confirm_ajax', ['prodi' => $prodi]);
+    }
+
+    public function delete_ajax(string $id)
+    {
+        $prodi = ProdiModel::find($id);
+        return view('prodi.delete_ajax', ['prodi' => $prodi]);
+    }
 }

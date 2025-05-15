@@ -36,8 +36,8 @@
                     <td>{{ $prodi->prodi_nama }}</td>
                 </tr>
                 <tr>
-                    <th>Nama Jurusan</th>
-                    <td>{{ $jurusan->jurusan_nama }}</td>
+                    <th>ID Jurusan</th>
+                    <td>{{ $jurusan->jurusan_id }}</td>
                 </tr>
             </table>
         </div>
