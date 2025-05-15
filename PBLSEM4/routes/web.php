@@ -36,6 +36,18 @@ Route::middleware(['auth'])->group(function () {
     // Rute kampus
     Route::prefix('kampus')->group(function () {
         Route::get('/', [KampusController::class, 'index']);
+        Route::post('/list', [KampusController::class, 'list']);
+        Route::get('/{id}/show_ajax', [KampusController::class, 'show_ajax']);
+        Route::get('/create_ajax', [KampusController::class, 'create_ajax']);
+        Route::post('/ajax', [KampusController::class, 'store_ajax']);
+        Route::get('/{id}/delete_ajax', [KampusController::class, 'confirm_ajax']);
+        Route::delete('/{id}/delete_ajax', [KampusController::class, 'delete_ajax']);
+        Route::get('/{id}/edit_ajax', [KampusController::class, 'edit_ajax']);
+        Route::put('/{id}/update_ajax', [KampusController::class, 'update_ajax']);
+        Route::get('import', [KampusController::class, 'import']);
+        Route::post('import_ajax', [KampusController::class, 'import_ajax']);
+        Route::get('export_excel', [KampusController::class, 'export_excel']); 
+        Route::get('export_pdf', [KampusController::class, 'export_pdf']);
     });
 
     // Rute Jurusan
