@@ -39,6 +39,21 @@
 
 <script>
     $(document).ready(function() {
+        // Inisialisasi DataTable
+        var dataJurusan = $('#table-jurusan').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: "{{ url('/jurusan/data') }}", // sesuaikan endpoint datanya
+            columns: [
+                { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
+                { data: 'jurusan_kode', name: 'jurusan_kode' },
+                { data: 'jurusan_nama', name: 'jurusan_nama' },
+                { data: 'kampus_nama', name: 'kampus_nama' },
+                { data: 'aksi', name: 'aksi', orderable: false, searchable: false }
+            ]
+        });
+
+        // Validasi dan submit form tambah
         $("#form-tambah").validate({
             rules: {
                 kampus_id: {
@@ -63,13 +78,19 @@
                     data: $(form).serialize(),
                     success: function(response) {
                         if (response.status) {
-                            $('#myModal').modal('hide');
+                            $('#modal-master').modal('hide');
+                            $('.error-text').text('');
+                            form.reset();
+
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Berhasil',
-                                text: response.message
+                                text: response.message,
+                                confirmButtonText: 'OKE'
+                            }).then(() => {
+                                location.reload(); // <-- bagian ini penting
                             });
-                            dataJurusan.ajax.reload(); // sesuaikan dengan DataTable jurusan
+
                         } else {
                             $('.error-text').text('');
                             $.each(response.msgField, function(prefix, val) {
@@ -81,6 +102,13 @@
                                 text: response.message
                             });
                         }
+                    },
+                    error: function(xhr, status, error) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'AJAX Error',
+                            text: error
+                        });
                     }
                 });
                 return false;

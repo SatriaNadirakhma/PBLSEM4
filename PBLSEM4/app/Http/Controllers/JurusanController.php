@@ -71,35 +71,31 @@ class JurusanController extends Controller
             return view('jurusan.show_ajax', ['jurusan' => $jurusan]);
         }
 
-        // Tambah Data AJAX
-        public function create_ajax()
-        {
-            return view('jurusan.create_ajax');
-        }
+       public function create_ajax()
+    {
+        $kampus = KampusModel::orderBy('kampus_nama')->get();
+        return view('jurusan.create_ajax', compact('kampus'));
+    }
 
-    // Store ajax
     public function store_ajax(Request $request)
     {
-        if ($request->ajax() || $request->wantsJson()) {
-            $rules = [
+        if ($request->ajax()) {
+            $validator = Validator::make($request->all(), [
                 'jurusan_kode' => 'required|string|max:20|unique:jurusan,jurusan_kode',
                 'jurusan_nama' => 'required|string|max:100',
                 'kampus_id' => 'required|exists:kampus,kampus_id',
-            ];
-
-            $validator = Validator::make($request->all(), $rules);
+            ]);
 
             if ($validator->fails()) {
                 return response()->json([
                     'status' => false,
-                    'message' => 'Validasi Gagal',
+                    'message' => 'Validasi gagal',
                     'msgField' => $validator->errors(),
                 ]);
             }
 
             try {
                 JurusanModel::create($request->all());
-
                 return response()->json([
                     'status' => true,
                     'message' => 'Data jurusan berhasil disimpan',
@@ -115,48 +111,55 @@ class JurusanController extends Controller
         return redirect('/');
     }
 
-    // Confirm ajax
-    public function confirm_ajax(string $id)
-    {
-        $jurusan = JurusanModel::find($id);
-        return view('jurusan.confirm_ajax', ['jurusan' => $jurusan]);
-    }
-
-    // Delete ajax
-    public function delete_ajax(Request $request, $id)
-    {
-        if ($request->ajax() || $request->wantsJson()) {
+        // Confirm ajax
+        public function confirm_ajax(string $id)
+        {
             $jurusan = JurusanModel::find($id);
-            if ($jurusan) {
-                $jurusan->delete();
-                return response()->json([
-                    'status' => true,
-                    'message' => 'Data berhasil dihapus'
-                ]);
-            } else {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Data tidak ditemukan'
-                ]);
-            }
+            return view('jurusan.confirm_ajax', ['jurusan' => $jurusan]);
         }
-        return redirect('/');
-    }
+
+        // Delete ajax
+        public function delete_ajax(Request $request, $id)
+        {
+            if ($request->ajax() || $request->wantsJson()) {
+                $jurusan = JurusanModel::find($id);
+                if ($jurusan) {
+                    $jurusan->delete();
+                    return response()->json([
+                        'status' => true,
+                        'message' => 'Data berhasil dihapus'
+                    ]);
+                } else {
+                    return response()->json([
+                        'status' => false,
+                        'message' => 'Data tidak ditemukan'
+                    ]);
+                }
+            }
+            return redirect('/');
+        }
 
     // Edit AJAX
-    public function edit_ajax(string $id)
+    public function edit_ajax(Request $request, $id)
     {
-        $jurusan = JurusanModel::find($id);
-
-        if (!$jurusan) {
+        // Cek apakah request adalah AJAX
+        if (!$request->ajax()) {
             return response()->json([
                 'status' => false,
-                'message' => 'Data jurusan tidak ditemukan'
+                'message' => 'Permintaan tidak valid.'
             ]);
         }
 
-        return view('jurusan.edit_ajax', ['jurusan' => $jurusan]);
+        $jurusan = JurusanModel::find($id);
+        $kampus = KampusModel::select('kampus_id', 'kampus_nama')->get();
+
+        return view('jurusan.edit_ajax', [
+            'jurusan' => $jurusan,
+            'kampus' => $kampus
+        ]);
     }
+
+
 
     // Update AJAX
     public function update_ajax(Request $request, $id)
