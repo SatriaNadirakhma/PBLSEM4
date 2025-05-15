@@ -57,6 +57,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{id}/show_ajax', [JurusanController::class, 'show_ajax']);
         Route::get('/create_ajax', [JurusanController::class, 'create_ajax']);
         Route::post('/ajax', [JurusanController::class, 'store_ajax']);
+        Route::get('/{id}/edit_ajax', [JurusanController::class, 'edit_ajax']);
+        Route::put('/{id}/update_ajax', [JurusanController::class, 'update_ajax']);
+        Route::get('/{id}/delete_ajax', [JurusanController::class, 'confirm_ajax']);
+        Route::delete('/{id}/delete_ajax', [JurusanController::class, 'delete_ajax']);
     });
 
     // Rute Prodi

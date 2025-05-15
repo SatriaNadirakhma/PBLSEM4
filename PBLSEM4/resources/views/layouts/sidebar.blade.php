@@ -95,8 +95,8 @@
             </li>
 
             <!-- Dropdown DAFTAR KAMPUS -->
-            <li class="nav-item has-treeview {{ in_array($activeMenu, ['kampus', 'daftar-jurusan', 'prodi']) ? 'menu-open' : '' }}">
-                <a href="#" class="nav-link {{ in_array($activeMenu, ['kampus', 'daftar-jurusan', 'prodi']) ? 'active' : '' }}">
+            <li class="nav-item has-treeview {{ in_array($activeMenu, ['kampus', 'jurusan', 'prodi']) ? 'menu-open' : '' }}">
+                <a href="#" class="nav-link {{ in_array($activeMenu, ['kampus', 'jurusan', 'prodi']) ? 'active' : '' }}">
                     <i class="nav-icon fas fa-home"></i>
                     <p>
                         KAMPUS
