@@ -58,8 +58,8 @@
             </li>
 
             <!-- Dropdown BIODATA -->
-            <li class="nav-item has-treeview {{ in_array($activeMenu, ['peserta-mahasiswa', 'peserta-dosen', 'peserta-tendik', 'peserta-admin']) ? 'menu-open' : '' }}">
-                <a href="#" class="nav-link {{ in_array($activeMenu, ['peserta-mahasiswa', 'peserta-dosen', 'peserta-tendik', 'peserta-admin']) ? 'active' : '' }}">
+            <li class="nav-item has-treeview {{ in_array($activeMenu, ['peserta-mahasiswa', 'peserta-dosen', 'tendik', 'peserta-admin']) ? 'menu-open' : '' }}">
+                <a href="#" class="nav-link {{ in_array($activeMenu, ['peserta-mahasiswa', 'peserta-dosen', 'tendik', 'peserta-admin']) ? 'active' : '' }}">
                     <i class="nav-icon fas fa-users"></i>
                     <p>
                         BIODATA USER
@@ -80,7 +80,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ url('/biodata/tendik') }}" class="nav-link {{ ($activeMenu == 'peserta-tendik') ? 'active' : '' }}">
+                        <a href="{{ route('biodata.tendik.index') }}" class="nav-link {{ ($activeMenu == 'peserta-tendik') ? 'active' : '' }}">
                             <i class="far fa-user nav-icon"></i>
                             <p>Peserta Tendik</p>
                         </a>

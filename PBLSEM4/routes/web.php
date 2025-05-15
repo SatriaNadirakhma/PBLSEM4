@@ -75,9 +75,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/', [DosenController::class, 'index']);
     });
 
-    // Rute Tendik
-    Route::prefix('tendik')->group(function () {
-        Route::get('/', [TendikController::class, 'index']);
+    // Rute BIODATA
+    Route::prefix('biodata')->group(function () {
+        Route::get('/tendik', [TendikController::class, 'index'])->name('biodata.tendik.index');
+        Route::get('/tendik/data', [TendikController::class, 'getData'])->name('biodata.tendik.data');
     });
 
     // Rute user
