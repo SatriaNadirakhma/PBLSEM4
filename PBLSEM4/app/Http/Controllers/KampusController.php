@@ -6,6 +6,10 @@ use Illuminate\Http\Request;
 use App\Models\KampusModel;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Log;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class KampusController extends Controller
 {
@@ -194,4 +198,122 @@ class KampusController extends Controller
         return redirect('/');
     }
 
+   // Menampilkan form import kampus
+    public function import()
+    {
+        return view('kampus.import');
+    }
+
+    // Import data kampus dari file Excel
+    public function import_ajax(Request $request)
+    {
+        if ($request->ajax() || $request->wantsJson()) {
+            $rules = [
+                'file_kampus' => ['required', 'mimes:xlsx', 'max:1024']
+            ];
+
+            $validator = Validator::make($request->all(), $rules);
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Validasi Gagal',
+                    'msgField' => $validator->errors()
+                ]);
+            }
+
+            $file = $request->file('file_kampus');
+            $reader = IOFactory::createReader('Xlsx');
+            $reader->setReadDataOnly(true);
+            $spreadsheet = $reader->load($file->getRealPath());
+            $sheet = $spreadsheet->getActiveSheet();
+            $data = $sheet->toArray(null, false, true, true);
+
+            $insert = [];
+            if (count($data) > 1) {
+                foreach ($data as $baris => $value) {
+                    if ($baris > 1) { // baris ke-1 adalah header
+                        $insert[] = [
+                            'kampus_kode' => $value['A'],
+                            'kampus_nama' => $value['B'],
+                            'created_at'  => now(),
+                        ];
+                    }
+                }
+
+                if (count($insert) > 0) {
+                    KampusModel::insertOrIgnore($insert);
+                    return response()->json([
+                        'status' => true,
+                        'message' => 'Data kampus berhasil diimport'
+                    ]);
+                }
+            }
+
+            return response()->json([
+                'status' => false,
+                'message' => 'Tidak ada data yang diimport'
+            ]);
+        }
+
+        return redirect('/');
+    }
+
+    // Export data kampus ke Excel
+    public function export_excel()
+    {
+        $kampus = KampusModel::select('kampus_kode', 'kampus_nama')
+            ->orderBy('kampus_id')
+            ->get();
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        // Header kolom
+        $sheet->setCellValue('A1', 'No');
+        $sheet->setCellValue('B1', 'Kode Kampus');
+        $sheet->setCellValue('C1', 'Nama Kampus');
+
+        $sheet->getStyle('A1:C1')->getFont()->setBold(true);
+
+        // Isi data
+        $no = 1;
+        $baris = 2;
+        foreach ($kampus as $value) {
+            $sheet->setCellValue('A' . $baris, $no++);
+            $sheet->setCellValue('B' . $baris, $value->kampus_kode);
+            $sheet->setCellValue('C' . $baris, $value->kampus_nama);
+            $baris++;
+        }
+
+        foreach (range('A', 'C') as $col) {
+            $sheet->getColumnDimension($col)->setAutoSize(true);
+        }
+
+        $sheet->setTitle('Data Kampus');
+
+        $filename = 'Data_Kampus_' . date('Y-m-d_H-i-s') . '.xlsx';
+
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="' . $filename . '"');
+        header('Cache-Control: max-age=0');
+
+        $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
+        $writer->save('php://output');
+        exit;
+    }
+
+    // Export data kampus ke PDF
+    public function export_pdf()
+    {
+        $kampus = KampusModel::select('kampus_kode', 'kampus_nama')
+            ->orderBy('kampus_kode')
+            ->get();
+
+        $pdf = Pdf::loadView('kampus.export_pdf', ['kampus' => $kampus]);
+        $pdf->setPaper('a4', 'portrait');
+        $pdf->setOption("isRemoteEnabled", true);
+        $pdf->render();
+
+        return $pdf->stream('Data Kampus ' . date('Y-m-d H:i:s') . '.pdf');
+    }
 }
