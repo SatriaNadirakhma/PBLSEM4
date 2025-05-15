@@ -111,7 +111,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ url('/kampus/jurusan') }}" class="nav-link {{ ($activeMenu == 'daftar-jurusan') ? 'active' : '' }}">
+                        <a href="{{ url('/jurusan') }}" class="nav-link {{ ($activeMenu == 'jurusan') ? 'active' : '' }}">
                             <i class="fa fa-list nav-icon"></i>
                             <p>Daftar Jurusan</p>
                         </a>

@@ -53,6 +53,10 @@ Route::middleware(['auth'])->group(function () {
     // Rute Jurusan
     Route::prefix('jurusan')->group(function () {
         Route::get('/', [JurusanController::class, 'index']);
+        Route::post('/list', [JurusanController::class, 'list']);
+        Route::get('/{id}/show_ajax', [JurusanController::class, 'show_ajax']);
+        Route::get('/create_ajax', [JurusanController::class, 'create_ajax']);
+        Route::post('/ajax', [JurusanController::class, 'store_ajax']);
     });
 
     // Rute Prodi
