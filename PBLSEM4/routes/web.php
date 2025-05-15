@@ -62,6 +62,14 @@ Route::middleware(['auth'])->group(function () {
     // Rute Prodi
     Route::prefix('prodi')->group(function () {
         Route::get('/', [ProdiController::class, 'index']);
+        Route::post('/list', [ProdiController::class, 'list']);
+        Route::get('/{id}/show_ajax', [ProdiController::class, 'show_ajax']);
+        Route::get('/create_ajax', [ProdiController::class, 'create_ajax']);
+        Route::post('/ajax', [ProdiController::class, 'store_ajax']);
+        Route::get('/{id}/delete_ajax', [ProdiController::class, 'confirm_ajax']);
+        Route::delete('/{id}/delete_ajax', [ProdiController::class, 'delete_ajax']);
+        Route::get('/{id}/edit_ajax', [ProdiController::class, 'edit_ajax']);
+        Route::put('/{id}/update_ajax', [ProdiController::class, 'update_ajax']);
     });
 
     // Rute Admin
@@ -79,9 +87,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/', [DosenController::class, 'index']);
     });
 
-    // Rute Tendik
-    Route::prefix('tendik')->group(function () {
-        Route::get('/', [TendikController::class, 'index']);
+    // Rute BIODATA
+    Route::prefix('biodata')->group(function () {
+        Route::get('/tendik', [TendikController::class, 'index'])->name('biodata.tendik.index');
+        Route::get('/tendik/data', [TendikController::class, 'getData'])->name('biodata.tendik.data');
     });
 
     // Rute user
