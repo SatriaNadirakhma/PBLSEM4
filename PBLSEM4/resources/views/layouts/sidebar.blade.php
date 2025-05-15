@@ -95,8 +95,8 @@
             </li>
 
             <!-- Dropdown DAFTAR KAMPUS -->
-            <li class="nav-item has-treeview {{ in_array($activeMenu, ['daftar-kampus', 'daftar-jurusan', 'daftar-programstudi']) ? 'menu-open' : '' }}">
-                <a href="#" class="nav-link {{ in_array($activeMenu, ['daftar-kampus', 'daftar-jurusan', 'daftar-programstudi']) ? 'active' : '' }}">
+            <li class="nav-item has-treeview {{ in_array($activeMenu, ['kampus', 'daftar-jurusan', 'daftar-programstudi']) ? 'menu-open' : '' }}">
+                <a href="#" class="nav-link {{ in_array($activeMenu, ['kampus', 'daftar-jurusan', 'daftar-programstudi']) ? 'active' : '' }}">
                     <i class="nav-icon fas fa-home"></i>
                     <p>
                         KAMPUS
@@ -105,7 +105,7 @@
                 </a>
                 <ul class="nav nav-treeview">
                     <li class="nav-item">
-                        <a href="{{ url('/kampus/daftarkampus') }}" class="nav-link {{ ($activeMenu == 'daftar-kampus') ? 'active' : '' }}">
+                        <a href="{{ url('/kampus') }}" class="nav-link {{ ($activeMenu == 'kampus') ? 'active' : '' }}">
                             <i class="fa fa-list nav-icon"></i>
                             <p>Daftar Kampus</p>
                         </a>
