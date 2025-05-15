@@ -7,6 +7,10 @@ use Illuminate\Http\Request;
 use App\Models\JurusanModel;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Log;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class ProdiController extends Controller
 {
@@ -167,4 +171,6 @@ class ProdiController extends Controller
         $prodi = ProdiModel::find($id);
         return view('prodi.delete_ajax', ['prodi' => $prodi]);
     }
+
+    
 }
