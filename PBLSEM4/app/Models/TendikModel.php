@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\KampusModel;
 
 class TendikModel extends Model
 {
@@ -18,4 +19,9 @@ class TendikModel extends Model
         'no_telp', 'alamat_asal', 'alamat_sekarang',
         'jenis_kelamin', 'kampus_id'
     ];
+
+    public function kampus()
+    {
+        return $this->belongsTo(KampusModel::class, 'kampus_id');
+    }
 }
