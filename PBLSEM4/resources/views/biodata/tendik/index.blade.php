@@ -76,33 +76,40 @@
 @endsection
 
 @push('js')
-<script>
-$(document).ready(function () {
-    var dataTendik = $('#table_tendik').DataTable({
-        processing: true,
-        serverSide: true,
-        order: [[0, 'asc']], // Menambahkan default sorting pada kolom pertama
-        ajax: {
-            url: "{{ route('biodata.tendik.list') }}",
-            type: "POST",
-            data: function (d) {
-                d.search_query = $('#searchInput').val() || '';
-                d.kampus_nama = $('#kampusFilter').val() || '';
-            }
-        },
-        columns: [
-            { data: "DT_RowIndex", className: "text-center", orderable: false, searchable: false },
-            { data: "nip", className: "text-nowrap" },
-            { data: "nik", className: "text-nowrap" },
-            { data: "tendik_nama", className: "text-nowrap" },
-            { data: "no_telp", className: "text-nowrap" },
-            { data: "alamat_asal", className: "text-nowrap" },
-            { data: "alamat_sekarang", className: "text-nowrap" },
-            { data: "jenis_kelamin", className: "text-nowrap" },
-            { data: "kampus_nama", className: "text-nowrap" },
-            { data: "aksi", className: "text-center text-nowrap", orderable: false, searchable: false }
-        ]
-    });
+    <script>
+        function modalAction(url = '') {
+            $('#myModal').load(url, function () {
+                $('#myModal').modal('show');
+            });
+        }
+
+        $(document).ready(function () {
+            var dataTendik = $('#table_tendik').DataTable({
+                processing: true,
+                serverSide: true,
+                order: [[0, 'asc']], // Menambahkan default sorting pada kolom pertama
+                ajax: {
+                    url: "{{ url('biodata/tendik/list') }}",
+                    type: "POST",
+                    data: function (d) {
+                        d.search_query = $('#searchInput').val() || '';
+                        d.kampus_nama = $('#kampusFilter').val() || '';
+                        d._token = '{{ csrf_token() }}';
+                    }
+                },
+                columns: [
+                    { data: "DT_RowIndex", className: "text-center", orderable: false, searchable: false },
+                    { data: "nip", className: "text-nowrap" },
+                    { data: "nik", className: "text-nowrap" },
+                    { data: "tendik_nama", className: "text-nowrap" },
+                    { data: "no_telp", className: "text-nowrap" },
+                    { data: "alamat_asal", className: "text-nowrap" },
+                    { data: "alamat_sekarang", className: "text-nowrap" },
+                    { data: "jenis_kelamin", className: "text-nowrap" },
+                    { data: "kampus_nama", className: "text-nowrap" },
+                    { data: "aksi", className: "text-center text-nowrap", orderable: false, searchable: false }
+                ]
+            });
 
     let delayTimer;
     $('#searchInput').on('keyup', function () {
@@ -113,10 +120,10 @@ $(document).ready(function () {
     });
 
     $('#kampusFilter').on('change', function () {
-        dataTendik.ajax.reload();
+            dataTendik.ajax.reload();
     });
 });
 
-</script>   
+    </script>
 
 @endpush

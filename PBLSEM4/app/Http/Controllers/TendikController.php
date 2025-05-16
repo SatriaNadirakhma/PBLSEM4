@@ -31,15 +31,15 @@ class TendikController extends Controller
         return view('biodata.tendik.index', compact('breadcrumb', 'page', 'activeMenu', 'kampus'));
     }
 
-   public function list(Request $request)
-{
+    public function list(Request $request)
+    {
     $tendik = TendikModel::select('tendik_id', 'nip', 'nik', 'tendik_nama', 'no_telp', 'alamat_asal', 'alamat_sekarang', 'jenis_kelamin', 'kampus_id')
         ->with('kampus'); // Pastikan relasi kampus sudah dimuat
 
     // Filter berdasarkan nama tendik
-    if ($request->has('search_query') && $request->search_query != '') {
-        $tendik->where('tendik_nama', 'like', '%' . $request->search_query . '%');
-    }
+        if ($request->has('search_query') && $request->search_query != '') {
+            $tendik->where('tendik_nama', 'like', '%' . $request->search_query . '%');
+        }
 
     // Filter berdasarkan nama kampus
     if ($request->has('kampus_nama') && $request->kampus_nama != '') {
@@ -48,20 +48,21 @@ class TendikController extends Controller
         });
     }
 
-    return DataTables::of($tendik)
+        return DataTables::of($tendik) 
         ->addIndexColumn()
         ->addColumn('kampus_nama', function ($t) {
             return $t->kampus ? $t->kampus->kampus_nama : '-'; // Pastikan kampus_nama terisi dengan benar
         })
         ->addColumn('aksi', function ($t) {
-            return '<button onclick="modalAction(\'' . route('biodata.tendik.show_ajax', $t->tendik_id) . '\')" class="btn btn-info btn-sm me-1">Detail</button>
-                    <button onclick="modalAction(\'' . route('biodata.tendik.edit_ajax', $t->tendik_id) . '\')" class="btn btn-warning btn-sm me-1">Edit</button>
-                    <button onclick="modalAction(\'' . route('biodata.tendik.confirm_ajax', $t->tendik_id) . '\')" class="btn btn-danger btn-sm">Hapus</button>';
+            $btn = '<button onclick="modalAction(\'' . route('biodata.tendik.show_ajax', $t->tendik_id) . '\')" class="btn btn-info btn-sm me-1">Detail</button>';
+            $btn .= '<button onclick="modalAction(\'' . route('biodata.tendik.edit_ajax', $t->tendik_id) . '\')" class="btn btn-warning btn-sm me-1">Edit</button>';
+            $btn .= '<button onclick="modalAction(\'' . route('biodata.tendik.confirm_ajax', $t->tendik_id) . '\')" class="btn btn-danger btn-sm">Hapus</button>';
+            return $btn;
         })
         ->rawColumns(['aksi'])
         ->make(true);
-}
 
+    }
 
     public function show_ajax(string $id)
     {
