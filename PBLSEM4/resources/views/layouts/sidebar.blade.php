@@ -59,7 +59,7 @@
 
             <!-- Dropdown BIODATA -->
             <li class="nav-item has-treeview {{ in_array($activeMenu, ['peserta-mahasiswa', 'peserta-dosen', 'tendik', 'peserta-admin']) ? 'menu-open' : '' }}">
-                <a href="#" class="nav-link {{ in_array($activeMenu, ['peserta-mahasiswa', 'peserta-dosen', 'tendik', 'peserta-admin']) ? 'active' : '' }}">
+                <a href="#" class="nav-link {{ in_array($activeMenu, ['peserta-mahasiswa', 'peserta-dosen', 'tendik', 'admin']) ? 'active' : '' }}">
                     <i class="nav-icon fas fa-users"></i>
                     <p>
                         BIODATA USER
@@ -86,7 +86,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ url('/biodata/admin') }}" class="nav-link {{ ($activeMenu == 'peserta-admin') ? 'active' : '' }}">
+                        <a href="{{ url('/admin') }}" class="nav-link {{ ($activeMenu == 'admin') ? 'active' : '' }}">
                             <i class="far fa-user nav-icon"></i>
                             <p>Admin</p>
                         </a>
@@ -95,8 +95,8 @@
             </li>
 
             <!-- Dropdown DAFTAR KAMPUS -->
-            <li class="nav-item has-treeview {{ in_array($activeMenu, ['kampus', 'daftar-jurusan', 'prodi']) ? 'menu-open' : '' }}">
-                <a href="#" class="nav-link {{ in_array($activeMenu, ['kampus', 'daftar-jurusan', 'prodi']) ? 'active' : '' }}">
+            <li class="nav-item has-treeview {{ in_array($activeMenu, ['kampus', 'jurusan', 'prodi']) ? 'menu-open' : '' }}">
+                <a href="#" class="nav-link {{ in_array($activeMenu, ['kampus', 'jurusan', 'prodi']) ? 'active' : '' }}">
                     <i class="nav-icon fas fa-home"></i>
                     <p>
                         KAMPUS
@@ -111,7 +111,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ url('/kampus/jurusan') }}" class="nav-link {{ ($activeMenu == 'daftar-jurusan') ? 'active' : '' }}">
+                        <a href="{{ url('/jurusan') }}" class="nav-link {{ ($activeMenu == 'jurusan') ? 'active' : '' }}">
                             <i class="fa fa-list nav-icon"></i>
                             <p>Daftar Jurusan</p>
                         </a>

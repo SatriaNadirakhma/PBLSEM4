@@ -53,16 +53,40 @@ Route::middleware(['auth'])->group(function () {
     // Rute Jurusan
     Route::prefix('jurusan')->group(function () {
         Route::get('/', [JurusanController::class, 'index']);
+        Route::post('/list', [JurusanController::class, 'list']);
+        Route::get('/{id}/show_ajax', [JurusanController::class, 'show_ajax']);
+        Route::get('/create_ajax', [JurusanController::class, 'create_ajax']);
+        Route::post('/ajax', [JurusanController::class, 'store_ajax']);
+        Route::get('/{id}/edit_ajax', [JurusanController::class, 'edit_ajax']);
+        Route::put('/{id}/update_ajax', [JurusanController::class, 'update_ajax']);
+        Route::get('/{id}/delete_ajax', [JurusanController::class, 'confirm_ajax']);
+        Route::delete('/{id}/delete_ajax', [JurusanController::class, 'delete_ajax']);
     });
 
     // Rute Prodi
     Route::prefix('prodi')->group(function () {
         Route::get('/', [ProdiController::class, 'index']);
+        Route::post('/list', [ProdiController::class, 'list']);
+        Route::get('/{id}/show_ajax', [ProdiController::class, 'show_ajax']);
+        Route::get('/create_ajax', [ProdiController::class, 'create_ajax']);
+        Route::post('/ajax', [ProdiController::class, 'store_ajax']);
+        Route::get('/{id}/delete_ajax', [ProdiController::class, 'confirm_ajax']);
+        Route::delete('/{id}/delete_ajax', [ProdiController::class, 'delete_ajax']);
+        Route::get('/{id}/edit_ajax', [ProdiController::class, 'edit_ajax']);
+        Route::put('/{id}/update_ajax', [ProdiController::class, 'update_ajax']);
     });
 
     // Rute Admin
     Route::prefix('admin')->group(function () {
         Route::get('/', [AdminController::class, 'index']);
+        Route::post('/list', [AdminController::class, 'list']);
+        Route::get('/{id}/show_ajax', [AdminController::class, 'show_ajax']);
+        Route::get('/create_ajax', [AdminController::class, 'create_ajax']);
+        Route::post('/ajax', [AdminController::class, 'store_ajax']);
+        Route::get('/{id}/delete_ajax', [AdminController::class, 'confirm_ajax']);
+        Route::delete('/{id}/delete_ajax', [AdminController::class, 'delete_ajax']);
+        Route::get('/{id}/edit_ajax', [AdminController::class, 'edit_ajax']);
+        Route::put('/{id}/update_ajax', [AdminController::class, 'update_ajax']);
     });
 
     // Rute Mahasiswa

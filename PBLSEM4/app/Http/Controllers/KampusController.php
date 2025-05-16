@@ -43,11 +43,11 @@ class KampusController extends Controller
         return DataTables::of($kampus)
             ->addIndexColumn() // Menambahkan kolom index
             ->addColumn('aksi', function ($k) {
-                // Menambahkan kolom aksi
-                $btn = '<button onclick="modalAction(\'' . url('/kampus/' . $k->kampus_id . '/show_ajax') . '\')" class="btn btn-info btn-sm me-1">Detail</button>';
-                $btn .= '<button onclick="modalAction(\'' . url('/kampus/' . $k->kampus_id . '/edit_ajax') . '\')" class="btn btn-warning btn-sm me-1">Edit</button>';
-                $btn .= '<button onclick="modalAction(\'' . url('/kampus/' . $k->kampus_id . '/delete_ajax') . '\')" class="btn btn-danger btn-sm">Hapus</button>';
-                return $btn;
+                return '
+                    <button onclick="modalAction(\'' . url('/kampus/' . $k->kampus_id . '/show_ajax') . '\')" class="btn btn-info btn-sm me-1">Detail</button>
+                    <button onclick="modalAction(\'' . url('/kampus/' . $k->kampus_id . '/edit_ajax') . '\')" class="btn btn-warning btn-sm me-1">Edit</button>
+                    <button onclick="modalAction(\'' . url('/kampus/' . $k->kampus_id . '/delete_ajax') . '\')" class="btn btn-danger btn-sm">Hapus</button>
+                ';
             })
             ->rawColumns(['aksi']) // Memberitahu bahwa kolom aksi adalah HTML
             ->make(true);
