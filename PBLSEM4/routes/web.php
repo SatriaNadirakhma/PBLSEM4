@@ -8,8 +8,11 @@ use App\Http\Controllers\KampusController;
 use App\Http\Controllers\JurusanController;
 use App\Http\Controllers\ProdiController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\DetailPendaftaranController;
 use App\Http\Controllers\MahasiswaController;
 use App\Http\Controllers\DosenController;
+use App\Http\Controllers\JadwalController;
+use App\Http\Controllers\PendaftaranController;
 use App\Http\Controllers\TendikController;
 use Illuminate\Http\Request;
 
@@ -30,7 +33,7 @@ Route::get('/register', [AuthController::class, 'register'])->name('register');
 Route::post('/register', [AuthController::class, 'postRegister']);
 
 // Grup rute yang butuh autentikasi
-Route::middleware(['auth'])->group(function () {
+// Route::middleware(['auth'])->group(function () {
     Route::get('/', [WelcomeController::class, 'index'])->name('home');
 
     // Rute kampus
@@ -109,4 +112,19 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('user')->group(function () {
         Route::get('/', [UserController::class, 'index']);
     });
-});
+
+    // Rute Jadwal
+    Route::prefix('jadwal')->group(function () {
+        Route::get('/', [JadwalController::class, 'index']);
+    });
+
+    // Rute pendaftaran
+    Route::prefix('pendaftaran')->group(function () {
+        Route::get('/', [PendaftaranController::class, 'index']);
+
+    // Rute Detail Pendaftaran
+        Route::prefix('detail_pendaftaran')->group(function () {
+            Route::get('/', [DetailPendaftaranController::class, 'index']);
+        });
+    });
+// });
