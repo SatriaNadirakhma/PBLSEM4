@@ -42,12 +42,17 @@ class ProdiController extends Controller
         $prodi->where('prodi_nama', 'like', '%' . $request->search_query . '%');
         }
 
-        if ($request->jurusan_id) {
-            $prodi->where('jurusan_id', $request->jurusan_id);
+        if ($request->has('jurusan_nama') && $request->jurusan_nama != '') {
+            $prodi->whereHas('jurusan', function ($query) use ($request) {
+            $query->where('jurusan_nama', 'like', '%' . $request->jurusan_nama . '%');
+        });
         }
 
         return DataTables::of($prodi)
             ->addIndexColumn() // Menambahkan kolom index
+            ->addColumn('jurusan_nama', function ($p) {
+                return $p->jurusan ? $p->jurusan->jurusan_nama : '-'; // Pastikan prodi_nama terisi dengan benar
+            })
             ->addColumn('aksi', function ($k) {
                 // Menambahkan kolom aksi
                 $btn = '<button onclick="modalAction(\'' . url('/prodi/' . $k->prodi_id . '/show_ajax') . '\')" class="btn btn-info btn-sm me-1">Detail</button>';
@@ -96,12 +101,12 @@ class ProdiController extends Controller
             }
                 
             try {
-                // Menyimpan data kampus
+                // Menyimpan data prodi
                 ProdiModel::create($request->all());
 
                 return response()->json([
                     'status' => true,
-                    'message' => 'Data kampus berhasil disimpan',
+                    'message' => 'Data prodi berhasil disimpan',
                 ]);
             } catch (\Exception $e) {
                 return response()->json([
@@ -142,12 +147,12 @@ class ProdiController extends Controller
             }
                 
             try {
-                // Menyimpan data kampus
+                // Menyimpan data prodi
                 ProdiModel::find($id)->update($request->all());
 
                 return response()->json([
                     'status' => true,
-                    'message' => 'Data kampus berhasil disimpan',
+                    'message' => 'Data prodi berhasil disimpan',
                 ]);
             } catch (\Exception $e) {
                 return response()->json([
@@ -166,11 +171,142 @@ class ProdiController extends Controller
         return view('prodi.confirm_ajax', ['prodi' => $prodi]);
     }
 
-    public function delete_ajax(string $id)
+    public function delete_ajax(Request $request, $id)
     {
-        $prodi = ProdiModel::find($id);
-        return view('prodi.delete_ajax', ['prodi' => $prodi]);
+        if ($request->ajax() || $request->wantsJson()) {
+            $prodi = ProdiModel::find($id);
+        if ($prodi) {
+            $prodi->delete();
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Data berhasil dihapus'
+                ]);
+        } else {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Data tidak ditemukan'
+                ]);
+            }
+        }
+        return redirect('/');
     }
 
-    
+    public function import()
+    {
+        return view('prodi.import');
+    }
+
+    // Import data prodi dari file Excel
+    public function import_ajax(Request $request)
+    {
+        if ($request->ajax() || $request->wantsJson()) {
+            $rules = [
+                'file_prodi' => ['required', 'mimes:xlsx', 'max:1024']
+            ];
+
+            $validator = Validator::make($request->all(), $rules);
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Validasi Gagal',
+                    'msgField' => $validator->errors()
+                ]);
+            }
+
+            $file = $request->file('file_prodi');
+            $reader = IOFactory::createReader('Xlsx');
+            $reader->setReadDataOnly(true);
+            $spreadsheet = $reader->load($file->getRealPath());
+            $sheet = $spreadsheet->getActiveSheet();
+            $data = $sheet->toArray(null, false, true, true);
+
+            $insert = [];
+            if (count($data) > 1) {
+                foreach ($data as $baris => $value) {
+                    if ($baris > 1) { // baris ke-1 adalah header
+                        $insert[] = [
+                            'prodi_kode' => $value['A'],
+                            'prodi_nama' => $value['B'],
+                            'created_at'  => now(),
+                        ];
+                    }
+                }
+
+                if (count($insert) > 0) {
+                    ProdiModel::insertOrIgnore($insert);
+                    return response()->json([
+                        'status' => true,
+                        'message' => 'Data prodi berhasil diimport'
+                    ]);
+                }
+            }
+
+            return response()->json([
+                'status' => false,
+                'message' => 'Tidak ada data yang diimport'
+            ]);
+        }
+
+        return redirect('/');
+    }
+
+    // Export data prodi ke Excel
+    public function export_excel()
+    {
+        $prodi = ProdiModel::select('prodi_kode', 'prodi_nama')
+            ->orderBy('prodi_id')
+            ->get();
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        // Header kolom
+        $sheet->setCellValue('A1', 'No');
+        $sheet->setCellValue('B1', 'Kode Prodi');
+        $sheet->setCellValue('C1', 'Nama Prodi');
+
+        $sheet->getStyle('A1:C1')->getFont()->setBold(true);
+
+        // Isi data
+        $no = 1;
+        $baris = 2;
+        foreach ($prodi as $value) {
+            $sheet->setCellValue('A' . $baris, $no++);
+            $sheet->setCellValue('B' . $baris, $value->prodi_kode);
+            $sheet->setCellValue('C' . $baris, $value->prodi_nama);
+            $baris++;
+        }
+
+        foreach (range('A', 'C') as $col) {
+            $sheet->getColumnDimension($col)->setAutoSize(true);
+        }
+
+        $sheet->setTitle('Data Prodi');
+
+        $filename = 'Data_Prodi_' . date('Y-m-d_H-i-s') . '.xlsx';
+
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="' . $filename . '"');
+        header('Cache-Control: max-age=0');
+
+        $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
+        $writer->save('php://output');
+        exit;
+    }
+
+    // Export data prodi ke PDF
+    public function export_pdf()
+    {
+        $prodi = ProdiModel::select('prodi_kode', 'prodi_nama')
+            ->orderBy('prodi_kode')
+            ->get();
+
+        $pdf = Pdf::loadView('prodi.export_pdf', ['prodi' => $prodi]);
+        $pdf->setPaper('a4', 'portrait');
+        $pdf->setOption("isRemoteEnabled", true);
+        $pdf->render();
+
+        return $pdf->stream('Data Prodi ' . date('Y-m-d H:i:s') . '.pdf');
+    }
+
 }

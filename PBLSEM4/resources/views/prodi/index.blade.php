@@ -43,7 +43,7 @@
                             <th style="width: 40px">No</th>
                             <th style="width: 50px">Kode Program Studi</th>
                             <th style="width: 200px">Nama Program Studi</th>
-                            <th style="width: 10px">ID Jurusan</th>
+                            <th style="width: 10px">Nama Jurusan</th>
                             <th style="width: 150px;">Aksi</th>
                         </tr>
                     </thead>
@@ -80,7 +80,7 @@
                     { data: "DT_RowIndex", className: "text-center", orderable: false, searchable: false },
                     { data: "prodi_kode", className: "text-nowrap" },
                     { data: "prodi_nama", className: "text-nowrap" },
-                    { data: "jurusan_id", className: "text-nowrap" },
+                    { data: "jurusan_nama", className: "text-nowrap" },
                     { data: "aksi", className: "text-center text-nowrap", orderable: false, searchable: false }
                 ]
             });
