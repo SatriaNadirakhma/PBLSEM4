@@ -79,6 +79,10 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/{id}/delete_ajax', [ProdiController::class, 'delete_ajax']);
         Route::get('/{id}/edit_ajax', [ProdiController::class, 'edit_ajax']);
         Route::put('/{id}/update_ajax', [ProdiController::class, 'update_ajax']);
+        Route::get('import', [ProdiController::class, 'import']);
+        Route::post('import_ajax', [ProdiController::class, 'import_ajax']);
+        Route::get('export_excel', [ProdiController::class, 'export_excel']); 
+        Route::get('export_pdf', [ProdiController::class, 'export_pdf']);
     });
 
     // Rute Admin
@@ -92,6 +96,10 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/{id}/delete_ajax', [AdminController::class, 'delete_ajax']);
         Route::get('/{id}/edit_ajax', [AdminController::class, 'edit_ajax']);
         Route::put('/{id}/update_ajax', [AdminController::class, 'update_ajax']);
+        Route::get('import', [AdminController::class, 'import']);
+        Route::post('import_ajax', [AdminController::class, 'import_ajax']);
+        Route::get('export_excel', [AdminController::class, 'export_excel']); 
+        Route::get('export_pdf', [AdminController::class, 'export_pdf']);
     });
 
     // Rute Mahasiswa

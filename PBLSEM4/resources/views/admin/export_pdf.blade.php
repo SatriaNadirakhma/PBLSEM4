@@ -63,7 +63,7 @@
             </td>
             <td width="85%">
                 <span class="text-center d-block font-11 font-bold mb-1">
-                    KEMENTERIAN PENDIDIKAN TINGGI, SAINS, DAN TEKNOLOGI
+                    KEMENTERIAN PENDIDIKAN, KEBUDAYAAN, RISET, DAN TEKNOLOGI
                 </span>
                 <span class="text-center d-block font-13 font-bold mb-1">
                     POLITEKNIK NEGERI MALANG
@@ -87,18 +87,16 @@
         <thead>
             <tr>
                 <th class="text-center">No</th>
-                <th>Kode Program Studi</th>
-                <th>Nama Program Studi</th>
-                <th>Nama Jurusan</th>
+                <th>Nama Admin</th>
+                <th>Nomor Telepon</th>
             </tr>
         </thead>
         <tbody>
-            @foreach($prodi as $p)
+            @foreach($admin as $a)
             <tr>
                 <td class="text-center">{{ $loop->iteration }}</td>
-                <td>{{ $p->prodi_kode }}</td>
-                <td>{{ $p->prodi_nama }}</td>
-                <td>{{ $p->jurusan->jurusan_nama }}</td>
+                <td>{{ $a->admin_nama }}</td>
+                <td>{{ $a->no_telp }}</td>
             </tr>
             @endforeach
         </tbody>

@@ -297,7 +297,8 @@ class ProdiController extends Controller
     // Export data prodi ke PDF
     public function export_pdf()
     {
-        $prodi = ProdiModel::select('prodi_kode', 'prodi_nama')
+        $prodi = ProdiModel::select('prodi_kode', 'prodi_nama', 'jurusan_id')
+            ->with('jurusan')
             ->orderBy('prodi_kode')
             ->get();
 
