@@ -34,6 +34,9 @@ Route::post('/register', [AuthController::class, 'postRegister']);
 Route::middleware(['auth'])->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('home');
 
+     Route::get('/profile', [UserController::class, 'profile'])->name('profile');
+    Route::post('/profile/update-photo', [UserController::class, 'updatePhoto'])->name('profile.updatePhoto');
+
     // Rute kampus
     Route::prefix('kampus')->group(function () {
         Route::get('/', [KampusController::class, 'index']);
@@ -112,7 +115,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/', [DosenController::class, 'index']);
     });
 
-    // Rute BIODATA TENDIK
+    // Rute Tendik
     Route::prefix('biodata/tendik')->name('biodata.tendik.')->group(function () {
         Route::get('/', [TendikController::class, 'index'])->name('index');
         Route::post('/list', [TendikController::class, 'list'])->name('list');
@@ -131,6 +134,14 @@ Route::middleware(['auth'])->group(function () {
 
     // Rute user
     Route::prefix('user')->group(function () {
-        Route::get('/', [UserController::class, 'index']);
+        Route::get('/', [UserController::class, 'index'])->name('user');
+        Route::post('/list', [UserController::class, 'list'])->name('user.list');
+        Route::get('get-nama-by-role/{role}', [UserController::class, 'getNamaByRole']);
+        Route::get('get-detail-by-role/{role}/{id}', [UserController::class, 'getDetailByRole']);
+        Route::get('/create_ajax', [UserController::class, 'create_ajax']);
+        Route::post('/ajax', [UserController::class, 'store_ajax']);
+        Route::get('/{id}/show_ajax', [UserController::class, 'show_ajax']);
+        // Route::get('/{id}/delete_ajax', [UserController::class, 'confirm_ajax']);
+        // Route::delete('/{id}/delete_ajax', [UserController::class, 'delete_ajax']);
     });
 });

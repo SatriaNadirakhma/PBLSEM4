@@ -24,4 +24,9 @@ class TendikModel extends Model
     {
         return $this->belongsTo(KampusModel::class, 'kampus_id');
     }
+
+    public function user()
+    {
+        return $this->hasOne(UserModel::class, 'tendik_id', 'tendik_id');
+    }
 }
