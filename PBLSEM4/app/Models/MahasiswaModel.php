@@ -18,4 +18,9 @@ class MahasiswaModel extends Model
         'no_telp', 'alamat_asal', 'alamat_sekarang',
         'jenis_kelamin', 'status', 'keterangan', 'prodi_id'
     ];
+
+    public function user()
+    {
+        return $this->hasOne(UserModel::class, 'mahasiswa_id', 'mahasiswa_id');
+    }
 }

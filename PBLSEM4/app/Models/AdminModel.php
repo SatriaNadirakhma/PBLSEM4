@@ -17,4 +17,9 @@ class AdminModel extends Model
         'admin_nama', 'no_telp'
     ];
 
+    public function user()
+    {
+        return $this->hasOne(UserModel::class, 'admin_id', 'admin_id');
+    }
+
 }

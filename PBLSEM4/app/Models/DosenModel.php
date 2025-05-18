@@ -18,4 +18,9 @@ class DosenModel extends Model
         'no_telp', 'alamat_asal', 'alamat_sekarang',
         'jenis_kelamin', 'jurusan_id'
     ];
+
+     public function user()
+    {
+        return $this->hasOne(UserModel::class, 'dosen_id', 'dosen_id');
+    }
 }

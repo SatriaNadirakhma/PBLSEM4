@@ -131,12 +131,12 @@
         <i class="fas fa-th-large"></i>
       </a>
     </li>
-    <!-- User profile dropdown -->
+   <!-- User profile dropdown -->
     <li class="nav-item dropdown user-menu" style="position: relative;">
       <a href="#" class="nav-link dropdown-toggle d-flex align-items-center" data-toggle="dropdown"
         style="padding: 0.5rem 1rem;">
         <img
-          src="{{ auth()->user()->profile_picture ? asset('storage/' . auth()->user()->profile_picture) : asset('img/default-profile.png') }}"
+          src="{{ auth()->user()->profile ? asset('storage/' . auth()->user()->profile) : asset('img/default-profile.png') }}"
           class="user-image img-circle elevation-1" alt="Profile Picture"
           style="width: 32px; height: 32px; object-fit: cover; margin-right: 8px;">
         <span class="d-none d-md-inline" style="line-height: 32px;">{{ auth()->user()->nama }}</span>
@@ -147,14 +147,16 @@
         <!-- User image -->
         <li class="user-header bg-primary">
           <img
-            src="{{ auth()->user()->profile_picture ? asset('storage/' . auth()->user()->profile_picture) : asset('img/default-profile.png') }}"
+            src="{{ auth()->user()->profile ? asset('storage/' . auth()->user()->profile) : asset('img/default-profile.png') }}"
             class="img-circle elevation-2" alt="Profile Picture"
             style="width: 100px; height: 100px; object-fit: cover;">
           <p>
             {{ auth()->user()->nama }}
-            <small>{{ auth()->user()->level->level_nama ?? 'User' }}</small>
+            <small class="text-capitalize">{{ auth()->user()->role }}</small>
           </p>
         </li>
+
+
 
         <!-- Menu Footer-->
         <li class="user-footer">
