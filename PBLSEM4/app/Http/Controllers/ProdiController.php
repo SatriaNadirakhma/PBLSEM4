@@ -238,6 +238,7 @@ class ProdiController extends Controller
                         $insert[] = [
                             'prodi_kode' => $value['A'],
                             'prodi_nama' => $value['B'],
+                            'jurusan_id' => $value['C'],
                             'created_at'  => now(),
                         ];
                     }

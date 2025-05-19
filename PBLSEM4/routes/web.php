@@ -37,7 +37,7 @@ Route::get('/register', [AuthController::class, 'register'])->name('register');
 Route::post('/register', [AuthController::class, 'postRegister']);
 
 // Grup rute yang butuh autentikasi
-// Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth'])->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('home');
 
      Route::get('/profile', [UserController::class, 'profile'])->name('profile');
@@ -178,4 +178,4 @@ Route::post('/register', [AuthController::class, 'postRegister']);
         
     });
 
-// });
+});

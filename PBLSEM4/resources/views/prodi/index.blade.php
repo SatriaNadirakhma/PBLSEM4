@@ -29,7 +29,27 @@
                 
                 </div>
             </div>
+            <!-- untuk Filter data -->
+            <div id="filter" class="form-horizontal filter-date p-2 border-bottom mb-2">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group form-group-sm row text-sm mb-0">
+                            <label for="filter_jurusan" class="col-md-2 col-form-label">Filter Jurusan</label>
+                            <div class="col-md-4">
+                                <select name="filter_jurusan" id="filter_jurusan" class="form-control form-control-sm filter_jurusan">
+                                    <option value="">- Semua Jurusan -</option>
+                                    @foreach($jurusan as $j)
+                                        <option value="{{ $j->jurusan_id }}">{{ $j->jurusan_nama }}</option>
+                                    @endforeach
+                                </select>
+                                <small class="form-text text-muted">Pilih Jurusan untuk memfilter program studi</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+        
         <div class="card-body">
             @if (session('success'))
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
