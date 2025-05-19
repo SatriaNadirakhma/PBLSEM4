@@ -19,7 +19,7 @@
                 <div class="form-group">
                     <label>Pilih File</label>
                     <input type="file" name="file_tendik" id="file_tendik" class="form-control" required>
-                    <small id="error-file_tendik" class="error-text form-text text-danger"></small>
+                     <small id="error-file_tendik" class="error-text form-text text-danger"></small>
                 </div>
             </div>
             <div class="modal-footer">
@@ -56,9 +56,7 @@ $(document).ready(function() {
                             title: 'Berhasil',
                             text: response.message
                         });
-                        if (typeof dataTendik !== 'undefined') {
-                            dataTendik.ajax.reload();
-                        }
+                        tableTendik.ajax.reload();
                     } else {
                         $('.error-text').text('');
                         $.each(response.msgField, function(prefix, val) {

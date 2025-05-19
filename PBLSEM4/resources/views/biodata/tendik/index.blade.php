@@ -6,8 +6,9 @@
             <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
                 <h3 class="card-title mb-2 mb-md-0">{{ $page->title }}</h3>
                 <div class="btn-toolbar flex-wrap gap-2" role="toolbar" aria-label="Aksi Tendik">
+                    
                     <button onclick="modalAction('{{ url('/biodata/tendik/import') }}')" class="btn btn-info btn-sm shadow-sm">
-                        <i class="fa fa-upload me-1"></i> Import
+                        <i class="fa fa-upload me-1"></i> Import Excel
                     </button>
                     <a href="{{ url('/biodata/tendik/export_excel') }}" class="btn btn-primary btn-sm shadow-sm">
                         <i class="fa fa-file-excel me-1"></i> Export Excel
