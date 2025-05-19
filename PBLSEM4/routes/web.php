@@ -9,8 +9,11 @@ use App\Http\Controllers\KampusController;
 use App\Http\Controllers\JurusanController;
 use App\Http\Controllers\ProdiController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\DetailPendaftaranController;
 use App\Http\Controllers\MahasiswaController;
 use App\Http\Controllers\DosenController;
+use App\Http\Controllers\JadwalController;
+use App\Http\Controllers\PendaftaranController;
 use App\Http\Controllers\TendikController;
 use Illuminate\Http\Request;
 
