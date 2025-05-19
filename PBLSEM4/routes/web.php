@@ -12,9 +12,12 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\DetailPendaftaranController;
 use App\Http\Controllers\MahasiswaController;
 use App\Http\Controllers\DosenController;
+use App\Http\Controllers\HasilUjianController;
+use App\Http\Controllers\InformasiController;
 use App\Http\Controllers\JadwalController;
 use App\Http\Controllers\PendaftaranController;
 use App\Http\Controllers\TendikController;
+use App\Http\Controllers\UjianController;
 use Illuminate\Http\Request;
 
 /*
@@ -34,7 +37,7 @@ Route::get('/register', [AuthController::class, 'register'])->name('register');
 Route::post('/register', [AuthController::class, 'postRegister']);
 
 // Grup rute yang butuh autentikasi
-Route::middleware(['auth'])->group(function () {
+// Route::middleware(['auth'])->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('home');
 
      Route::get('/profile', [UserController::class, 'profile'])->name('profile');
@@ -146,5 +149,39 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{id}/show_ajax', [UserController::class, 'show_ajax']);
         // Route::get('/{id}/delete_ajax', [UserController::class, 'confirm_ajax']);
         // Route::delete('/{id}/delete_ajax', [UserController::class, 'delete_ajax']);
+
+        
     });
-});
+
+    // Rute jadwal
+    Route::prefix('jadwal')->group(function () {
+        Route::get('/', [JadwalController::class, 'index']);
+    }); 
+
+    // Rute pendaftaran     
+    Route::prefix('pendaftaran')->group(function () {
+        Route::get('/', [PendaftaranController::class, 'index']);
+    });
+
+    // Rute detail pendaftaran  
+    Route::prefix('detail_pendaftaran')->group(function () {
+        Route::get('/', [DetailPendaftaranController::class, 'index']);
+    });
+
+    // Rute Ujian
+    Route::prefix('ujian')->group(function () {
+        Route::get('/', [UjianController::class, 'index']);
+    });
+
+    // Rute Hasil Ujian
+    Route::prefix('hasil_ujian')->group(function () {
+        Route::get('/', [HasilUjianController::class, 'index']);
+    });
+
+    // Rute Informasi
+    Route::prefix('informasi')->group(function () {
+        Route::get('/', [InformasiController::class, 'index']);
+        
+    });
+
+// });
