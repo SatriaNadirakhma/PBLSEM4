@@ -42,7 +42,7 @@
                         <small id="error-prodi_nama" class="error-text form-text text-danger"></small>
                     </div>
                     <div class="form-group">
-                        <label>ID Jurusan</label>
+                        <label>Nama Jurusan</label>
                         <select name="jurusan_id" id="jurusan_id" class="form-control" required>
                             <option value="">- Pilih Jurusan -</option>
                             @foreach($jurusan as $l)
@@ -99,6 +99,7 @@
 
                             // Reload DataTables Prodi
                             if (typeof dataProdi !== 'undefined') {
+                                console.log('Reload DataTables');
                                 dataProdi.ajax.reload(null, true);
                             }
 

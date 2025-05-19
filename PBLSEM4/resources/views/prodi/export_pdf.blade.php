@@ -89,16 +89,16 @@
                 <th class="text-center">No</th>
                 <th>Kode Program Studi</th>
                 <th>Nama Program Studi</th>
-                <th>ID Jurusan</th>
+                <th>Nama Jurusan</th>
             </tr>
         </thead>
         <tbody>
-            @foreach($kampus as $k)
+            @foreach($prodi as $p)
             <tr>
                 <td class="text-center">{{ $loop->iteration }}</td>
-                <td>{{ $k->prodi_kode }}</td>
-                <td>{{ $k->prodi_nama }}</td>
-                <td>{{ $k->jurusan_id }}</td>
+                <td>{{ $p->prodi_kode }}</td>
+                <td>{{ $p->prodi_nama }}</td>
+                <td>{{ $p->jurusan->jurusan_nama }}</td>
             </tr>
             @endforeach
         </tbody>

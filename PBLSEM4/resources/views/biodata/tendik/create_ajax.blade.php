@@ -1,0 +1,121 @@
+<form action="{{ url('/biodata/tendik/store_ajax') }}" method="POST" id="form-tambah-tendik">
+    @csrf
+    <div id="modal-master" class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Tambah Data Tendik</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>NIP</label>
+                    <input type="text" name="nip" id="nip" class="form-control" required>
+                    <small id="error-nip" class="error-text text-danger"></small>
+                </div>
+                <div class="form-group">
+                    <label>NIK</label>
+                    <input type="text" name="nik" id="nik" class="form-control" required>
+                    <small id="error-nik" class="error-text text-danger"></small>
+                </div>
+                <div class="form-group">
+                    <label>Nama Tendik</label>
+                    <input type="text" name="tendik_nama" id="tendik_nama" class="form-control" required>
+                    <small id="error-tendik_nama" class="error-text text-danger"></small>
+                </div>
+                <div class="form-group">
+                    <label>No Telp</label>
+                    <input type="text" name="no_telp" id="no_telp" class="form-control">
+                    <small id="error-no_telp" class="error-text text-danger"></small>
+                </div>
+                <div class="form-group">
+                    <label>Alamat Asal</label>
+                    <input type="text" name="alamat_asal" id="alamat_asal" class="form-control">
+                    <small id="error-alamat_asal" class="error-text text-danger"></small>
+                </div>
+                <div class="form-group">
+                    <label>Alamat Sekarang</label>
+                    <input type="text" name="alamat_sekarang" id="alamat_sekarang" class="form-control">
+                    <small id="error-alamat_sekarang" class="error-text text-danger"></small>
+                </div>
+                <div class="form-group">
+                    <label>Jenis Kelamin</label>
+                    <select name="jenis_kelamin" id="jenis_kelamin" class="form-control" required>
+                        <option value="">Pilih</option>
+                        <option value="Laki-laki">Laki-laki</option>
+                        <option value="Perempuan">Perempuan</option>
+                    </select>
+                    <small id="error-jenis_kelamin" class="error-text text-danger"></small>
+                </div>
+                <div class="form-group">
+                    <label>Kampus ID</label>
+                    <input type="number" name="kampus_id" id="kampus_id" class="form-control" required>
+                    <small id="error-kampus_id" class="error-text text-danger"></small>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-warning">Batal</button>
+                <button type="submit" class="btn btn-primary">Simpan</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script>
+$(document).ready(function() {
+    $("#form-tambah-tendik").validate({
+        rules: {
+            nip: { required: true, minlength: 3, maxlength: 20 },
+            nik: { required: true, minlength: 3, maxlength: 20 },
+            tendik_nama: { required: true, minlength: 3, maxlength: 100 },
+            jenis_kelamin: { required: true },
+            kampus_id: { required: true }
+        },
+        submitHandler: function(form) {
+            $.ajax({
+                url: form.action,
+                type: form.method,
+                data: $(form).serialize(),
+                dataType: 'json',
+                success: function(response) {
+                    if (response.status) {
+                        $('#modal-master').modal('hide');
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil',
+                            text: response.message
+                        });
+
+                        if (typeof dataTendik !== 'undefined') {
+                            dataTendik.ajax.reload();
+                        } else {
+                            setTimeout(() => location.reload(), 1500);
+                        }
+                    } else {
+                        $('.error-text').text('');
+                        if (response.msgField) {
+                            $.each(response.msgField, function(prefix, val) {
+                                $('#error-' + prefix).text(Array.isArray(val) ? val[0] : val);
+                            });
+                        }
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Terjadi Kesalahan',
+                            text: response.message || 'Gagal menyimpan data'
+                        });
+                    }
+                },
+                error: function(xhr, status, error) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Terjadi Kesalahan',
+                        text: 'Gagal mengirim data. Silakan coba lagi.'
+                    });
+                }
+            });
+            return false;
+        }
+    });
+});
+</script>

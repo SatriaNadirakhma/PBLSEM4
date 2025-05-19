@@ -53,11 +53,21 @@ class JurusanController extends Controller
                 return $j->kampus->kampus_nama ?? '-';
             })
             ->addColumn('aksi', function ($j) {
-                return '
-                    <button onclick="modalAction(\'' . url('/jurusan/' . $j->jurusan_id . '/show_ajax') . '\')" class="btn btn-info btn-sm me-1">Detail</button>
-                    <button onclick="modalAction(\'' . url('/jurusan/' . $j->jurusan_id . '/edit_ajax') . '\')" class="btn btn-warning btn-sm me-1">Edit</button>
-                    <button onclick="modalAction(\'' . url('/jurusan/' . $j->jurusan_id . '/delete_ajax') . '\')" class="btn btn-danger btn-sm">Hapus</button>
-                ';
+                $btn  = '<button onclick="modalAction(\'' . url('/jurusan/' . $j->jurusan_id . '/show_ajax') . '\')" 
+                            class="btn btn-info btn-sm rounded-pill shadow-sm me-1 px-3 py-1" style="font-size: 0.85rem;">
+                            <i class="fa fa-eye me-1"></i> Detail
+                        </button>';
+
+                $btn .= '<button onclick="modalAction(\'' . url('/jurusan/' . $j->jurusan_id . '/edit_ajax') . '\')" 
+                            class="btn btn-warning btn-sm rounded-pill shadow-sm me-1 px-3 py-1" style="font-size: 0.85rem;">
+                            <i class="fa fa-edit me-1"></i> Edit
+                        </button>';
+
+                $btn .= '<button onclick="modalAction(\'' . url('/jurusan/' . $j->jurusan_id . '/delete_ajax') . '\')" 
+                            class="btn btn-danger btn-sm rounded-pill shadow-sm px-3 py-1" style="font-size: 0.85rem;">
+                            <i class="fa fa-trash me-1"></i> Hapus
+                        </button>';
+                return $btn;
             })
             ->rawColumns(['aksi'])
             ->make(true);
@@ -252,7 +262,6 @@ class JurusanController extends Controller
                             'jurusan_nama' => $value['B'],
                             'kampus_id' => $value['C'],  // pastikan kode kampus/id di kolom C
                             'created_at' => now(),
-                            'updated_at' => now(),
                         ];
                     }
                 }
@@ -273,5 +282,66 @@ class JurusanController extends Controller
         }
 
         return redirect('/');
+    }
+
+    public function export_excel()
+    {
+        $jurusan = JurusanModel::with('kampus')
+            ->select('jurusan_kode', 'jurusan_nama', 'kampus_id')
+            ->orderBy('jurusan_id')
+            ->get();
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        // Header kolom
+        $sheet->setCellValue('A1', 'No');
+        $sheet->setCellValue('B1', 'Kode Jurusan');
+        $sheet->setCellValue('C1', 'Nama Jurusan');
+        $sheet->setCellValue('D1', 'Nama Kampus');
+
+        $sheet->getStyle('A1:D1')->getFont()->setBold(true);
+
+        // Isi data
+        $no = 1;
+        $baris = 2;
+        foreach ($jurusan as $value) {
+            $sheet->setCellValue('A' . $baris, $no++);
+            $sheet->setCellValue('B' . $baris, $value->jurusan_kode);
+            $sheet->setCellValue('C' . $baris, $value->jurusan_nama);
+            $sheet->setCellValue('D' . $baris, $value->kampus->kampus_nama ?? '-');
+            $baris++;
+        }
+
+        foreach (range('A', 'D') as $col) {
+            $sheet->getColumnDimension($col)->setAutoSize(true);
+        }
+
+        $sheet->setTitle('Data Jurusan');
+
+        $filename = 'Data_Jurusan_' . date('Y-m-d_H-i-s') . '.xlsx';
+
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="' . $filename . '"');
+        header('Cache-Control: max-age=0');
+
+        $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
+        $writer->save('php://output');
+        exit;
+    }
+
+    public function export_pdf()
+    {
+        $jurusan = JurusanModel::with('kampus')
+            ->select('jurusan_kode', 'jurusan_nama', 'kampus_id')
+            ->orderBy('jurusan_kode')
+            ->get();
+
+        $pdf = Pdf::loadView('jurusan.export_pdf', ['jurusan' => $jurusan]);
+        $pdf->setPaper('a4', 'portrait');
+        $pdf->setOption("isRemoteEnabled", true);
+        $pdf->render(); 
+
+        return $pdf->stream('Data Jurusan ' . date('Y-m-d H:i:s') . '.pdf');
     }
 }

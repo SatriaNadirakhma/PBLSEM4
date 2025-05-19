@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuthController;
@@ -8,9 +9,15 @@ use App\Http\Controllers\KampusController;
 use App\Http\Controllers\JurusanController;
 use App\Http\Controllers\ProdiController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\DetailPendaftaranController;
 use App\Http\Controllers\MahasiswaController;
 use App\Http\Controllers\DosenController;
+use App\Http\Controllers\HasilUjianController;
+use App\Http\Controllers\InformasiController;
+use App\Http\Controllers\JadwalController;
+use App\Http\Controllers\PendaftaranController;
 use App\Http\Controllers\TendikController;
+use App\Http\Controllers\UjianController;
 use Illuminate\Http\Request;
 
 /*
@@ -30,8 +37,11 @@ Route::get('/register', [AuthController::class, 'register'])->name('register');
 Route::post('/register', [AuthController::class, 'postRegister']);
 
 // Grup rute yang butuh autentikasi
-Route::middleware(['auth'])->group(function () {
-    Route::get('/', [WelcomeController::class, 'index'])->name('home');
+// Route::middleware(['auth'])->group(function () {
+    Route::get('/', [DashboardController::class, 'index'])->name('home');
+
+     Route::get('/profile', [UserController::class, 'profile'])->name('profile');
+    Route::post('/profile/update-photo', [UserController::class, 'updatePhoto'])->name('profile.updatePhoto');
 
     // Rute kampus
     Route::prefix('kampus')->group(function () {
@@ -61,6 +71,10 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/{id}/update_ajax', [JurusanController::class, 'update_ajax']);
         Route::get('/{id}/delete_ajax', [JurusanController::class, 'confirm_ajax']);
         Route::delete('/{id}/delete_ajax', [JurusanController::class, 'delete_ajax']);
+        Route::get('import', [JurusanController::class, 'import']);
+        Route::post('import_ajax', [JurusanController::class, 'import_ajax']);
+        Route::get('export_excel', [JurusanController::class, 'export_excel']); 
+        Route::get('export_pdf', [JurusanController::class, 'export_pdf']);
     });
 
     // Rute Prodi
@@ -74,6 +88,10 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/{id}/delete_ajax', [ProdiController::class, 'delete_ajax']);
         Route::get('/{id}/edit_ajax', [ProdiController::class, 'edit_ajax']);
         Route::put('/{id}/update_ajax', [ProdiController::class, 'update_ajax']);
+        Route::get('import', [ProdiController::class, 'import']);
+        Route::post('import_ajax', [ProdiController::class, 'import_ajax']);
+        Route::get('export_excel', [ProdiController::class, 'export_excel']); 
+        Route::get('export_pdf', [ProdiController::class, 'export_pdf']);
     });
 
     // Rute Admin
@@ -87,6 +105,10 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/{id}/delete_ajax', [AdminController::class, 'delete_ajax']);
         Route::get('/{id}/edit_ajax', [AdminController::class, 'edit_ajax']);
         Route::put('/{id}/update_ajax', [AdminController::class, 'update_ajax']);
+        Route::get('import', [AdminController::class, 'import']);
+        Route::post('import_ajax', [AdminController::class, 'import_ajax']);
+        Route::get('export_excel', [AdminController::class, 'export_excel']); 
+        Route::get('export_pdf', [AdminController::class, 'export_pdf']);
     });
 
     // Rute Mahasiswa
@@ -103,15 +125,53 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('biodata')->group(function () {
         Route::get('/tendik', [TendikController::class, 'index'])->name('biodata.tendik.index');
         Route::get('/tendik/data', [TendikController::class, 'getData'])->name('biodata.tendik.data');
-        Route::get('/mahasiswa', [MahasiswaController::class, 'index'])->name('biodata.mahasiswa.index');
-        Route::get('/mahasiswa/data', [MahasiswaController::class, 'getData'])->name('biodata.mahasiswa.data');
-        Route::get('/dosen', [DosenController::class, 'index'])->name('biodata.dosen.index');
-        Route::get('/dosen/data', [DosenController::class, 'getData'])->name('biodata.dosen.data');
-        });
+    });
 
 
     // Rute user
     Route::prefix('user')->group(function () {
-        Route::get('/', [UserController::class, 'index']);
+        Route::get('/', [UserController::class, 'index'])->name('user');
+        Route::post('/list', [UserController::class, 'list'])->name('user.list');
+        Route::get('get-nama-by-role/{role}', [UserController::class, 'getNamaByRole']);
+        Route::get('get-detail-by-role/{role}/{id}', [UserController::class, 'getDetailByRole']);
+        Route::get('/create_ajax', [UserController::class, 'create_ajax']);
+        Route::post('/ajax', [UserController::class, 'store_ajax']);
+        Route::get('/{id}/show_ajax', [UserController::class, 'show_ajax']);
+        // Route::get('/{id}/delete_ajax', [UserController::class, 'confirm_ajax']);
+        // Route::delete('/{id}/delete_ajax', [UserController::class, 'delete_ajax']);
+
+        
     });
-});
+
+    // Rute jadwal
+    Route::prefix('jadwal')->group(function () {
+        Route::get('/', [JadwalController::class, 'index']);
+    }); 
+
+    // Rute pendaftaran     
+    Route::prefix('pendaftaran')->group(function () {
+        Route::get('/', [PendaftaranController::class, 'index']);
+    });
+
+    // Rute detail pendaftaran  
+    Route::prefix('detail_pendaftaran')->group(function () {
+        Route::get('/', [DetailPendaftaranController::class, 'index']);
+    });
+
+    // Rute Ujian
+    Route::prefix('ujian')->group(function () {
+        Route::get('/', [UjianController::class, 'index']);
+    });
+
+    // Rute Hasil Ujian
+    Route::prefix('hasil_ujian')->group(function () {
+        Route::get('/', [HasilUjianController::class, 'index']);
+    });
+
+    // Rute Informasi
+    Route::prefix('informasi')->group(function () {
+        Route::get('/', [InformasiController::class, 'index']);
+        
+    });
+
+// });

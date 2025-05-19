@@ -5,19 +5,28 @@
         <div class="card-header">
             <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
                 <h3 class="card-title mb-2 mb-md-0">{{ $page->title }}</h3>
-                <div class="btn-toolbar flex-wrap gap-2" role="toolbar" aria-label="Aksi Kampus">
-                    <button onclick="modalAction('{{ url('/kampus/import') }}')" class="btn btn-info btn-sm shadow-sm">
-                        <i class="fa fa-upload me-1"></i> Import
+                <div class="btn-toolbar flex-wrap gap-2" role="toolbar" aria-label="Aksi Kampus" style="gap: 0.50rem">
+                    
+                    <button onclick="modalAction('{{ url('/kampus/import') }}')" class="btn btn-sm shadow-sm rounded-pill"
+                        style="background-color: #6f42c1; color: white; font-size: 0.95rem;">
+                        <i class="fa fa-upload me-1"></i> Impor Excel
                     </button>
-                    <a href="{{ url('/kampus/export_excel') }}" class="btn btn-primary btn-sm shadow-sm">
-                        <i class="fa fa-file-excel me-1"></i> Export Excel
+
+                    <a href="{{ url('/kampus/export_excel') }}" class="btn btn-sm shadow-sm rounded-pill"
+                        style="background-color: #004085; color: white; font-size: 0.95rem;">
+                        <i class="fa fa-file-excel me-1"></i> Ekspor Excel
                     </a>
-                    <a href="{{ url('/kampus/export_pdf') }}" class="btn btn-warning text-dark btn-sm shadow-sm">
-                        <i class="fa fa-file-pdf me-1"></i> Export PDF
+
+                    <a href="{{ url('/kampus/export_pdf') }}" class="btn btn-sm shadow-sm rounded-pill"
+                        style="background-color: #20c997; color: black; font-size: 0.95rem;">
+                        <i class="fa fa-file-pdf me-1"></i> Ekspor PDF
                     </a>
-                    <button onclick="modalAction('{{ url('/kampus/create_ajax') }}')" class="btn btn-success btn-sm shadow-sm">
-                        <i class="fa fa-plus-circle me-1"></i> Tambah
+
+                    <button onclick="modalAction('{{ url('/kampus/create_ajax') }}')" class="btn btn-sm shadow-sm rounded-pill"
+                        style="background-color: #d63384; color: white; font-size: 0.95rem;">
+                        <i class="fa fa-plus-circle me-1"></i> Tambah Data
                     </button>
+
                 </div>
             </div>
         </div>

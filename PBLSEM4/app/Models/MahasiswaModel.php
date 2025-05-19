@@ -26,4 +26,9 @@ class MahasiswaModel extends Model
         'keterangan',
         'prodi_id'
     ];
+
+    public function user()
+    {
+        return $this->hasOne(UserModel::class, 'mahasiswa_id', 'mahasiswa_id');
+    }
 }

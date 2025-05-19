@@ -5,20 +5,17 @@
       <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
     </li>
     <li class="nav-item d-none d-sm-inline-block">
-      <a href="../../index3.html" class="nav-link">Home</a>
-    </li>
-    <li class="nav-item d-none d-sm-inline-block">
-      <a href="#" class="nav-link">Contact</a>
+      <a href="/" class="nav-link">Home</a>
     </li>
   </ul>
 
   <!-- Right navbar links -->
   <ul class="navbar-nav ml-auto">
     <!-- Navbar Search -->
-    <li class="nav-item">
+    <!-- <li class="nav-item">
       <a class="nav-link" data-widget="navbar-search" href="#" role="button">
         <i class="fas fa-search"></i>
-      </a>
+      </a> -->
       <div class="navbar-search-block">
         <form class="form-inline">
           <div class="input-group input-group-sm">
@@ -38,10 +35,10 @@
 
     <!-- Messages Dropdown Menu -->
     <li class="nav-item dropdown">
-      <a class="nav-link" data-toggle="dropdown" href="#">
+      <!-- <a class="nav-link" data-toggle="dropdown" href="#">
         <i class="far fa-comments"></i>
         <span class="badge badge-danger navbar-badge">3</span>
-      </a>
+      </a> -->
       <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
         <a href="#" class="dropdown-item">
           <!-- Message Start -->
@@ -96,10 +93,10 @@
     </li>
     <!-- Notifications Dropdown Menu -->
     <li class="nav-item dropdown">
-      <a class="nav-link" data-toggle="dropdown" href="#">
+      <!-- <a class="nav-link" data-toggle="dropdown" href="#">
         <i class="far fa-bell"></i>
         <span class="badge badge-warning navbar-badge">15</span>
-      </a>
+      </a> -->
       <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
         <span class="dropdown-item dropdown-header">15 Notifications</span>
         <div class="dropdown-divider"></div>
@@ -131,12 +128,12 @@
         <i class="fas fa-th-large"></i>
       </a>
     </li>
-    <!-- User profile dropdown -->
+   <!-- User profile dropdown -->
     <li class="nav-item dropdown user-menu" style="position: relative;">
       <a href="#" class="nav-link dropdown-toggle d-flex align-items-center" data-toggle="dropdown"
         style="padding: 0.5rem 1rem;">
         <img
-          src="{{ auth()->user()->profile_picture ? asset('storage/' . auth()->user()->profile_picture) : asset('img/default-profile.png') }}"
+          src="{{ auth()->user()->profile ? asset('storage/' . auth()->user()->profile) : asset('img/default-profile.png') }}"
           class="user-image img-circle elevation-1" alt="Profile Picture"
           style="width: 32px; height: 32px; object-fit: cover; margin-right: 8px;">
         <span class="d-none d-md-inline" style="line-height: 32px;">{{ auth()->user()->nama }}</span>
@@ -147,28 +144,42 @@
         <!-- User image -->
         <li class="user-header bg-primary">
           <img
-            src="{{ auth()->user()->profile_picture ? asset('storage/' . auth()->user()->profile_picture) : asset('img/default-profile.png') }}"
+            src="{{ auth()->user()->profile ? asset('storage/' . auth()->user()->profile) : asset('img/default-profile.png') }}"
             class="img-circle elevation-2" alt="Profile Picture"
             style="width: 100px; height: 100px; object-fit: cover;">
           <p>
             {{ auth()->user()->nama }}
-            <small>{{ auth()->user()->level->level_nama ?? 'User' }}</small>
+            <small class="text-capitalize">{{ auth()->user()->role }}</small>
           </p>
         </li>
 
+
+
         <!-- Menu Footer-->
-        <li class="user-footer">
+        <li class="user-footer d-flex justify-content-between">
           <a href="{{ url('/profile') }}" class="btn btn-default btn-flat">
             <i class="fas fa-user mr-1"></i> Profile
           </a>
-          <a href="#" class="btn btn-default btn-flat float-right"
-            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+          <a href="#" class="btn btn-default btn-flat"
+            onclick="confirmLogout(event)">
             <i class="fas fa-sign-out-alt mr-1"></i> Logout
           </a>
           <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
             @csrf
           </form>
         </li>
+
+        <!-- Logout confirmation modal -->
+        <script>
+          function confirmLogout(event) {
+          event.preventDefault();
+            if (confirm("Apakah Anda yakin ingin logout?")) {
+              document.getElementById("logout-form").submit();
+            }
+          }
+        </script>
+
+
       </ul>
     </li>
   </ul>
