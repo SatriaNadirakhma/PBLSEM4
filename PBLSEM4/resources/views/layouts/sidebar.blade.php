@@ -20,42 +20,14 @@
                     <p>Dashboard</p>
                 </a>
             </li>
-            <!-- Dropdown for DATA USER -->
-            <li class="nav-item has-treeview {{ in_array($activeMenu, ['', 'user-mahasiswa', 'user-dosen', 'user-tendik']) ? 'menu-open' : '' }}">
-                <a href="#" class="nav-link {{ in_array($activeMenu, ['', 'user-mahasiswa', 'user-dosen', 'user-tendik']) ? 'active' : '' }}">
+            <!--DATA USER -->
+            <li class="nav-item">
+                <a href="{{ route('user') }}" class="nav-link {{ in_array($activeMenu, ['user']) ? 'active' : '' }}">
                     <i class="nav-icon fas fa-layer-group"></i>
-                    <p>
-                        DATA USER
-                        <i class="fas fa-angle-left right"></i>
-                    </p>
+                    <p>DATA USER</p>
                 </a>
-                <ul class="nav nav-treeview">
-                    <li class="nav-item">
-                        <a href=" }}" class="nav-link {{ ($activeMenu == '') ? 'active' : '' }}">
-                            <i class="nav-icon far fa-user-circle"></i>
-                            <p>Data Admin</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="" class="nav-link {{ ($activeMenu == 'user-mahasiswa') ? 'active' : '' }}">
-                            <i class="nav-icon far fa-user-circle"></i>
-                            <p>Data Mahasiswa</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="" class="nav-link {{ ($activeMenu == 'user-dosen') ? 'active' : '' }}">
-                            <i class="nav-icon far fa-user-circle"></i>
-                            <p>Data Dosen</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="" class="nav-link {{ ($activeMenu == 'user-tendik') ? 'active' : '' }}">
-                            <i class="nav-icon far fa-user-circle"></i>
-                            <p>Data Tendik</p>
-                        </a>
-                    </li>
-                </ul>
             </li>
+
 
             <!-- Dropdown BIODATA -->
             <li class="nav-item has-treeview {{ in_array($activeMenu, ['peserta-mahasiswa', 'peserta-dosen', 'tendik', 'peserta-admin']) ? 'menu-open' : '' }}">

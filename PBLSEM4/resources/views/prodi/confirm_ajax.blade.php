@@ -23,7 +23,7 @@
         <div id="modal-master" class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Hapus Data Kampus</h5>
+                    <h5 class="modal-title">Hapus Data Prodi</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -35,12 +35,16 @@
                     </div>
                     <table class="table table-sm table-bordered table-striped">
                         <tr>
-                            <th class="text-right col-3">Kode Kampus:</th>
+                            <th class="text-right col-3">Kode Program Studi:</th>
                             <td class="col-9">{{ $prodi->prodi_kode }}</td>
                         </tr>
                         <tr>
-                            <th class="text-right col-3">Nama Kampus:</th>
+                            <th class="text-right col-3">Nama Program Studi:</th>
                             <td class="col-9">{{ $prodi->prodi_nama }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-right col-3">Nama Jurusan:</th>
+                            <td class="col-9">{{ $prodi->jurusan->jurusan_nama ?? '-' }}</td>
                         </tr>
                     </table>
                 </div>
@@ -75,12 +79,12 @@
                             text: response.message
                         });
 
-                        // Pastikan dataKampus sudah didefinisikan sebelum reload
-                        if (typeof dataKampus !== 'undefined') {
+                        // Pastikan dataProdi sudah didefinisikan sebelum reload
+                        if (typeof dataProdi !== 'undefined') {
                             console.log('Reload DataTables');
-                            dataKampus.ajax.reload(null, true); // Reset DataTables dengan cara yang benar
+                            dataProdi.ajax.reload(null, true); // Reset DataTables dengan cara yang benar
                         } else {
-                            // Jika dataKampus belum didefinisikan, kita lakukan reload halaman
+                            // Jika dataProdi belum didefinisikan, kita lakukan reload halaman
                             setTimeout(function() {
                                 location.reload(); // Refresh halaman setelah penghapusan
                             }, 1500); // Delay 1,5 detik sebelum refresh

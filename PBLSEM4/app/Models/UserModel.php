@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Casts\Attribute; 
 
 class UserModel extends Authenticatable
 {
@@ -40,9 +41,36 @@ class UserModel extends Authenticatable
         return $this->belongsTo(TendikModel::class, 'tendik_id');
     }
 
-    // 🔥 Ini untuk fix login pakai kolom username
-    public function getAuthIdentifierName()
+
+    public function getNamaLengkapAttribute()
     {
-        return 'username';
+        switch ($this->role) {
+            case 'admin':
+                return $this->admin->admin_nama ?? '-';
+            case 'mahasiswa':
+                return $this->mahasiswa->mahasiswa_nama ?? '-';
+            case 'dosen':
+                return $this->dosen->dosen_nama ?? '-';
+            case 'tendik':
+                return $this->tendik->tendik_nama ?? '-';
+            default:
+                return '-';
+        }
     }
+
+    public function getProfilePictureUrlAttribute()
+    {
+        return $this->profile_picture 
+            ? asset('storage/profile/' . basename($this->profile_picture))
+            : asset('img/default-profile.png');
+    }
+
+    protected function image(): Attribute 
+    { 
+        return Attribute::make( 
+            get: fn ($image) => url('/storage/posts/' . $image),
+        );
+    }
+
+
 }
