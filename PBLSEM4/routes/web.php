@@ -125,6 +125,10 @@ Route::post('/register', [AuthController::class, 'postRegister']);
     Route::prefix('biodata')->group(function () {
         Route::get('/tendik', [TendikController::class, 'index'])->name('biodata.tendik.index');
         Route::get('/tendik/data', [TendikController::class, 'getData'])->name('biodata.tendik.data');
+         Route::get('/mahasiswa', [MahasiswaController::class, 'index'])->name('biodata.mahasiswa.index');
+        Route::get('/mahasiswa/data', [MahasiswaController::class, 'getData'])->name('biodata.mahasiswa.data');
+         Route::get('/dosen', [DosenController::class, 'index'])->name('biodata.dosen.index');
+        Route::get('/dosen/data', [DosenController::class, 'getData'])->name('biodata.dosen.data');
     });
 
 
