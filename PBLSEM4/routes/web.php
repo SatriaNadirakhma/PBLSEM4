@@ -138,15 +138,38 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/export_pdf', [TendikController::class, 'export_pdf'])->name('export_pdf');
     });
 
-    //route lyra
-    // Route::prefix('biodata')->group(function () {
-    //     Route::get('/tendik', [TendikController::class, 'index'])->name('biodata.tendik.index');
-    //     Route::get('/tendik/data', [TendikController::class, 'getData'])->name('biodata.tendik.data');
-    //      Route::get('/mahasiswa', [MahasiswaController::class, 'index'])->name('biodata.mahasiswa.index');
-    //     Route::get('/mahasiswa/data', [MahasiswaController::class, 'getData'])->name('biodata.mahasiswa.data');
-    //      Route::get('/dosen', [DosenController::class, 'index'])->name('biodata.dosen.index');
-    //     Route::get('/dosen/data', [DosenController::class, 'getData'])->name('biodata.dosen.data');
-    // });
+     Route::prefix('biodata/mahasiswa')->name('biodata.mahasiswa.')->group(function () {
+    Route::get('/', [MahasiswaController::class, 'index'])->name('index');
+        Route::post('/list', [MahasiswaController::class, 'list'])->name('list');
+        Route::get('/{id}/show_ajax', [MahasiswaController::class, 'show_ajax'])->name('show_ajax');
+        Route::get('/create_ajax', [MahasiswaController::class, 'create_ajax'])->name('create_ajax');
+        Route::post('/store_ajax', [MahasiswaController::class, 'store_ajax'])->name('store_ajax');
+        Route::get('/{id}/delete_ajax', [MahasiswaController::class, 'confirm_ajax'])->name('confirm_ajax');
+        Route::delete('/{id}/delete_ajax', [MahasiswaController::class, 'delete_ajax'])->name('delete_ajax');
+        Route::get('/{id}/edit_ajax', [MahasiswaController::class, 'edit_ajax'])->name('edit_ajax');
+        Route::put('/{id}/update_ajax', [MahasiswaController::class, 'update_ajax'])->name('update_ajax');
+        Route::get('/import', [MahasiswaController::class, 'import'])->name('import');
+        Route::post('/import_ajax', [MahasiswaController::class, 'import_ajax'])->name('import_ajax');
+        Route::get('/export_excel', [MahasiswaController::class, 'export_excel'])->name('export_excel');
+        Route::get('/export_pdf', [MahasiswaController::class, 'export_pdf'])->name('export_pdf');
+    });
+
+      Route::prefix('biodata/dosen')->name('biodata.dosen.')->group(function () {
+    Route::get('/', [DosenController::class, 'index'])->name('index');
+        Route::post('/list', [DosenController::class, 'list'])->name('list');
+        Route::get('/{id}/show_ajax', [DosenController::class, 'show_ajax'])->name('show_ajax');
+        Route::get('/create_ajax', [DosenController::class, 'create_ajax'])->name('create_ajax');
+        Route::post('/store_ajax', [DosenController::class, 'store_ajax'])->name('store_ajax');
+        Route::get('/{id}/delete_ajax', [DosenController::class, 'confirm_ajax'])->name('confirm_ajax');
+        Route::delete('/{id}/delete_ajax', [DosenController::class, 'delete_ajax'])->name('delete_ajax');
+        Route::get('/{id}/edit_ajax', [DosenController::class, 'edit_ajax'])->name('edit_ajax');
+        Route::put('/{id}/update_ajax', [DosenController::class, 'update_ajax'])->name('update_ajax');
+        Route::get('/import', [DosenController::class, 'import'])->name('import');
+        Route::post('/import_ajax', [DosenController::class, 'import_ajax'])->name('import_ajax');
+        Route::get('/export_excel', [DosenController::class, 'export_excel'])->name('export_excel');
+        Route::get('/export_pdf', [DosenController::class, 'export_pdf'])->name('export_pdf');
+    });
+
 
 
     // Rute user
