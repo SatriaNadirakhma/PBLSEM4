@@ -18,6 +18,7 @@ use App\Http\Controllers\JadwalController;
 use App\Http\Controllers\PendaftaranController;
 use App\Http\Controllers\TendikController;
 use App\Http\Controllers\UjianController;
+use App\Http\Controllers\LandingPageController;
 use Illuminate\Http\Request;
 
 /*
@@ -27,6 +28,8 @@ use Illuminate\Http\Request;
 */
 
 Route::pattern('id', '[0-9]+');
+
+Route::get('/', [LandingPageController::class, 'index'])->name('templatepage');
 
 // Login & Register
 Route::get('login', [AuthController::class, 'login'])->name('login');
@@ -38,7 +41,7 @@ Route::post('/register', [AuthController::class, 'postRegister']);
 
 // Grup rute yang butuh autentikasi
 Route::middleware(['auth'])->group(function () {
-    Route::get('/', [DashboardController::class, 'index'])->name('home');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('home');
 
      Route::get('/profile', [UserController::class, 'profile'])->name('profile');
     Route::post('/profile/update-photo', [UserController::class, 'updatePhoto'])->name('profile.updatePhoto');

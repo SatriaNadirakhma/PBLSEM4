@@ -114,7 +114,7 @@
                 ]
             });
 
-            $('#searchInput').on('keyup', function () {
+            $('#filter_jurusan').on('change', function () { 
                 dataProdi.ajax.reload();
             });
         });

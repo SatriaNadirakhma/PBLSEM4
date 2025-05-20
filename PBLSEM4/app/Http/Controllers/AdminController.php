@@ -40,17 +40,17 @@ class AdminController extends Controller
         return DataTables::of($admin)
             ->addIndexColumn() // Menambahkan kolom index
             ->addColumn('aksi', function ($a) {
-                $btn  = '<button onclick="modalAction(\'' . url('/prodi/' . $a->admin_id . '/show_ajax') . '\')" 
+                $btn  = '<button onclick="modalAction(\'' . url('/admin/' . $a->admin_id . '/show_ajax') . '\')" 
                             class="btn btn-info btn-sm rounded-pill shadow-sm me-1 px-3 py-1" style="font-size: 0.85rem;">
                             <i class="fa fa-eye me-1"></i> Detail
                         </button>';
 
-                $btn .= '<button onclick="modalAction(\'' . url('/prodi/' . $a->admin_id . '/edit_ajax') . '\')" 
+                $btn .= '<button onclick="modalAction(\'' . url('/admin/' . $a->admin_id . '/edit_ajax') . '\')" 
                             class="btn btn-warning btn-sm rounded-pill shadow-sm me-1 px-3 py-1" style="font-size: 0.85rem;">
                             <i class="fa fa-edit me-1"></i> Edit
                         </button>';
 
-                $btn .= '<button onclick="modalAction(\'' . url('/prodi/' . $a->admin_id . '/delete_ajax') . '\')" 
+                $btn .= '<button onclick="modalAction(\'' . url('/admin/' . $a->admin_id . '/delete_ajax') . '\')" 
                             class="btn btn-danger btn-sm rounded-pill shadow-sm px-3 py-1" style="font-size: 0.85rem;">
                             <i class="fa fa-trash me-1"></i> Hapus
                         </button>';

@@ -79,8 +79,8 @@
                 <button type="submit" class="form-button">Masuk!</button>
 
                 <div class="form-links">
-                    <a href="#">Lupa kata sandi?</a> | 
-                    <a href="#">Bantuan lainnya</a>
+                    <a href="/register">Belum Daftar?</a> | 
+                    <a href="/">Kembali ke Halaman Awal</a>
                 </div>
             </form>
             <div class="footer">
