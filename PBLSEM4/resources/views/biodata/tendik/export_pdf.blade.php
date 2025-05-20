@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
@@ -5,67 +6,70 @@
         body {
             font-family: "Times New Roman", Times, serif;
             margin: 6px 20px 5px 20px;
-            line-height: 15px;
+            line-height: 1.3;
+            font-size: 9pt;
         }
+
         table {
             width: 100%;
             border-collapse: collapse;
         }
+
         td, th {
-            padding: 4px 3px;
+            padding: 2px;
+            border: 1px solid #000;
         }
+
         th {
             text-align: left;
+            background-color: #f2f2f2;
         }
+
         .d-block {
             display: block;
         }
+
         img.image {
             width: auto;
             height: 80px;
             max-width: 150px;
             max-height: 150px;
         }
-        .text-right {
-            text-align: right;
-        }
+
         .text-center {
             text-align: center;
         }
-        .p-1 {
-            padding: 5px 1px 5px 1px;
+
+        .text-left {
+            text-align: left;
         }
-        .font-10 {
-            font-size: 10pt;
-        }
-        .font-11 {
-            font-size: 11pt;
-        }
-        .font-12 {
-            font-size: 12pt;
-        }
-        .font-13 {
-            font-size: 13pt;
-        }
+
+        .font-10 { font-size: 10pt; }
+        .font-11 { font-size: 11pt; }
+        .font-12 { font-size: 12pt; }
+        .font-bold { font-weight: bold; }
+
         .border-bottom-header {
             border-bottom: 1px solid;
         }
-        .border-all, .border-all th, .border-all td {
-            border: 1px solid;
+
+        .no-border td {
+            border: none !important;
         }
     </style>
 </head>
 <body>
-    <table class="border-bottom-header">
+
+    <table class="no-border">
         <tr>
             <td width="15%" class="text-center">
                 <img src="{{ public_path('img/polinema-bw.png') }}" class="image">
             </td>
             <td width="85%">
-                <span class="text-center d-block font-11 font-bold mb-1">
+                <span class="text-center d-block font-11 font-bold">
                     KEMENTERIAN PENDIDIKAN, KEBUDAYAAN, RISET, DAN TEKNOLOGI
                 </span>
-                <span class="text-center d-block font-13 font-bold mb-1">
+                <span class="text-center d-block font-12 font-bold">
                     POLITEKNIK NEGERI MALANG
                 </span>
                 <span class="text-center d-block font-10">
@@ -80,13 +84,14 @@
             </td>
         </tr>
     </table>
+    <hr class="separator">
 
     <h3 class="text-center">LAPORAN DATA TENAGA KEPENDIDIKAN (TENDIK)</h3>
 
-    <table class="border-all">
+    <table>
         <thead>
             <tr>
-                <th class="text-center">No</th>
+                <th>No</th>
                 <th>NIP</th>
                 <th>NIK</th>
                 <th>Nama</th>
@@ -94,7 +99,7 @@
                 <th>Alamat Asal</th>
                 <th>Alamat Sekarang</th>
                 <th>Jenis Kelamin</th>
-                <th>Kampus ID</th>
+
             </tr>
         </thead>
         <tbody>
@@ -107,11 +112,12 @@
                 <td>{{ $item->no_telp }}</td>
                 <td>{{ $item->alamat_asal }}</td>
                 <td>{{ $item->alamat_sekarang }}</td>
-                <td>{{ $item->jenis_kelamin }}</td>
-                <td>{{ $item->kampus_id }}</td>
+                <td class="text-center">{{ $item->jenis_kelamin }}</td>
+
             </tr>
             @endforeach
         </tbody>
     </table>
+
 </body>
 </html>

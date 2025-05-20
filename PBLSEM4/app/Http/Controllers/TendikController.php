@@ -210,4 +210,140 @@ class TendikController extends Controller
         }
         return redirect('/');
     }
+
+    // Menampilkan form import tendik
+    public function import()
+    {
+        return view('biodata.tendik.import');
+    }
+
+    // Import data tendik dari file Excel via AJAX
+    public function import_ajax(Request $request)
+    {
+        if ($request->ajax() || $request->wantsJson()) {
+            $rules = [
+                'file_tendik' => ['required', 'mimes:xlsx', 'max:1024']
+            ];
+
+            $validator = Validator::make($request->all(), $rules);
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Validasi Gagal',
+                    'msgField' => $validator->errors()
+                ]);
+            }
+
+            $file = $request->file('file_tendik');
+            $reader = IOFactory::createReader('Xlsx');
+            $reader->setReadDataOnly(true);
+            $spreadsheet = $reader->load($file->getRealPath());
+            $sheet = $spreadsheet->getActiveSheet();
+            $data = $sheet->toArray(null, false, true, true);
+
+            $insert = [];
+            if (count($data) > 1) {
+                foreach ($data as $rowNumber => $row) {
+                    if ($rowNumber > 1) { 
+                        $insert[] = [
+                            'nip' => $row['A'],
+                            'nik' => $row['B'],
+                            'tendik_nama' => $row['C'],
+                            'no_telp' => $row['D'],
+                            'alamat_asal' => $row['E'],
+                            'alamat_sekarang' => $row['F'],
+                            'jenis_kelamin' => $row['G'],
+                            'kampus_id' => $row['H'],
+                            'created_at' => now(),
+                        ];
+                    }
+                }
+
+                if (count($insert) > 0) {
+                    TendikModel::insertOrIgnore($insert);
+                    return response()->json([
+                        'status' => true,
+                        'message' => 'Data tendik berhasil diimport'
+                    ]);
+                }
+            }
+
+            return response()->json([
+                'status' => false,
+                'message' => 'Tidak ada data yang diimport'
+            ]);
+        }
+
+        return redirect('/');
+    }
+
+    //EXPORT KE EXCEL
+    public function export_excel()
+    {
+    $tendik = TendikModel::select('nip', 'nik', 'tendik_nama', 'no_telp', 'alamat_asal', 'alamat_sekarang', 'jenis_kelamin')
+        ->orderBy('tendik_nama')
+        ->get();
+
+    $spreadsheet = new Spreadsheet();
+    $sheet = $spreadsheet->getActiveSheet();
+
+    // Header kolom
+    $sheet->setCellValue('A1', 'No');
+    $sheet->setCellValue('B1', 'NIP');
+    $sheet->setCellValue('C1', 'NIK');
+    $sheet->setCellValue('D1', 'Nama Tendik');
+    $sheet->setCellValue('E1', 'No Telepon');
+    $sheet->setCellValue('F1', 'Alamat Asal');
+    $sheet->setCellValue('G1', 'Alamat Sekarang');
+    $sheet->setCellValue('H1', 'Jenis Kelamin');
+
+    $sheet->getStyle('A1:H1')->getFont()->setBold(true);
+
+    // Isi data
+    $no = 1;
+    $baris = 2;
+    foreach ($tendik as $value) {
+        $sheet->setCellValue('A' . $baris, $no++);
+        $sheet->setCellValue('B' . $baris, $value->nip);
+        $sheet->setCellValue('C' . $baris, $value->nik);
+        $sheet->setCellValue('D' . $baris, $value->tendik_nama);
+        $sheet->setCellValue('E' . $baris, $value->no_telp);
+        $sheet->setCellValue('F' . $baris, $value->alamat_asal);
+        $sheet->setCellValue('G' . $baris, $value->alamat_sekarang);
+        $sheet->setCellValue('H' . $baris, $value->jenis_kelamin);
+        $baris++;
+    }
+
+    // Auto size kolom
+    foreach (range('A', 'H') as $col) {
+        $sheet->getColumnDimension($col)->setAutoSize(true);
+    }
+
+    $sheet->setTitle('Data Tendik');
+
+    $filename = 'Data_Tendik_' . date('Y-m-d_H-i-s') . '.xlsx';
+
+    header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    header('Content-Disposition: attachment;filename="' . $filename . '"');
+    header('Cache-Control: max-age=0');
+
+    $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
+    $writer->save('php://output');
+    exit;
+    }
+
+    //EXPORT KE PDF
+    public function export_pdf()
+    {
+    $tendik = TendikModel::select('nip', 'nik', 'tendik_nama', 'no_telp', 'alamat_asal', 'alamat_sekarang', 'jenis_kelamin')
+        ->orderBy('tendik_nama')
+        ->get();
+
+    $pdf = Pdf::loadView('biodata.tendik.export_pdf', ['tendik' => $tendik]);
+    $pdf->setPaper('a4', 'portrait');
+    $pdf->setOption("isRemoteEnabled", true);
+    $pdf->render();
+
+    return $pdf->stream('Data Tendik ' . date('Y-m-d H:i:s') . '.pdf');
+    }
 }
