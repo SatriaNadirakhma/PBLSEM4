@@ -67,7 +67,7 @@
             <img src="{{ asset('img/logo_sipinta.png') }}" alt="tcToeic Logo">
             <form id="loginForm">
                 <div class="form-group">
-                    <label for="username">Nomor Induk Mahasiswa (username)</label>
+                    <label for="username">Username</label>
                     <input type="text" id="username" name="username" placeholder="Ketik Nama Pengguna" required>
                 </div>
 
@@ -79,8 +79,8 @@
                 <button type="submit" class="form-button">Masuk!</button>
 
                 <div class="form-links">
-                    <a href="#">Lupa kata sandi?</a> | 
-                    <a href="#">Bantuan lainnya</a>
+                    <a href="/register">Belum Daftar?</a> | 
+                    <a href="/">Kembali ke Halaman Awal</a>
                 </div>
             </form>
             <div class="footer">

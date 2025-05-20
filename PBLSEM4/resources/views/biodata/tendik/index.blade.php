@@ -24,11 +24,8 @@
 
             <div class="row mt-3 g-2">
                 <div class="col-md-6">
-                    <input type="text" id="searchInput" class="form-control" placeholder="Cari nama tendik...">
-                </div>
-                <div class="col-md-6">
                     <select id="kampusFilter" class="form-select">
-                        <option value="">-- Filter berdasarkan kampus --</option>
+                        <option value=""> Filter Berdasarkan Kampus </option>
                         @foreach ($kampus as $k)
                             <option value="{{ $k->kampus_nama }}">{{ $k->kampus_nama }}</option>
                         @endforeach

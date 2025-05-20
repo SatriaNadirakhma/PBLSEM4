@@ -39,9 +39,28 @@
                         <td class="col-9">{{ $tendik->nip }}</td>
                     </tr>
                     <tr>
+                        <th class="text-right col-3">NIK:</th>
+                        <td class="col-9">{{ $tendik->nik }}</td>
+                    </tr>
+                    <tr>
                         <th class="text-right col-3">Nama:</th>
                         <td class="col-9">{{ $tendik->tendik_nama }}</td>
                     </tr>
+                    <tr>
+                        <th class="text-right col-3">No Telepon:</th>
+                        <td class="col-9">{{ $tendik->no_telp }}</td>
+                    </tr>
+                    <tr>
+                        <th class="text-right col-3">Alamat Asal:</th>
+                        <td class="col-9">{{ $tendik->alamat_asal }}</td>
+                    </tr>
+                    <tr>
+                        <th class="text-right col-3">Alamat Sekarang:</th>
+                        <td class="col-9">{{ $tendik->alamat_sekarang }}</td>
+                    </tr>
+                    <tr>
+                        <th class="text-right col-3">Jenis Kelamin:</th>
+                        <td class="col-9">{{ $tendik->jenis_kelamin }}</td>
                 </table>
             </div>
             <div class="modal-footer">
