@@ -36,11 +36,6 @@ class TendikController extends Controller
     $tendik = TendikModel::select('tendik_id', 'nip', 'nik', 'tendik_nama', 'no_telp', 'alamat_asal', 'alamat_sekarang', 'jenis_kelamin', 'kampus_id')
         ->with('kampus'); // Pastikan relasi kampus sudah dimuat
 
-    // Filter berdasarkan nama tendik
-        if ($request->has('search_query') && $request->search_query != '') {
-            $tendik->where('tendik_nama', 'like', '%' . $request->search_query . '%');
-        }
-
     // Filter berdasarkan nama kampus
     if ($request->has('kampus_nama') && $request->kampus_nama != '') {
         $tendik->whereHas('kampus', function ($query) use ($request) {
@@ -54,9 +49,20 @@ class TendikController extends Controller
             return $t->kampus ? $t->kampus->kampus_nama : '-'; // Pastikan kampus_nama terisi dengan benar
         })
         ->addColumn('aksi', function ($t) {
-            $btn = '<button onclick="modalAction(\'' . route('biodata.tendik.show_ajax', $t->tendik_id) . '\')" class="btn btn-info btn-sm me-1">Detail</button>';
-            $btn .= '<button onclick="modalAction(\'' . route('biodata.tendik.edit_ajax', $t->tendik_id) . '\')" class="btn btn-warning btn-sm me-1">Edit</button>';
-            $btn .= '<button onclick="modalAction(\'' . route('biodata.tendik.confirm_ajax', $t->tendik_id) . '\')" class="btn btn-danger btn-sm">Hapus</button>';
+            $btn = '<button onclick="modalAction(\'' . route('biodata.tendik.show_ajax', $t->tendik_id) . '\')" 
+                        class="btn btn-info btn-sm rounded-pill shadow-sm me-1 px-3 py-1" style="font-size: 0.85rem;">
+                        <i class="fa fa-eye me-1"></i> Detail 
+                    </button>';
+
+            $btn .= '<button onclick="modalAction(\'' . route('biodata.tendik.edit_ajax', $t->tendik_id) . '\')" 
+                            class="btn btn-warning btn-sm rounded-pill shadow-sm me-1 px-3 py-1" style="font-size: 0.85rem;">
+                            <i class="fa fa-edit me-1"></i> Edit
+                    </button>';
+
+            $btn .= '<button onclick="modalAction(\'' . route('biodata.tendik.confirm_ajax', $t->tendik_id) . '\')"  
+                            class="btn btn-danger btn-sm rounded-pill shadow-sm px-3 py-1" style="font-size: 0.85rem;">
+                            <i class="fa fa-trash me-1"></i> Hapus
+                    </button>';
             return $btn;
         })
         ->rawColumns(['aksi'])
@@ -146,6 +152,7 @@ class TendikController extends Controller
     public function edit_ajax(string $id)
     {
         $tendik = TendikModel::find($id);
+        $kampus = KampusModel::all(); // Ambil semua kampus
 
         if (!$tendik) {
             return response()->json([
@@ -154,7 +161,10 @@ class TendikController extends Controller
             ]);
         }
 
-        return view('biodata.tendik.edit_ajax', ['tendik' => $tendik]);
+        return view('biodata.tendik.edit_ajax', [
+        'tendik' => $tendik,
+        'kampus' => $kampus // Kirim data kampus ke view
+    ]);
     }
 
     public function update_ajax(Request $request, $id)
@@ -174,7 +184,8 @@ class TendikController extends Controller
             'alamat_asal' => 'nullable|string',
             'alamat_sekarang' => 'nullable|string',
             'jenis_kelamin' => 'required|string',
-            'kampus_id' => 'required|integer',
+            'kampus_id' => 'required|integer|exists:kampus,kampus_id',
+
         ]);
 
         if ($validator->fails()) {

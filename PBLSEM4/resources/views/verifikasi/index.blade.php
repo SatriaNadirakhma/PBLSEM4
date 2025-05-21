@@ -75,47 +75,83 @@ $(document).ready(function () {
 });
 
 function updateStatus(id, status) {
-    let catatan = prompt("Masukkan catatan (opsional):");
-
-    fetch(`/verifikasi/${id}/update`, {
-        method: 'POST',
-        headers: {
-            'X-CSRF-TOKEN': '{{ csrf_token() }}',
-            'Content-Type': 'application/json'
+    Swal.fire({
+        title: 'Yakin ingin mengubah status?',
+        text: "Perubahan ini akan disimpan!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Iya',
+        cancelButtonText: 'Tidak',
+        reverseButtons: true,
+        customClass: {
+            confirmButton: 'btn btn-success me-5',
+            cancelButton: 'btn btn-danger'
         },
-        body: JSON.stringify({ status, catatan })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
+        buttonsStyling: false
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Tampilkan prompt untuk catatan setelah konfirmasi
             Swal.fire({
-                icon: 'success',
-                title: 'Berhasil',
-                text: data.message,
-                confirmButtonText: 'OKE',
+                title: 'Tuliskan Catatan untuk Peserta',
+                input: 'text',
+                inputPlaceholder: 'opsional...',
+                showCancelButton: true,
+                confirmButtonText: 'Simpan',
+                cancelButtonText: 'Batal',
                 customClass: {
-                    confirmButton: 'btn btn-primary'
+                    confirmButton: 'btn btn-success me-2',
+                    cancelButton: 'btn btn-danger'
                 },
                 buttonsStyling: false
-            }).then(() => {
-                // reload agar session flash juga muncul (opsional)
-                location.reload();
-            });
-        } else {
-            Swal.fire({
-                icon: 'error',
-                title: 'Gagal',
-                text: 'Gagal mengubah status.',
-                confirmButtonText: 'Coba Lagi',
-                customClass: {
-                    confirmButton: 'btn btn-danger'
-                },
-                buttonsStyling: false
-            });
-        }
-    })
+            }).then((inputResult) => {
+                if (inputResult.isConfirmed) {
+                    let catatan = inputResult.value;
 
+                    fetch(`/verifikasi/${id}/update`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ status, catatan })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Berhasil',
+                                text: data.message,
+                                confirmButtonText: 'OKE',
+                                customClass: {
+                                    confirmButton: 'btn btn-primary'
+                                },
+                                buttonsStyling: false
+                            }).then(() => {
+                                location.reload();
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Gagal',
+                                text: 'Gagal mengubah status.',
+                                confirmButtonText: 'Coba Lagi',
+                                customClass: {
+                                    confirmButton: 'btn btn-danger'
+                                },
+                                buttonsStyling: false
+                            });
+                        }
+                    });
+                }
+                // Jika klik Batal di input, tidak lakukan apa pun
+            });
+
+        }
+        // Jika klik "Tidak", tidak terjadi apa-apa
+    });
 }
+
 </script>
 @endpush
 
