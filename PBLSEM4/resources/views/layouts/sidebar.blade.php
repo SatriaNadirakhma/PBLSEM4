@@ -114,6 +114,12 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a href="{{ url('riwayat') }}" class="nav-link {{ ($activeMenu == 'riwayat-pendaftaran') ? 'active' : '' }}">
+                            <i class="fa fa-list nav-icon"></i>
+                            <p>Riwayat Pendaftaran</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a href="{{ url('/pendaftaran/edit') }}" class="nav-link {{ ($activeMenu == 'edit-formulir') ? 'active' : '' }}">
                             <i class="fa fa-list nav-icon"></i>
                             <p>Edit Formulir</p>

@@ -30,4 +30,10 @@ class PendaftaranModel extends Model
     {
         return $this->belongsTo(JadwalModel::class, 'jadwal_id');
     }
+
+    public function detail()
+    {
+        return $this->hasOne(DetailPendaftaranModel::class, 'pendaftaran_id', 'pendaftaran_id');
+    }
+
 }
