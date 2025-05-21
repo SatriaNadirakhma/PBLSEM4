@@ -18,6 +18,7 @@ use App\Http\Controllers\JadwalController;
 use App\Http\Controllers\PendaftaranController;
 use App\Http\Controllers\TendikController;
 use App\Http\Controllers\UjianController;
+use App\Http\Controllers\RiwayatController;
 use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\VerifikasiPendaftaranController;
 use Illuminate\Http\Request;
@@ -211,6 +212,12 @@ Route::middleware(['auth'])->group(function () {
     // Rute pendaftaran     
     Route::prefix('pendaftaran')->group(function () {
         Route::get('/', [PendaftaranController::class, 'index']);
+    });
+
+    //Rute Riwayat Pendaftaran
+    Route::prefix('riwayat')->group(function () {
+        Route::get('/', [RiwayatController::class, 'index'])->name('riwayat.index');
+        Route::post('/list', [RiwayatController::class, 'list'])->name('riwayat.list');
     });
 
     // Rute detail pendaftaran  
