@@ -4,23 +4,44 @@
     <div class="card card-outline card-primary shadow-sm">
         <div class="card-header">
             <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
-                <h3 class="card-title mb-2 mb-md-0">{{ $breadcrumb->title ?? 'Data Dosen' }}</h3>
+                <h3 class="card-title mb-2 mb-md-0">{{ $page->title }}</h3>
                 <div class="btn-toolbar flex-wrap gap-2" role="toolbar" aria-label="Aksi Dosen">
-                    <button onclick="modalAction('{{ url('/dosen/import') }}')" class="btn btn-info btn-sm shadow-sm">
-                        <i class="fa fa-upload me-1"></i> Import
+                    
+                    <button onclick="modalAction('{{ url('/biodata/dosen/import') }}')" class="btn btn-info btn-sm shadow-sm">
+                        <i class="fa fa-upload me-1"></i> Import Excel
                     </button>
-                    <a href="{{ url('/dosen/export_excel') }}" class="btn btn-primary btn-sm shadow-sm">
+                    <a href="{{ url('/biodata/dosen/export_excel') }}" class="btn btn-primary btn-sm shadow-sm">
                         <i class="fa fa-file-excel me-1"></i> Export Excel
                     </a>
-                    <a href="{{ url('/dosen/export_pdf') }}" class="btn btn-warning text-dark btn-sm shadow-sm">
+                    <a href="{{ url('/biodata/dosen/export_pdf') }}" class="btn btn-warning text-dark btn-sm shadow-sm">
                         <i class="fa fa-file-pdf me-1"></i> Export PDF
                     </a>
-                    <button onclick="modalAction('{{ url('/dosen/create_ajax') }}')" class="btn btn-success btn-sm shadow-sm">
+                    <button onclick="modalAction('{{ url('/biodata/dosen/create_ajax') }}')" class="btn btn-success btn-sm shadow-sm">
                         <i class="fa fa-plus-circle me-1"></i> Tambah
                     </button>
                 </div>
             </div>
+
+           <!-- untuk Filter data -->
+        <div id="filter" class="form-horizontal filter-date p-2 border-bottom mb-2">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group form-group-sm row text-sm mb-0">
+                        <label for="jurusanFilter" class="col-md-2 col-form-label">Filter Jurusan</label>
+                        <div class="col-md-4">
+                            <select id="jurusanFilter" class="form-control form-control-sm">
+                                <option value="">- Semua Jurusan -</option>
+                                @foreach ($jurusan as $k)
+                                    <option value="{{ $k->jurusan_id }}">{{ $k->jurusan_id }}</option>
+                                @endforeach
+                            </select>
+                            <small class="form-text text-muted">Pilih jurusan untuk memfilter data dosen</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+
         <div class="card-body">
             @if (session('success'))
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -35,6 +56,7 @@
                 </div>
             @endif
 
+           
             <div class="table-responsive">
                 <table class="table table-bordered table-striped table-hover table-sm" id="table_dosen">
                     <thead class="table-primary text-center">
@@ -57,7 +79,7 @@
         </div>
     </div>
 
-    <div id="myModal" class="modal fade animate shake" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" data-width="75%" aria-hidden="true"></div>
+       <div id="myModal" class="modal fade animate shake" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" data-width="75%" aria-hidden="true"></div>
 @endsection
 
 @push('js')
@@ -100,3 +122,9 @@
         });
     </script>
 @endpush
+
+
+
+
+
+
