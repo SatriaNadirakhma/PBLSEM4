@@ -20,6 +20,7 @@ use App\Http\Controllers\TendikController;
 use App\Http\Controllers\UjianController;
 use App\Http\Controllers\RiwayatController;
 use App\Http\Controllers\LandingPageController;
+use App\Http\Controllers\VerifikasiPendaftaranController;
 use Illuminate\Http\Request;
 
 /*
@@ -190,6 +191,18 @@ Route::middleware(['auth'])->group(function () {
 
         
     });
+
+    // ROUTE VERIFIKASI
+    Route::prefix('verifikasi')->name('verifikasi.')->group(function () {
+    Route::get('/', [VerifikasiPendaftaranController::class, 'index'])->name('index');
+    Route::get('/list', [VerifikasiPendaftaranController::class, 'list'])->name('list'); // pastikan ini GET
+    Route::post('{id}/update', [VerifikasiPendaftaranController::class, 'update'])->name('update');
+    Route::get('{id}/edit', [VerifikasiPendaftaranController::class, 'edit'])->name('edit');
+    Route::get('/show/{id}', [VerifikasiPendaftaranController::class, 'show'])->name('show');
+});
+
+
+
 
     // Rute jadwal
     Route::prefix('jadwal')->group(function () {

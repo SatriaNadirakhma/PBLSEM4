@@ -98,8 +98,8 @@
             </li>
 
             <!-- Dropdown PENDAFTARAN -->
-            <li class="nav-item has-treeview {{ in_array($activeMenu, ['verifikasi-pendaftaran', 'edit-formulir']) ? 'menu-open' : '' }}">
-                <a href="#" class="nav-link {{ in_array($activeMenu, ['verifikasi-pendaftaran', 'edit-formulir']) ? 'active' : '' }}">
+            <li class="nav-item has-treeview {{ in_array($activeMenu, ['verifikasi', 'edit-formulir']) ? 'menu-open' : '' }}">
+                <a href="#" class="nav-link {{ in_array($activeMenu, ['verifikasi', 'edit-formulir']) ? 'active' : '' }}">
                     <i class="nav-icon fas fa-clipboard-list"></i>
                     <p>
                         PENDAFTARAN
@@ -108,7 +108,7 @@
                 </a>
                 <ul class="nav nav-treeview">
                     <li class="nav-item">
-                        <a href="{{ url('/pendaftaran/verifikasi') }}" class="nav-link {{ ($activeMenu == 'verifikasi-pendaftaran') ? 'active' : '' }}">
+                        <a href="{{ url('/verifikasi') }}" class="nav-link {{ ($activeMenu == 'verifikasi') ? 'active' : '' }}">
                             <i class="fa fa-list nav-icon"></i>
                             <p>Verifikasi Pendaftaran</p>
                         </a>

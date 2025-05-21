@@ -22,14 +22,22 @@
                 </div>
             </div>
 
-            <div class="row mt-3 g-2">
-                <div class="col-md-6">
-                    <select id="kampusFilter" class="form-select">
-                        <option value=""> Filter Berdasarkan Kampus </option>
-                        @foreach ($kampus as $k)
-                            <option value="{{ $k->kampus_nama }}">{{ $k->kampus_nama }}</option>
-                        @endforeach
-                    </select>
+           <!-- untuk Filter data -->
+        <div id="filter" class="form-horizontal filter-date p-2 border-bottom mb-2">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group form-group-sm row text-sm mb-0">
+                        <label for="kampusFilter" class="col-md-2 col-form-label">Filter Kampus</label>
+                        <div class="col-md-4">
+                            <select id="kampusFilter" class="form-control form-control-sm">
+                                <option value="">- Semua Kampus -</option>
+                                @foreach ($kampus as $k)
+                                    <option value="{{ $k->kampus_nama }}">{{ $k->kampus_nama }}</option>
+                                @endforeach
+                            </select>
+                            <small class="form-text text-muted">Pilih kampus untuk memfilter data tendik</small>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

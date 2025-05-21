@@ -69,9 +69,15 @@
                     <small id="error-jenis_kelamin" class="error-text form-text text-danger"></small>
                 </div>
                 <div class="form-group">
-                    <label>Kampus ID</label>
-                    <input value="{{ $tendik->kampus_id }}" type="number" name="kampus_id" id="kampus_id" class="form-control" required>
-                    <small id="error-kampus_id" class="error-text form-text text-danger"></small>
+                    <label>Nama Kampus</label>
+                    <select name="kampus_nama" id="kampus_nama" class="form-control" required>
+                        <option value="">--Pilih Kampus--</option>
+                        <option value="Utama" {{ $tendik->kampus->kampus_nama == 'Utama' ? 'selected' : '' }}>Utama</option>
+                        <option value="PSDKU Kediri" {{ $tendik->kampus->kampus_nama == 'PSDKU Kediri' ? 'selected' : '' }}>PSDKU Kediri</option>
+                        <option value="PSDKU Lumajang" {{ $tendik->kampus->kampus_nama == 'PSDKU Lumajang' ? 'selected' : '' }}>PSDKU Lumajang</option>
+                        <option value="PSDKU Pamekasan" {{ $tendik->kampus->kampus_nama == 'PSDKU Pamekasan' ? 'selected' : '' }}>PSDKU Pamekasan</option>
+                    </select>
+                    <small id="error-kampus_nama" class="error-text form-text text-danger"></small>
                 </div>
             </div>
             <div class="modal-footer">

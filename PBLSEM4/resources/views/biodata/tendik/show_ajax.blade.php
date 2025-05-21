@@ -56,11 +56,12 @@
                     <td>{{ $tendik->jenis_kelamin }}</td>
                 </tr>
                 <tr>
-                    <th>Kampus ID</th>
-                    <td>{{ $tendik->kampus_id }}</td>
+                    <th>Kampus Nama</th>
+                    <td>{{ $tendik->kampus->kampus_nama }}</td>
                 </tr>
             </table>
         </div>
+        <!-- <td>{{ $prodi->jurusan->jurusan_nama ?? '-' }}</td> -->
         <div class="modal-footer">
             <button type="button" class="btn btn-primary" data-dismiss="modal">Tutup</button>
         </div>

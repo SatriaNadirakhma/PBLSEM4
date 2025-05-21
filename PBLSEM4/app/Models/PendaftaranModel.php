@@ -33,7 +33,6 @@ class PendaftaranModel extends Model
 
     public function detail()
     {
-        return $this->hasOne(DetailPendaftaranModel::class, 'pendaftaran_id', 'pendaftaran_id');
+        return $this->hasOne(DetailPendaftaranModel::class, 'pendaftaran_id');
     }
-
 }
