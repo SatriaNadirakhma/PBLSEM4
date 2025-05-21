@@ -10,4 +10,11 @@ class DetailPendaftaranModel extends Model
     protected $primaryKey = 'detail_id';
     public $timestamps = true;
     protected $guarded = [];
+
+    protected $fillable = ['status', 'catatan'];
+
+    public function pendaftaran()
+    {
+        return $this->belongsTo(PendaftaranModel::class, 'pendaftaran_id');
+    }
 }

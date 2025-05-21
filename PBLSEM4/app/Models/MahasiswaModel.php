@@ -31,4 +31,17 @@ class MahasiswaModel extends Model
     {
         return $this->hasOne(UserModel::class, 'mahasiswa_id', 'mahasiswa_id');
     }
+
+    public function prodi() {
+        return $this->belongsTo(ProdiModel::class, 'prodi_id');
+    }
+
+    public function jurusan() {
+        return $this->belongsTo(JurusanModel::class, 'jurusan_id');
+    }
+
+    public function kampus() {
+        return $this->belongsTo(KampusModel::class, 'kampus_id');
+    }
+
 }
