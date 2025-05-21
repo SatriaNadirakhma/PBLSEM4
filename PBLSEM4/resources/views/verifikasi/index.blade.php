@@ -27,8 +27,8 @@
                         <th>Prodi</th>
                         <th>Jurusan</th>
                         <th>Kampus</th>
-                        <th>Aksi</th>
                         <th>Status</th>
+                        <th>Aksi</th>
                         
                     </tr>
                 </thead>
@@ -67,8 +67,8 @@ $(document).ready(function () {
             { data: 'prodi', name: 'prodi' },
             { data: 'jurusan', name: 'jurusan' },
             { data: 'kampus', name: 'kampus' },
-            { data: 'aksi', name: 'aksi', className: 'text-center', orderable: false, searchable: false },
             { data: 'status', name: 'status', className: 'text-center' },
+            { data: 'aksi', name: 'aksi', className: 'text-center', orderable: false, searchable: false },
         ]
 
     });
