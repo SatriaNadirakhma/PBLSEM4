@@ -70,14 +70,15 @@
                 </div>
                 <div class="form-group">
                     <label>Nama Kampus</label>
-                    <select name="kampus_nama" id="kampus_nama" class="form-control" required>
-                        <option value="">--Pilih Kampus--</option>
-                        <option value="Utama" {{ $tendik->kampus->kampus_nama == 'Utama' ? 'selected' : '' }}>Utama</option>
-                        <option value="PSDKU Kediri" {{ $tendik->kampus->kampus_nama == 'PSDKU Kediri' ? 'selected' : '' }}>PSDKU Kediri</option>
-                        <option value="PSDKU Lumajang" {{ $tendik->kampus->kampus_nama == 'PSDKU Lumajang' ? 'selected' : '' }}>PSDKU Lumajang</option>
-                        <option value="PSDKU Pamekasan" {{ $tendik->kampus->kampus_nama == 'PSDKU Pamekasan' ? 'selected' : '' }}>PSDKU Pamekasan</option>
+                    <select name="kampus_id" id="kampus_id" class="form-control" required>
+                        <option value="">-- Pilih Kampus --</option>
+                        @foreach($kampus as $k)
+                            <option value="{{ $k->kampus_id }}" {{ $tendik->kampus_id == $k->kampus_id ? 'selected' : '' }}>
+                                {{ $k->kampus_nama }}
+                            </option>
+                        @endforeach
                     </select>
-                    <small id="error-kampus_nama" class="error-text form-text text-danger"></small>
+                    <small id="error-kampus_id" class="error-text form-text text-danger"></small>
                 </div>
             </div>
             <div class="modal-footer">
