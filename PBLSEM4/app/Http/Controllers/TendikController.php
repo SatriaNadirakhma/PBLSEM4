@@ -85,10 +85,10 @@ class TendikController extends Controller
     {
         if ($request->ajax() || $request->wantsJson()) {
             $rules = [
-                'nip' => 'required|string|max:20|unique:tendik,nip',
-                'nik' => 'required|string|max:20',
+                'nip' => 'required|string|max:20|min:18|unique:tendik,nip',
+                'nik' => 'required|string|max:16|min:16|unique:tendik,nik',
                 'tendik_nama' => 'required|string|max:100',
-                'no_telp' => 'nullable|string',
+                'no_telp' => 'nullable|string|max:13|min:11|',
                 'alamat_asal' => 'nullable|string',
                 'alamat_sekarang' => 'nullable|string',
                 'jenis_kelamin' => 'required|string',
@@ -177,10 +177,10 @@ class TendikController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'nip' => 'required|string|max:20',
-            'nik' => 'required|string|max:20',
+            'nip' => 'required|string|max:20|min:18',
+            'nik' => 'required|string|max:16|min:16',
             'tendik_nama' => 'required|string|max:100',
-            'no_telp' => 'nullable|string',
+            'no_telp' => 'nullable|string|max:13|min:11',
             'alamat_asal' => 'nullable|string',
             'alamat_sekarang' => 'nullable|string',
             'jenis_kelamin' => 'required|string',

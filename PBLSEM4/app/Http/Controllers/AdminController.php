@@ -77,7 +77,7 @@ class AdminController extends Controller
             if ($request->ajax() || $request->wantsJson()) {
                 $rules = [
                     'admin_nama' => 'required|string|max:100',
-                    'no_telp' => 'required|string|max:20',
+                    'no_telp' => 'required|string|max:13|min:11',
                 ];
 
                 $validator = Validator::make($request->all(), $rules);
@@ -164,7 +164,7 @@ class AdminController extends Controller
 
         $validator = Validator::make($request->all(), [
             'admin_nama' => 'required|min:3|max:100',
-            'no_telp' => 'required|min:3|max:20',
+            'no_telp' => 'required|min:3|max:13|min:11',
         ]);
 
         if ($validator->fails()) {
