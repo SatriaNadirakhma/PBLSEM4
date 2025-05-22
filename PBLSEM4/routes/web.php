@@ -218,6 +218,7 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('riwayat')->group(function () {
         Route::get('/', [RiwayatController::class, 'index'])->name('riwayat.index');
         Route::post('/list', [RiwayatController::class, 'list'])->name('riwayat.list');
+        Route::get('/{id}/show_ajax', [RiwayatController::class, 'show_ajax']);
     });
 
     // Rute detail pendaftaran  

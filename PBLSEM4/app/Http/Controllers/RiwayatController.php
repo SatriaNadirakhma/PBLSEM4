@@ -66,4 +66,14 @@ class RiwayatController extends Controller
             ->make(true);
     }
 
+    public function show_ajax($id)
+    {
+        $pendaftaran = PendaftaranModel::with([
+            'mahasiswa.prodi.jurusan.kampus',
+            'detail',
+            'jadwal'
+        ])->find($id);
+
+        return view('riwayat.show_ajax', compact('pendaftaran'));
+    }
 }
