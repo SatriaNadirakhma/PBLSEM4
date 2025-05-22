@@ -167,7 +167,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/export_pdf', [MahasiswaController::class, 'export_pdf'])->name('export_pdf');
 });
 
-   Route::prefix('biodata/dosen')->middleware(['auth', 'role:admin'])->name('biodata.dosen.')->group(function () {
+  Route::prefix('biodata/dosen')->middleware(['auth', 'role:admin'])->name('biodata.dosen.')->group(function () {
     Route::get('/', [DosenController::class, 'index'])->name('index');
     Route::get('/list', [DosenController::class, 'list'])->name('list');
     Route::get('/{id}/show_ajax', [DosenController::class, 'show_ajax'])->name('show_ajax');
@@ -182,7 +182,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/export_excel', [DosenController::class, 'export_excel'])->name('export_excel');
     Route::get('/export_pdf', [DosenController::class, 'export_pdf'])->name('export_pdf');
 });
-
 
 
 
