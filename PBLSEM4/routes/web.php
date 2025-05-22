@@ -144,7 +144,7 @@ Route::middleware(['auth'])->group(function () {
     });
 
     Route::prefix('biodata/mahasiswa')
-    ->middleware(['auth', 'role:admin,mahasiswa'])
+->middleware(['auth', 'role:admin,mahasiswa'])
     ->name('biodata.mahasiswa.')
     ->group(function () {
 
