@@ -39,6 +39,7 @@ class MahasiswaController extends Controller
             $mahasiswa->where('mahasiswa_nama', 'like', '%' . $request->search_query . '%');
         }
 
+
         return DataTables::of($mahasiswa)
             ->addIndexColumn()
             ->addColumn('prodi_id', function ($t) {
@@ -68,7 +69,7 @@ class MahasiswaController extends Controller
 
     public function store_ajax(Request $request)
     {
-        if ($request->ajax()) {
+        if ($request->ajax()|| $request->wantsJson()) {
             $rules = [
                 'nim' => 'required|string|max:20|unique:mahasiswa,nim',
                 'nik' => 'required|string|max:20',
