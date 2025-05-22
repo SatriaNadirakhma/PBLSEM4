@@ -35,7 +35,7 @@
 
             <!-- Dropdown BIODATA -->
             @auth
-            @if(Auth::user()->role == 'admin')
+            @if(in_array(Auth::user()->role, ['admin', 'mahasiswa', 'dosen', 'tendik']))
             <li class="nav-item has-treeview {{ in_array($activeMenu, ['peserta-mahasiswa', 'peserta-dosen', 'tendik', 'peserta-admin']) ? 'menu-open' : '' }}">
                 <a href="#" class="nav-link {{ in_array($activeMenu, ['peserta-mahasiswa', 'peserta-dosen', 'tendik', 'admin']) ? 'active' : '' }}">
                     <i class="nav-icon fas fa-users"></i>
@@ -45,30 +45,38 @@
                     </p>
                 </a>
                 <ul class="nav nav-treeview">
+                    @if(in_array(Auth::user()->role, ['admin', 'mahasiswa']))
                     <li class="nav-item">
                         <a href="{{ url('/biodata/mahasiswa') }}" class="nav-link {{ ($activeMenu == 'peserta-mahasiswa') ? 'active' : '' }}">
                             <i class="far fa-user nav-icon"></i>
                             <p>Peserta Mahasiswa</p>
                         </a>
                     </li>
+                    @endif
+                    @if(in_array(Auth::user()->role, ['admin', 'dosen']))
                     <li class="nav-item">
                         <a href="{{ url('/biodata/dosen') }}" class="nav-link {{ ($activeMenu == 'peserta-dosen') ? 'active' : '' }}">
                             <i class="far fa-user nav-icon"></i>
                             <p>Peserta Dosen</p>
                         </a>
                     </li>
+                    @endif
+                    @if(in_array(Auth::user()->role, ['admin', 'tendik']))
                     <li class="nav-item">
                         <a href="{{ route('biodata.tendik.index') }}" class="nav-link {{ ($activeMenu == 'peserta-tendik') ? 'active' : '' }}">
                             <i class="far fa-user nav-icon"></i>
                             <p>Peserta Tendik</p>
                         </a>
                     </li>
+                    @endif
+                    @if(Auth::user()->role == 'admin')
                     <li class="nav-item">
                         <a href="{{ url('/admin') }}" class="nav-link {{ ($activeMenu == 'admin') ? 'active' : '' }}">
                             <i class="far fa-user nav-icon"></i>
                             <p>Admin</p>
                         </a>
                     </li>
+                    @endif
                 </ul>
             </li>
             @endif
@@ -121,24 +129,30 @@
                     </p>
                 </a>
                 <ul class="nav nav-treeview">
+                    @if(Auth::user()->role == 'admin')
                     <li class="nav-item">
                         <a href="{{ url('/verifikasi') }}" class="nav-link {{ ($activeMenu == 'verifikasi') ? 'active' : '' }}">
                             <i class="fa fa-list nav-icon"></i>
                             <p>Verifikasi Pendaftaran</p>
                         </a>
                     </li>
+                    @endif
+                    @if(Auth::user()->role == 'admin')
                     <li class="nav-item">
                         <a href="{{ url('riwayat') }}" class="nav-link {{ ($activeMenu == 'riwayat-pendaftaran') ? 'active' : '' }}">
                             <i class="fa fa-list nav-icon"></i>
                             <p>Riwayat Pendaftaran</p>
                         </a>
                     </li>
+                    @endif
+                    @if(in_array(Auth::user()->role, ['mahasiswa', 'dosen', 'tendik']))
                     <li class="nav-item">
                         <a href="{{ url('/pendaftaran/edit') }}" class="nav-link {{ ($activeMenu == 'edit-formulir') ? 'active' : '' }}">
                             <i class="fa fa-list nav-icon"></i>
-                            <p>Edit Formulir</p>
+                            <p>Formulir</p>
                         </a>
                     </li>
+                    @endif
                 </ul>
             </li>
             @endif
