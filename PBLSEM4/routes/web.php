@@ -45,7 +45,7 @@ Route::post('/register', [AuthController::class, 'postRegister']);
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('home');
 
-     Route::get('/profile', [UserController::class, 'profile'])->name('profile');
+    Route::get('/profile', [UserController::class, 'profile'])->name('profile');
     Route::post('/profile/update-photo', [UserController::class, 'updatePhoto'])->name('profile.updatePhoto');
 
     // Rute kampus
@@ -143,7 +143,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/export_pdf', [TendikController::class, 'export_pdf'])->name('export_pdf');
     });
 
-     Route::prefix('biodata/mahasiswa')->name('biodata.mahasiswa.')->group(function () {
+    Route::prefix('biodata/mahasiswa')->name('biodata.mahasiswa.')->group(function () {
     Route::get('/', [MahasiswaController::class, 'index'])->name('index');
         Route::post('/list', [MahasiswaController::class, 'list'])->name('list');
         Route::get('/{id}/show_ajax', [MahasiswaController::class, 'show_ajax'])->name('show_ajax');
@@ -159,7 +159,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/export_pdf', [MahasiswaController::class, 'export_pdf'])->name('export_pdf');
     });
 
-      Route::prefix('biodata/dosen')->name('biodata.dosen.')->group(function () {
+    Route::prefix('biodata/dosen')->name('biodata.dosen.')->group(function () {
     Route::get('/', [DosenController::class, 'index'])->name('index');
         Route::post('/list', [DosenController::class, 'list'])->name('list');
         Route::get('/{id}/show_ajax', [DosenController::class, 'show_ajax'])->name('show_ajax');
@@ -194,11 +194,11 @@ Route::middleware(['auth'])->group(function () {
 
     // ROUTE VERIFIKASI
     Route::prefix('verifikasi')->name('verifikasi.')->group(function () {
-    Route::get('/', [VerifikasiPendaftaranController::class, 'index'])->name('index');
-    Route::get('/list', [VerifikasiPendaftaranController::class, 'list'])->name('list'); // pastikan ini GET
-    Route::post('{id}/update', [VerifikasiPendaftaranController::class, 'update'])->name('update');
-    Route::get('{id}/edit', [VerifikasiPendaftaranController::class, 'edit'])->name('edit');
-    Route::get('/show/{id}', [VerifikasiPendaftaranController::class, 'show'])->name('show');
+        Route::get('/', [VerifikasiPendaftaranController::class, 'index'])->name('index');
+        Route::get('/list', [VerifikasiPendaftaranController::class, 'list'])->name('list'); // pastikan ini GET
+        Route::post('{id}/update', [VerifikasiPendaftaranController::class, 'update'])->name('update');
+        Route::get('{id}/edit', [VerifikasiPendaftaranController::class, 'edit'])->name('edit');
+        Route::get('/show/{id}', [VerifikasiPendaftaranController::class, 'show'])->name('show');
 });
 
 
