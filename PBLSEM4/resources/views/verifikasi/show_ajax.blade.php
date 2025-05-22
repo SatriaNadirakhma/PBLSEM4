@@ -29,7 +29,11 @@
                 </tr>
                 <tr>
                     <th>Tanggal Pendaftaran</th>
-                    <td>{{ $pendaftaran->tanggal_pendaftaran }}</td>
+                    <td>
+                        {{ $pendaftaran->tanggal_pendaftaran
+                            ? \Carbon\Carbon::parse($pendaftaran->tanggal_pendaftaran)->format('d-m-Y - H:i:s')
+                            : '-' }}
+                    </td>
                 </tr>
                 <tr>
                     <th>Nama Mahasiswa</th>
@@ -71,10 +75,6 @@
                     <td>{{ ucfirst($pendaftaran->mahasiswa->jenis_kelamin ?? '-') }}</td>
                 </tr>
                 <tr>
-                    <th>Status Pendaftaran</th>
-                    <td>{{ ucfirst($pendaftaran->detail->status ?? 'menunggu') }}</td>
-                </tr>
-                <tr>
                     <th>Scan KTP</th>
                     <td>{{ $pendaftaran->scan_ktp ?? '-' }}</td>
                 </tr>
@@ -85,6 +85,14 @@
                 <tr>
                     <th>Pas Foto</th>
                     <td>{{ $pendaftaran->pas_foto ?? '-' }}</td>
+                </tr>
+                <tr>
+                    <th>Jadwal yang Dipilih</th>
+                    <td>
+                        {{ $pendaftaran->jadwal->tanggal_pelaksanaan 
+                            ? \Carbon\Carbon::parse($pendaftaran->jadwal->tanggal_pelaksanaan)->format('d-m-Y') 
+                            : '-' }} - {{ $pendaftaran->jadwal->jam_mulai ?? '-' }}
+                    </td>
                 </tr>
             </table>
         </div>

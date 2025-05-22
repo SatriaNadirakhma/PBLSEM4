@@ -102,7 +102,8 @@ public function list(Request $request)
     {
         $pendaftaran = PendaftaranModel::with([
             'mahasiswa.prodi.jurusan.kampus', // relasi bertingkat
-            'detail'
+            'detail',
+            'jadwal'
         ])->findOrFail($id);
 
         return view('verifikasi.show_ajax', compact('pendaftaran'));
