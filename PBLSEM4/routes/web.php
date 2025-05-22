@@ -195,11 +195,11 @@ Route::middleware(['auth'])->group(function () {
     // ROUTE VERIFIKASI
     Route::prefix('verifikasi')->middleware(['auth', 'role:admin'])->group(function () {
         Route::get('/', [VerifikasiPendaftaranController::class, 'index'])->name('index');
-        Route::get('/list', [VerifikasiPendaftaranController::class, 'list'])->name('list'); // pastikan ini GET
+        Route::get('/list', [VerifikasiPendaftaranController::class, 'list'])->name('verifikasi.list'); // pastikan ini GET
         Route::post('{id}/update', [VerifikasiPendaftaranController::class, 'update'])->name('update');
         Route::get('{id}/edit', [VerifikasiPendaftaranController::class, 'edit'])->name('edit');
         Route::get('/show/{id}', [VerifikasiPendaftaranController::class, 'show'])->name('show');
-});
+    });
 
 
 
