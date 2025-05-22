@@ -49,10 +49,16 @@
                     <small id="error-jenis_kelamin" class="error-text text-danger"></small>
                 </div>
                 <div class="form-group">
-                    <label>Kampus ID</label>
-                    <input type="number" name="kampus_id" id="kampus_id" class="form-control" required>
+                    <label>Nama Kampus</label>
+                    <select name="kampus_id" id="kampus_id" class="form-control" required>
+                        <option value=""disabled>--Pilih Kampus--</option>
+                        @foreach ($kampus as $k)
+                            <option value="{{ $k->kampus_id }}">{{ $k->kampus_nama }}</option>
+                        @endforeach
+                    </select>
                     <small id="error-kampus_id" class="error-text text-danger"></small>
                 </div>
+
             </div>
             <div class="modal-footer">
                 <button type="button" data-dismiss="modal" class="btn btn-warning">Batal</button>
