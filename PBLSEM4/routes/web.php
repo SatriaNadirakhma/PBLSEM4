@@ -159,21 +159,22 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/export_pdf', [MahasiswaController::class, 'export_pdf'])->name('export_pdf');
     });
 
-    Route::prefix('biodata/dosen')->middleware(['auth', 'role:admin'])->group(function () {
+   Route::prefix('biodata/dosen')->middleware(['auth', 'role:admin'])->name('biodata.dosen.')->group(function () {
     Route::get('/', [DosenController::class, 'index'])->name('index');
-        Route::post('/list', [DosenController::class, 'list'])->name('list');
-        Route::get('/{id}/show_ajax', [DosenController::class, 'show_ajax'])->name('show_ajax');
-        Route::get('/create_ajax', [DosenController::class, 'create_ajax'])->name('create_ajax');
-        Route::post('/store_ajax', [DosenController::class, 'store_ajax'])->name('store_ajax');
-        Route::get('/{id}/delete_ajax', [DosenController::class, 'confirm_ajax'])->name('confirm_ajax');
-        Route::delete('/{id}/delete_ajax', [DosenController::class, 'delete_ajax'])->name('delete_ajax');
-        Route::get('/{id}/edit_ajax', [DosenController::class, 'edit_ajax'])->name('edit_ajax');
-        Route::put('/{id}/update_ajax', [DosenController::class, 'update_ajax'])->name('update_ajax');
-        Route::get('/import', [DosenController::class, 'import'])->name('import');
-        Route::post('/import_ajax', [DosenController::class, 'import_ajax'])->name('import_ajax');
-        Route::get('/export_excel', [DosenController::class, 'export_excel'])->name('export_excel');
-        Route::get('/export_pdf', [DosenController::class, 'export_pdf'])->name('export_pdf');
-    });
+    Route::get('/list', [DosenController::class, 'list'])->name('list');
+    Route::get('/{id}/show_ajax', [DosenController::class, 'show_ajax'])->name('show_ajax');
+    Route::get('/create_ajax', [DosenController::class, 'create_ajax'])->name('create_ajax');
+    Route::post('/store_ajax', [DosenController::class, 'store_ajax'])->name('store_ajax');
+    Route::get('/{id}/delete_ajax', [DosenController::class, 'confirm_ajax'])->name('confirm_ajax');
+    Route::delete('/{id}/delete_ajax', [DosenController::class, 'delete_ajax'])->name('delete_ajax');
+    Route::get('/{id}/edit_ajax', [DosenController::class, 'edit_ajax'])->name('edit_ajax');
+    Route::put('/{id}/update_ajax', [DosenController::class, 'update_ajax'])->name('update_ajax');
+    Route::get('/import', [DosenController::class, 'import'])->name('import');
+    Route::post('/import_ajax', [DosenController::class, 'import_ajax'])->name('import_ajax');
+    Route::get('/export_excel', [DosenController::class, 'export_excel'])->name('export_excel');
+    Route::get('/export_pdf', [DosenController::class, 'export_pdf'])->name('export_pdf');
+});
+
 
 
 
