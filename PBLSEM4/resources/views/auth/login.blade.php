@@ -11,10 +11,11 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <style>
         * { margin: 0; padding: 0; font-family: 'Inter', sans-serif; box-sizing: border-box; }
+        
         body { display: flex; height: 100vh; background-color: #1a1a1a; }
         .left {
             flex: 1;
-            background: url('{{ asset('img/background.jpg') }}') no-repeat center center;
+            background: url('{{ asset('img/gedung_polinema1.jpg') }}') no-repeat center center;
             background-size: cover; /* isi penuh, tanpa space hitam */
             display: flex;
             align-items: flex-end;
@@ -23,13 +24,28 @@
             padding: 3rem;
         }
 
-        .left h2 { font-size: 2rem; line-height: 1.5; font-weight: 600; max-width: 60%; }
         .right { flex: 1; background: white; display: flex; justify-content: center; align-items: center; padding: 2rem; }
         .login-box {
             width: 100%;
             max-width: 400px;
             margin-top: -30px; /* ini menggeser semua isi ke atas sedikit */
             text-align: center;
+        }
+
+        .left h2 {
+            font-size: 2rem;
+            line-height: 1.5;
+            font-weight: 600;
+            max-width: 70%;
+        }
+        .logo-container {
+            position: absolute;
+            top: 1.5rem;
+            left: 1.5rem;
+        }
+        
+        .logo-container img{
+        height: 50px;
         }
 
         .login-box img {
@@ -59,6 +75,12 @@
 <body>
 
     <div class="left">
+            <div class="logo-container">
+                <img src="{{ asset('img/logowhite.png') }}" alt="Logo SIPINTA">
+            </div>
+        <h2>English Starts Now.<br>With TOEIC, Future Become Must!</h2>
+            
+    </div>
         
     </div>
 
@@ -115,10 +137,12 @@
                             title: 'Berhasil!',
                             text: response.message || 'Login berhasil!',
                             showConfirmButton: false,
-                            timer: 1500
+                            timer: 1500,
+                            heightAuto: false // Mencegah pergeseran tampilan
                         }).then(() => {
                             window.location.href = response.redirect;
                         });
+
                     } else {
                         Swal.fire({
                         icon: 'error',
