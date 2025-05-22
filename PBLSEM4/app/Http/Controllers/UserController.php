@@ -92,9 +92,19 @@ class UserController extends Controller
 
             ->addColumn('aksi', function ($u) {
                 return '
-                    <button onclick="modalAction(\'' . url('/user/' . $u->user_id . '/show_ajax') . '\')" class="btn btn-info btn-sm me-1">Detail</button>
-                    <button onclick="modalAction(\'' . url('/user/' . $u->user_id . '/edit_ajax') . '\')" class="btn btn-warning btn-sm me-1">Edit</button>
-                    <button onclick="modalAction(\'' . url('/user/' . $u->user_id . '/delete_ajax') . '\')" class="btn btn-danger btn-sm">Hapus</button>
+                    <button onclick="modalAction(\'' . url('/user/' . $u->user_id . '/show_ajax') . '\')"
+                        class="btn btn-info btn-sm rounded-pill shadow-sm me-1 px-3 py-1" style="font-size: 0.85rem;">
+                        <i class="fa fa-eye me-1"></i> Detail 
+                    </button>
+
+                    <button onclick="modalAction(\'' . url('/user/' . $u->user_id . '/edit_ajax') . '\')" 
+                        class="btn btn-warning btn-sm rounded-pill shadow-sm me-1 px-3 py-1" style="font-size: 0.85rem;">
+                        <i class="fa fa-edit me-1"></i> Edit
+                    </button>
+                    <button onclick="modalAction(\'' . url('/user/' . $u->user_id . '/delete_ajax') . '\')"  
+                        class="btn btn-danger btn-sm rounded-pill shadow-sm px-3 py-1" style="font-size: 0.85rem;">
+                        <i class="fa fa-trash me-1"></i> Hapus
+                    </button>
                 ';
             })
             ->rawColumns(['profile', 'aksi'])
