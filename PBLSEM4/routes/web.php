@@ -21,6 +21,7 @@ use App\Http\Controllers\UjianController;
 use App\Http\Controllers\RiwayatController;
 use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\VerifikasiPendaftaranController;
+use App\Http\Controllers\DataDiriController;
 use Illuminate\Http\Request;
 
 /*
@@ -248,6 +249,11 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('informasi')->group(function () {
         Route::get('/', [InformasiController::class, 'index']);
         
+    });
+
+    //RUTE DATA DIRI
+    Route::prefix('datadiri')->middleware(['auth'])->group(function () {
+        Route::get('/', [DataDiriController::class, 'index'])->name('datadiri.index');
     });
 
 });

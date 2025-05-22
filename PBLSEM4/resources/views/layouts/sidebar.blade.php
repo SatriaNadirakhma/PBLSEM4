@@ -192,6 +192,17 @@
             @endif
             @endauth
 
+            @auth
+                @if(Auth::user()->role == 'mahasiswa')
+                    <li class="nav-item">
+                        <a href="{{ route('datadiri.index') }}" class="nav-link {{ ($activeMenu === 'datadiri') ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-id-card"></i>
+                            <p>Data Diri</p>
+                        </a>
+                    </li>
+                @endif
+            @endauth
+
         </ul>
     </nav>
 </div>
