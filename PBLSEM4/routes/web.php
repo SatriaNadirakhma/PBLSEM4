@@ -49,7 +49,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/profile/update-photo', [UserController::class, 'updatePhoto'])->name('profile.updatePhoto');
 
     // Rute kampus
-    Route::prefix('kampus')->group(function () {
+    Route::prefix('kampus')->middleware(['auth', 'role:admin'])->group(function () {
         Route::get('/', [KampusController::class, 'index']);
         Route::post('/list', [KampusController::class, 'list']);
         Route::get('/{id}/show_ajax', [KampusController::class, 'show_ajax']);
@@ -66,7 +66,7 @@ Route::middleware(['auth'])->group(function () {
     });
 
     // Rute Jurusan
-    Route::prefix('jurusan')->group(function () {
+    Route::prefix('jurusan')->middleware(['auth', 'role:admin'])->group(function () {
         Route::get('/', [JurusanController::class, 'index']);
         Route::post('/list', [JurusanController::class, 'list']);
         Route::get('/{id}/show_ajax', [JurusanController::class, 'show_ajax']);
@@ -83,7 +83,7 @@ Route::middleware(['auth'])->group(function () {
     });
 
     // Rute Prodi
-    Route::prefix('prodi')->group(function () {
+    Route::prefix('prodi')->middleware(['auth', 'role:admin'])->group(function () {
         Route::get('/', [ProdiController::class, 'index']);
         Route::post('/list', [ProdiController::class, 'list']);
         Route::get('/{id}/show_ajax', [ProdiController::class, 'show_ajax']);
@@ -100,7 +100,7 @@ Route::middleware(['auth'])->group(function () {
     });
 
     // Rute Admin
-    Route::prefix('admin')->group(function () {
+    Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
         Route::get('/', [AdminController::class, 'index']);
         Route::post('/list', [AdminController::class, 'list']);
         Route::get('/{id}/show_ajax', [AdminController::class, 'show_ajax']);
@@ -127,7 +127,7 @@ Route::middleware(['auth'])->group(function () {
     });
 
     // Rute BIODATA
-    Route::prefix('biodata/tendik')->name('biodata.tendik.')->group(function () {
+    Route::prefix('biodata/tendik')->middleware(['auth', 'role:admin'])->group(function () {
         Route::get('/', [TendikController::class, 'index'])->name('index');
         Route::post('/list', [TendikController::class, 'list'])->name('list');
         Route::get('/{id}/show_ajax', [TendikController::class, 'show_ajax'])->name('show_ajax');
@@ -143,7 +143,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/export_pdf', [TendikController::class, 'export_pdf'])->name('export_pdf');
     });
 
-    Route::prefix('biodata/mahasiswa')->name('biodata.mahasiswa.')->group(function () {
+    Route::prefix('biodata/mahasiswa')->middleware(['auth', 'role:admin, mahasiswa'])->group(function () {
     Route::get('/', [MahasiswaController::class, 'index'])->name('index');
         Route::post('/list', [MahasiswaController::class, 'list'])->name('list');
         Route::get('/{id}/show_ajax', [MahasiswaController::class, 'show_ajax'])->name('show_ajax');
@@ -159,7 +159,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/export_pdf', [MahasiswaController::class, 'export_pdf'])->name('export_pdf');
     });
 
-    Route::prefix('biodata/dosen')->name('biodata.dosen.')->group(function () {
+    Route::prefix('biodata/dosen')->middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/', [DosenController::class, 'index'])->name('index');
         Route::post('/list', [DosenController::class, 'list'])->name('list');
         Route::get('/{id}/show_ajax', [DosenController::class, 'show_ajax'])->name('show_ajax');
@@ -178,7 +178,7 @@ Route::middleware(['auth'])->group(function () {
 
 
     // Rute user
-    Route::prefix('user')->group(function () {
+    Route::prefix('user')->middleware(['auth', 'role:admin'])->group(function () {
         Route::get('/', [UserController::class, 'index'])->name('user');
         Route::post('/list', [UserController::class, 'list'])->name('user.list');
         Route::get('get-nama-by-role/{role}', [UserController::class, 'getNamaByRole']);
@@ -193,7 +193,7 @@ Route::middleware(['auth'])->group(function () {
     });
 
     // ROUTE VERIFIKASI
-    Route::prefix('verifikasi')->name('verifikasi.')->group(function () {
+    Route::prefix('verifikasi')->middleware(['auth', 'role:admin'])->group(function () {
         Route::get('/', [VerifikasiPendaftaranController::class, 'index'])->name('index');
         Route::get('/list', [VerifikasiPendaftaranController::class, 'list'])->name('list'); // pastikan ini GET
         Route::post('{id}/update', [VerifikasiPendaftaranController::class, 'update'])->name('update');

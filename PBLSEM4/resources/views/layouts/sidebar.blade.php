@@ -21,15 +21,21 @@
                 </a>
             </li>
             <!--DATA USER -->
+            @auth
+            @if(Auth::user()->role == 'admin')
             <li class="nav-item">
                 <a href="{{ route('user') }}" class="nav-link {{ in_array($activeMenu, ['user']) ? 'active' : '' }}">
                     <i class="nav-icon fas fa-layer-group"></i>
                     <p>DATA USER</p>
                 </a>
             </li>
+            @endif
+            @endauth
 
 
             <!-- Dropdown BIODATA -->
+            @auth
+            @if(Auth::user()->role == 'admin')
             <li class="nav-item has-treeview {{ in_array($activeMenu, ['peserta-mahasiswa', 'peserta-dosen', 'tendik', 'peserta-admin']) ? 'menu-open' : '' }}">
                 <a href="#" class="nav-link {{ in_array($activeMenu, ['peserta-mahasiswa', 'peserta-dosen', 'tendik', 'admin']) ? 'active' : '' }}">
                     <i class="nav-icon fas fa-users"></i>
@@ -65,8 +71,12 @@
                     </li>
                 </ul>
             </li>
+            @endif
+            @endauth
 
             <!-- Dropdown DAFTAR KAMPUS -->
+            @auth
+            @if(Auth::user()->role == 'admin')
             <li class="nav-item has-treeview {{ in_array($activeMenu, ['kampus', 'jurusan', 'prodi']) ? 'menu-open' : '' }}">
                 <a href="#" class="nav-link {{ in_array($activeMenu, ['kampus', 'jurusan', 'prodi']) ? 'active' : '' }}">
                     <i class="nav-icon fas fa-home"></i>
@@ -96,8 +106,12 @@
                     </li>
                 </ul>
             </li>
+            @endif
+            @endauth
 
             <!-- Dropdown PENDAFTARAN -->
+            @auth
+            @if(in_array(Auth::user()->role, ['admin', 'mahasiswa', 'dosen', 'tendik']))
             <li class="nav-item has-treeview {{ in_array($activeMenu, ['verifikasi', 'edit-formulir']) ? 'menu-open' : '' }}">
                 <a href="#" class="nav-link {{ in_array($activeMenu, ['verifikasi', 'edit-formulir']) ? 'active' : '' }}">
                     <i class="nav-icon fas fa-clipboard-list"></i>
@@ -127,8 +141,11 @@
                     </li>
                 </ul>
             </li>
+            @endif
+            @endauth
 
-            
+            @auth
+            @if(in_array(Auth::user()->role, ['admin', 'mahasiswa', 'dosen', 'tendik']))
             <li class="nav-item has-treeview {{ in_array($activeMenu, ['info-jadwal', 'info-pengumuman', 'info-zoom']) ? 'menu-open' : '' }}">
                 <a href="#" class="nav-link {{ in_array($activeMenu, ['info-jadwal', 'info-pengumuman', 'info-zoom']) ? 'active' : '' }}">
                     <i class="nav-icon fas fa-info-circle"></i>
@@ -158,6 +175,8 @@
                     </li>
                 </ul>
             </li>
+            @endif
+            @endauth
 
         </ul>
     </nav>
