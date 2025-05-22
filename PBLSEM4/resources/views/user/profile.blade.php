@@ -31,14 +31,27 @@
                     @endif
                 </div>
                 <div class="col-md-8">
-                    <p>Username: {{ $user->username }}</p>
-                    <p>Nama: {{ $user->nama_lengkap }}</p>
-                    <p>Role: {{ ucfirst($user->role) }}</p>
+                    <table class="table table-borderless">
+                    <tbody>
+                        <tr>
+                            <th scope="row" style="width: 150px;">Username</th>
+                            <td>: {{ $user->username }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Nama Lengkap</th>
+                            <td>: {{ $user->nama_lengkap }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Role</th>
+                            <td>: <span class="badge bg-info text-dark">{{ ucfirst($user->role) }}</span></td>
+                        </tr>
+                    </tbody>
+                </table>
 
                     <form action="{{ url('/profile/update-photo') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="mb-3">
-                            <label for="profile_picture" class="form-label">Ganti Foto Profil</label>
+                            <label for="profile_picture" class="form-label" style="font-weight: normal;">Ganti Foto Profil</label>
                             <input type="file" name="profile_picture" id="profile_picture" class="form-control @error('profile_picture') is-invalid @enderror" accept="image/*">
                             @error('profile_picture')
                                 <div class="invalid-feedback">{{ $message }}</div>
