@@ -198,7 +198,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/list', [VerifikasiPendaftaranController::class, 'list'])->name('verifikasi.list'); // pastikan ini GET
         Route::post('{id}/update', [VerifikasiPendaftaranController::class, 'update'])->name('update');
         Route::get('{id}/edit', [VerifikasiPendaftaranController::class, 'edit'])->name('edit');
-        Route::get('/show/{id}', [VerifikasiPendaftaranController::class, 'show'])->name('show');
+        Route::get('/show/{id}', [VerifikasiPendaftaranController::class, 'show'])->name('verifikasi.show');
     });
 
 
