@@ -38,18 +38,33 @@
 
 <body class="index-page">
 
-<style>
-  header {
-    padding-bottom: 30px;
-  }
-  footer {
-    margin-top: 50px;
-  }
-</style>
-
+  @include('landing.herosection')
 
   @include('landing.headerlanding')
 
+  @include('landing.aboutsection')
+
   @include('landing.footerlanding')
+
+<!-- Scroll Top -->
+<a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center">
+    <i class="bi bi-arrow-up-short"></i>
+</a>
+
+<!-- Preloader -->
+<div id="preloader"></div>
+
+<!-- Vendor JS Files -->
+<script src="{{ asset('invent/assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+<script src="{{ asset('invent/assets/vendor/php-email-form/validate.js') }}"></script>
+<script src="{{ asset('invent/assets/vendor/aos/aos.js') }}"></script>
+<script src="{{ asset('invent/assets/vendor/glightbox/js/glightbox.min.js') }}"></script>
+<script src="{{ asset('invent/assets/vendor/imagesloaded/imagesloaded.pkgd.min.js') }}"></script>
+<script src="{{ asset('invent/assets/vendor/isotope-layout/isotope.pkgd.min.js') }}"></script>
+<script src="{{ asset('invent/assets/vendor/swiper/swiper-bundle.min.js') }}"></script>
+
+<!-- Main JS File -->
+<script src="{{ asset('invent/assets/js/main.js') }}"></script>
+
 
 </body>
