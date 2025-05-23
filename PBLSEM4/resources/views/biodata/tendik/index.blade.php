@@ -79,9 +79,6 @@
                             <th>NIP</th>
                             <th>NIK</th>
                             <th>Nama Tendik</th>
-                            <th>No Telp</th>
-                            <th>Alamat Asal</th>
-                            <th>Alamat Sekarang</th>
                             <th>Jenis Kelamin</th>
                             <th>Nama Kampus</th>
                             <th style="width: 150px;">Aksi</th>
@@ -123,9 +120,6 @@
                     { data: "nip", className: "text-nowrap" },
                     { data: "nik", className: "text-nowrap" },
                     { data: "tendik_nama", className: "text-nowrap" },
-                    { data: "no_telp", className: "text-nowrap" },
-                    { data: "alamat_asal", className: "text-nowrap" },
-                    { data: "alamat_sekarang", className: "text-nowrap" },
                     { data: "jenis_kelamin", className: "text-nowrap" },
                     { data: "kampus_nama", className: "text-nowrap" },
                     { data: "aksi", className: "text-center text-nowrap", orderable: false, searchable: false }
