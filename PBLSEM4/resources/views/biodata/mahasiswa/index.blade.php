@@ -70,12 +70,8 @@
                         <th>NIK</th>
                         <th>Nama</th>
                         <th>Angkatan</th>
-                        <th>No. Telp</th>
-                        <th>Alamat Asal</th>
-                        <th>Alamat Sekarang</th>
                         <th>Jenis Kelamin</th>
                         <th>Status</th>
-                        <th>Keterangan</th>
                         <th>Prodi</th>
                         <th>Aksi</th>
                     </tr>
@@ -115,12 +111,8 @@
                 { data: "nik", className: "text-nowrap" },
                 { data: "mahasiswa_nama", className: "text-nowrap" },
                 { data: "angkatan", className: "text-center" },
-                { data: "no_telp", className: "text-nowrap" },
-                { data: "alamat_asal", className: "text-nowrap" },
-                { data: "alamat_sekarang", className: "text-nowrap" },
                 { data: "jenis_kelamin", className: "text-center" },
                 { data: "status", className: "text-center" },
-                { data: "keterangan", className: "text-center" },
                 { data: "prodi_id", className: "text-center" },
                 { data: "aksi", className: "text-center text-nowrap", orderable: false, searchable: false }
             ]

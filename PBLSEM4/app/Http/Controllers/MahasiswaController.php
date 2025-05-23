@@ -31,8 +31,7 @@ class MahasiswaController extends Controller
     {
         $mahasiswa = MahasiswaModel::with('prodi')->select(
             'mahasiswa_id', 'nim', 'nik', 'mahasiswa_nama',
-            'angkatan', 'no_telp', 'alamat_asal', 'alamat_sekarang',
-            'jenis_kelamin', 'status', 'keterangan', 'prodi_id'
+            'angkatan', 'jenis_kelamin', 'status', 'prodi_id'
         );
 
         if ($request->has('search_query') && $request->search_query != '') {
