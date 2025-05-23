@@ -2,14 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Models\MahasiswaModel;
 
 class DataDiriController extends Controller
 {
     public function index()
     {
+        $user = Auth::user();
+
+        // Ambil data mahasiswa berdasarkan mahasiswa_id dari user
+        $mahasiswa = MahasiswaModel::where('mahasiswa_id', $user->mahasiswa_id)->firstOrFail();
+
         $breadcrumb = (object) [
-            'title' => 'Data Diri',
+            'title' => 'Data Diri Mahasiswa',
             'list' => ['Home', 'Data Diri'],
         ];
 
@@ -19,7 +25,8 @@ class DataDiriController extends Controller
 
         $activeMenu = 'datadiri';
 
-        return view('datadiri.index', compact('breadcrumb', 'page', 'activeMenu'));
+        return view('datadiri.index', compact('breadcrumb', 'page', 'activeMenu', 'mahasiswa'));
     }
 }
+
 
