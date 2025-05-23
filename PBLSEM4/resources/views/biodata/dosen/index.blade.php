@@ -36,10 +36,6 @@
                             </select>
                             <small class="form-text text-muted">Pilih jurusan untuk memfilter data dosen</small>
                         </div>
-                        <label for="searchInput" class="col-md-2 col-form-label">Cari Nama</label>
-                        <div class="col-md-4">
-                            <input type="text" id="searchInput" class="form-control form-control-sm" placeholder="Cari nama dosen...">
-                        </div>
                     </div>
                 </div>
             </div>
@@ -69,9 +65,6 @@
                         <th>NIDN</th>
                         <th>NIK</th>
                         <th>Nama</th>
-                        <th>No. Telp</th>
-                        <th>Alamat Asal</th>
-                        <th>Alamat Sekarang</th>
                         <th>Jenis Kelamin</th>
                         <th>Jurusan</th>
                         <th>Aksi</th>
@@ -99,7 +92,7 @@
             processing: true,
             serverSide: true,
             ajax: {
-                url: "{{ route('biodata.dosen.list') }}", // ✅ gunakan nama route yang benar
+                url: "{{ route('biodata.dosen.list') }}", 
                 type: "GET",
                 data: function (d) {
                     d.search_query = $('#searchInput').val();
@@ -111,9 +104,6 @@
                 { data: "nidn", className: "text-nowrap" },
                 { data: "nik", className: "text-nowrap" },
                 { data: "dosen_nama", className: "text-nowrap" },
-                { data: "no_telp", className: "text-nowrap" },
-                { data: "alamat_asal", className: "text-nowrap" },
-                { data: "alamat_sekarang", className: "text-nowrap" },
                 { data: "jenis_kelamin", className: "text-center" },
                 { data: "jurusan_id", className: "text-center" },
                 { data: "aksi", className: "text-center text-nowrap", orderable: false, searchable: false }

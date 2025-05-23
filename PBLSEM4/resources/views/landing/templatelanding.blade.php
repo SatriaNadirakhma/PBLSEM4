@@ -44,6 +44,12 @@
 
   @include('landing.aboutsection')
 
+  @include('landing.pengantarsection')
+
+  @include('landing.faqsection')
+
+  @include('landing.teamsection')
+
   @include('landing.footerlanding')
 
 <!-- Scroll Top -->

@@ -36,10 +36,6 @@
                             </select>
                             <small class="form-text text-muted">Pilih prodi untuk memfilter data mahasiswa</small>
                         </div>
-                        <label for="searchInput" class="col-md-2 col-form-label">Cari Nama</label>
-                        <div class="col-md-4">
-                            <input type="text" id="searchInput" class="form-control form-control-sm" placeholder="Cari nama mahasiswa...">
-                        </div>
                     </div>
                 </div>
             </div>
@@ -70,12 +66,8 @@
                         <th>NIK</th>
                         <th>Nama</th>
                         <th>Angkatan</th>
-                        <th>No. Telp</th>
-                        <th>Alamat Asal</th>
-                        <th>Alamat Sekarang</th>
                         <th>Jenis Kelamin</th>
                         <th>Status</th>
-                        <th>Keterangan</th>
                         <th>Prodi</th>
                         <th>Aksi</th>
                     </tr>
@@ -115,12 +107,8 @@
                 { data: "nik", className: "text-nowrap" },
                 { data: "mahasiswa_nama", className: "text-nowrap" },
                 { data: "angkatan", className: "text-center" },
-                { data: "no_telp", className: "text-nowrap" },
-                { data: "alamat_asal", className: "text-nowrap" },
-                { data: "alamat_sekarang", className: "text-nowrap" },
                 { data: "jenis_kelamin", className: "text-center" },
                 { data: "status", className: "text-center" },
-                { data: "keterangan", className: "text-center" },
                 { data: "prodi_id", className: "text-center" },
                 { data: "aksi", className: "text-center text-nowrap", orderable: false, searchable: false }
             ]
