@@ -78,8 +78,10 @@ class TendikController extends Controller
 
     public function create_ajax()
     {
-        return view('biodata.tendik.create_ajax');
+        $kampus = KampusModel::all();
+        return view('biodata.tendik.create_ajax', compact('kampus'));
     }
+
 
     public function store_ajax(Request $request)
     {

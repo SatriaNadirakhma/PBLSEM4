@@ -3,7 +3,9 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ config('app.name', 'PWL Laravel Starter Code') }}</title>
+    <!-- <title>{{ config('app.name', 'PWL Laravel Starter Code') }}</title> -->
+    <title>Dashboard Sipinta</title>
+    <link rel="icon" href="{{ asset('img/logo.png') }}" type="image/x-icon"> <!-- Favicon -->
     <meta name="csrf-token" content="{{ csrf_token() }}"> <!-- Untuk mengirimkan token Laravel CSRF pada setiap request ajax -->
 
     <!-- Google Font: Montserrat -->
