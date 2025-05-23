@@ -4,12 +4,12 @@
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>Index - Invent Bootstrap Template</title>
+  <title>SIPINTA POLINEMA</title>
   <meta name="description" content="">
   <meta name="keywords" content="">
 
   <!-- Favicons -->
-  <link href="{{ asset('invent/assets/img/favicon.png') }}" rel="icon">
+  <link href="{{ asset('img/logo.png') }}" rel="icon">
   <link href="{{ asset('invent/assets/img/apple-touch-icon.png') }}" rel="apple-touch-icon">
 
   <!-- Fonts -->

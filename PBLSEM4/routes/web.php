@@ -21,6 +21,7 @@ use App\Http\Controllers\UjianController;
 use App\Http\Controllers\RiwayatController;
 use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\VerifikasiPendaftaranController;
+use App\Http\Controllers\DataDiriController;
 use Illuminate\Http\Request;
 
 /*
@@ -144,7 +145,7 @@ Route::middleware(['auth'])->group(function () {
     });
 
     Route::prefix('biodata/mahasiswa')
-    ->middleware(['auth', 'role:admin,mahasiswa'])
+->middleware(['auth', 'role:admin,mahasiswa'])
     ->name('biodata.mahasiswa.')
     ->group(function () {
 
@@ -218,7 +219,7 @@ Route::middleware(['auth'])->group(function () {
     }); 
 
     // Rute pendaftaran     
-    Route::prefix('pendaftaran')->group(function () {
+    Route::prefix('pendaftaran')->name('pendaftaran.index')->group(function () {
         Route::get('/', [PendaftaranController::class, 'index']);
     });
 
@@ -248,6 +249,11 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('informasi')->group(function () {
         Route::get('/', [InformasiController::class, 'index']);
         
+    });
+
+    //RUTE DATA DIRI
+    Route::prefix('datadiri')->middleware(['auth'])->group(function () {
+        Route::get('/', [DataDiriController::class, 'index'])->name('datadiri.index');
     });
 
 });

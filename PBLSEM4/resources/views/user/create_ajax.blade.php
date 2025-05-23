@@ -144,7 +144,7 @@
                 role: { required: true },
                 role_related_id: { required: true },
                 username: { required: true, minlength: 3 },
-                password: { minlength: 6 },
+                password: { minlength: 5 },
                 profile: { extension: "jpg|jpeg|png" }
             },
             messages: {
