@@ -219,7 +219,7 @@ Route::middleware(['auth'])->group(function () {
     }); 
 
     // Rute pendaftaran     
-    Route::prefix('pendaftaran')->group(function () {
+    Route::prefix('pendaftaran')->name('pendaftaran.index')->group(function () {
         Route::get('/', [PendaftaranController::class, 'index']);
     });
 

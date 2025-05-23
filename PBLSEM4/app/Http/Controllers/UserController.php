@@ -180,13 +180,13 @@ class UserController extends Controller
             'role' => 'required|in:admin,mahasiswa,dosen,tendik',
             'username' => 'required|string|unique:user,username',
             'email' => 'required|email|unique:users,email',
-            'password' => 'nullable|string|min:6',
+            'password' => 'nullable|string|min:5',
             'profile' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ];
 
         $validator = Validator::make($request->all(), $rules, [
             'username.unique' => 'Username sudah terdaftar',
-            'password.min' => 'Password minimal 6 karakter',
+            'password.min' => 'Password minimal 5 karakter',
         ]);
 
         if ($validator->fails()) {

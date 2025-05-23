@@ -35,7 +35,7 @@
 
             <!-- Dropdown BIODATA -->
             @auth
-            @if(in_array(Auth::user()->role, ['admin', 'mahasiswa', 'dosen', 'tendik']))
+            @if(Auth::user()->role == 'admin')
             <li class="nav-item has-treeview {{ in_array($activeMenu, ['peserta-mahasiswa', 'peserta-dosen', 'tendik', 'peserta-admin']) ? 'menu-open' : '' }}">
                 <a href="#" class="nav-link {{ in_array($activeMenu, ['peserta-mahasiswa', 'peserta-dosen', 'tendik', 'admin']) ? 'active' : '' }}">
                     <i class="nav-icon fas fa-users"></i>
@@ -45,7 +45,7 @@
                     </p>
                 </a>
                 <ul class="nav nav-treeview">
-                    @if(in_array(Auth::user()->role, ['admin', 'mahasiswa']))
+                    @if(Auth::user()->role == 'admin')
                     <li class="nav-item">
                         <a href="{{ url('/biodata/mahasiswa') }}" class="nav-link {{ ($activeMenu == 'peserta-mahasiswa') ? 'active' : '' }}">
                             <i class="far fa-user nav-icon"></i>
@@ -53,7 +53,7 @@
                         </a>
                     </li>
                     @endif
-                    @if(in_array(Auth::user()->role, ['admin', 'dosen']))
+                    @if(Auth::user()->role == 'admin')
                     <li class="nav-item">
                         <a href="{{ url('/biodata/dosen') }}" class="nav-link {{ ($activeMenu == 'peserta-dosen') ? 'active' : '' }}">
                             <i class="far fa-user nav-icon"></i>
@@ -61,7 +61,7 @@
                         </a>
                     </li>
                     @endif
-                    @if(in_array(Auth::user()->role, ['admin', 'tendik']))
+                    @if(Auth::user()->role == 'admin')
                     <li class="nav-item">
                         <a href="{{ route('biodata.tendik.index') }}" class="nav-link {{ ($activeMenu == 'peserta-tendik') ? 'active' : '' }}">
                             <i class="far fa-user nav-icon"></i>
@@ -119,7 +119,7 @@
 
             <!-- Dropdown PENDAFTARAN -->
             @auth
-            @if(in_array(Auth::user()->role, ['admin', 'mahasiswa', 'dosen', 'tendik']))
+            @if(Auth::user()->role == 'admin')
             <li class="nav-item has-treeview {{ in_array($activeMenu, ['verifikasi', 'edit-formulir']) ? 'menu-open' : '' }}">
                 <a href="#" class="nav-link {{ in_array($activeMenu, ['verifikasi', 'edit-formulir']) ? 'active' : '' }}">
                     <i class="nav-icon fas fa-clipboard-list"></i>
@@ -159,7 +159,7 @@
             @endauth
 
             @auth
-            @if(in_array(Auth::user()->role, ['admin', 'mahasiswa', 'dosen', 'tendik']))
+            @if(Auth::user()->role == 'admin')
             <li class="nav-item has-treeview {{ in_array($activeMenu, ['info-jadwal', 'info-pengumuman', 'info-zoom']) ? 'menu-open' : '' }}">
                 <a href="#" class="nav-link {{ in_array($activeMenu, ['info-jadwal', 'info-pengumuman', 'info-zoom']) ? 'active' : '' }}">
                     <i class="nav-icon fas fa-info-circle"></i>
@@ -193,11 +193,22 @@
             @endauth
 
             @auth
-                @if(Auth::user()->role == 'mahasiswa')
+                @if(in_array(Auth::user()->role, ['mahasiswa', 'dosen', 'tendik']))
                     <li class="nav-item">
                         <a href="{{ route('datadiri.index') }}" class="nav-link {{ ($activeMenu === 'datadiri') ? 'active' : '' }}">
                             <i class="nav-icon fas fa-id-card"></i>
                             <p>Data Diri</p>
+                        </a>
+                    </li>
+                @endif
+            @endauth
+
+            @auth
+                @if(in_array(Auth::user()->role, ['mahasiswa', 'dosen', 'tendik']))
+                    <li class="nav-item">
+                        <a href="{{ route('pendaftaran.index') }}" class="nav-link {{ ($activeMenu === 'pendaftaran') ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-id-card"></i>
+                            <p>Pendaftaran</p>
                         </a>
                     </li>
                 @endif
