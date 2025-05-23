@@ -31,7 +31,6 @@ class DosenController extends Controller
     {
         $dosen = DosenModel::with('jurusan')->select(
             'dosen_id', 'nidn', 'nik', 'dosen_nama',
-            'no_telp', 'alamat_asal', 'alamat_sekarang',
             'jenis_kelamin', 'jurusan_id'
         );
 
