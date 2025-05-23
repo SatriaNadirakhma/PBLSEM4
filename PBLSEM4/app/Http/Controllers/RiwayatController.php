@@ -36,6 +36,23 @@ class RiwayatController extends Controller
                 }
             });
 
+            /// Tambahkan bagian ini untuk mengaktifkan search:
+        if ($request->filled('search.value')) {
+            $search = $request->input('search.value');
+
+            $riwayat->where(function ($q) use ($search) {
+                $q->whereHas('mahasiswa', function ($q2) use ($search) {
+                    $q2->where('nim', 'like', "%$search%")
+                    ->orWhere('nik', 'like', "%$search%")
+                    ->orWhere('mahasiswa_nama', 'like', "%$search%");
+                })
+                ->orWhere('tanggal_pendaftaran', 'like', "%$search%")
+                ->orWhereHas('detail', function ($q2) use ($search) {
+                    $q2->where('status', 'like', "%$search%");
+                });
+            });
+        }
+
         return DataTables::of($riwayat)
             ->addIndexColumn()
             ->addColumn('nim', function($r) {

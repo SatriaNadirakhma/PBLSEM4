@@ -20,69 +20,124 @@ class DosenController extends Controller
             'list' => ['Home', 'Biodata', 'Peserta Dosen'],
         ];
 
-        $page = (object) [
-            'title' => 'Daftar Dosen',
-        ];
-
-         $activeMenu = 'peserta-dosen';
-
-          $dosen = DosenModel::all();
+        $page = (object) ['title' => 'Daftar Dosen'];
+        $activeMenu = 'peserta-dosen';
         $jurusan = JurusanModel::all();
 
-         return view('biodata.dosen.index', compact('breadcrumb', 'page', 'activeMenu', 'jurusan'));
+        return view('biodata.dosen.index', compact('breadcrumb', 'page', 'activeMenu', 'jurusan'));
     }
 
-
-     public function list(Request $request)
+    public function list(Request $request)
     {
-    $dosen = DosenModel::select('dosen_id', 'nidn', 'nik', 'dosen_nama', 'no_telp', 'alamat_asal', 'alamat_sekarang', 'jenis_kelamin', 'jurusan_id')
-        ->with('jurusan'); // 
+        $dosen = DosenModel::with('jurusan')->select(
+            'dosen_id', 'nidn', 'nik', 'dosen_nama',
+            'no_telp', 'alamat_asal', 'alamat_sekarang',
+            'jenis_kelamin', 'jurusan_id'
+        );
 
-    // Filter berdasarkan nama dosen
         if ($request->has('search_query') && $request->search_query != '') {
             $dosen->where('dosen_nama', 'like', '%' . $request->search_query . '%');
         }
 
-    // Filter berdasarkan nama 
-    if ($request->has('jurusan_id') && $request->jurusan_id != '') {
-        $dosen->whereHas('jurusan', function ($query) use ($request) {
-            $query->where('jurusan_id', 'like', '%' . $request->jurusan_id . '%');
-        });
+        if ($request->has('jurusan_id') && $request->jurusan_id != '') {
+            $dosen->where('jurusan_id', $request->jurusan_id);
+        }
+
+        return DataTables::of($dosen)
+            ->addIndexColumn()
+            ->addColumn('jurusan_id', function ($t) {
+                return $t->jurusan->jurusan_nama ?? '-';
+            })
+            ->addColumn('aksi', function ($t) {
+                $btn = '<button onclick="modalAction(\'' . route('biodata.dosen.show_ajax', $t->dosen_id) . '\')" class="btn btn-info btn-sm me-1">Detail</button>';
+                $btn .= '<button onclick="modalAction(\'' . route('biodata.dosen.edit_ajax', $t->dosen_id) . '\')" class="btn btn-warning btn-sm me-1">Edit</button>';
+                $btn .= '<button onclick="modalAction(\'' . route('biodata.dosen.confirm_ajax', $t->dosen_id) . '\')" class="btn btn-danger btn-sm">Hapus</button>';
+                return $btn;
+            })
+            ->rawColumns(['aksi'])
+            ->make(true);
     }
 
-        return DataTables::of($dosen) 
-        ->addIndexColumn()
-        ->addColumn('jurusan_id', function ($t) {
-            return $t->jurusan ? $t->jurusan->jurusan_id : '-';
-        })
-        ->addColumn('aksi', function ($t) {
-            $btn = '<button onclick="modalAction(\'' . route('biodata.dosen.show_ajax', $t->dosen_id) . '\')" class="btn btn-info btn-sm me-1">Detail</button>';
-            $btn .= '<button onclick="modalAction(\'' . route('biodata.dosen.edit_ajax', $t->dosen_id) . '\')" class="btn btn-warning btn-sm me-1">Edit</button>';
-            $btn .= '<button onclick="modalAction(\'' . route('biodata.dosen.confirm_ajax', $t->dosen_id) . '\')" class="btn btn-danger btn-sm">Hapus</button>';
-            return $btn;
-        })
-        ->rawColumns(['aksi'])
-        ->make(true);
-
-    }
-
-  
     public function show_ajax(string $id)
     {
         $dosen = DosenModel::find($id);
-        return view('biodata.dosen.show_ajax', ['dosen' => $dosen]);
+        return view('biodata.dosen.show_ajax', compact('dosen'));
     }
 
     public function create_ajax()
     {
-        return view('biodata.dosen.create_ajax');
+        $jurusan = JurusanModel::all();
+        return view('biodata.dosen.create_ajax', compact('jurusan'));
     }
 
-   public function store_ajax(Request $request)
-{
-    if ($request->ajax() || $request->wantsJson()) {
-        $rules = [
-            'nidn' => 'required|string|max:20|unique:dosen,nidn',
+    public function store_ajax(Request $request)
+    {
+        if ($request->ajax() || $request->wantsJson()) {
+            $rules = [
+                'nidn' => 'required|string|max:20|unique:dosen,nidn',
+                'nik' => 'required|string|max:20',
+                'dosen_nama' => 'required|string|max:100',
+                'no_telp' => 'nullable|string',
+                'alamat_asal' => 'nullable|string',
+                'alamat_sekarang' => 'nullable|string',
+                'jenis_kelamin' => 'required|string',
+                'jurusan_id' => 'required|integer',
+            ];
+
+            $validator = Validator::make($request->all(), $rules);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Validasi Gagal',
+                    'msgField' => $validator->errors(),
+                ]);
+            }
+
+            try {
+                DosenModel::create($request->all());
+
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Data dosen berhasil disimpan',
+                ]);
+            } catch (\Exception $e) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Gagal menyimpan data: ' . $e->getMessage(),
+                ]);
+            }
+        }
+
+        return redirect('/');
+    }
+
+    public function edit_ajax(string $id)
+    {
+        $dosen = DosenModel::find($id);
+        $jurusan = JurusanModel::all();
+
+        if (!$dosen) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Data dosen tidak ditemukan'
+            ]);
+        }
+
+        return view('biodata.dosen.edit_ajax', compact('dosen', 'jurusan'));
+    }
+
+    public function update_ajax(Request $request, $id)
+    {
+        if (!$request->ajax()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Permintaan tidak valid.'
+            ]);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'nidn' => 'required|string|max:20',
             'nik' => 'required|string|max:20',
             'dosen_nama' => 'required|string|max:100',
             'no_telp' => 'nullable|string',
@@ -90,46 +145,50 @@ class DosenController extends Controller
             'alamat_sekarang' => 'nullable|string',
             'jenis_kelamin' => 'required|string',
             'jurusan_id' => 'required|integer',
-        ];
-
-        $validator = Validator::make($request->all(), $rules);
+        ]);
 
         if ($validator->fails()) {
             return response()->json([
                 'status' => false,
-                'message' => 'Validasi Gagal',
-                'msgField' => $validator->errors(),
+                'message' => 'Validasi gagal.',
+                'msgField' => $validator->errors()
+            ]);
+        }
+
+        $dosen = DosenModel::find($id);
+
+        if (!$dosen) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Data dosen tidak ditemukan.'
             ]);
         }
 
         try {
-            DosenModel::create($request->all());
+            $dosen->update($request->all());
 
             return response()->json([
                 'status' => true,
-                'message' => 'Data dosen berhasil disimpan',
+                'message' => 'Data dosen berhasil diperbarui.'
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => false,
-                'message' => 'Gagal menyimpan data: ' . $e->getMessage(),
+                'message' => 'Gagal memperbarui data dosen.',
+                'error' => $e->getMessage()
             ]);
         }
     }
 
-    return redirect('/');
-}
-
     public function confirm_ajax(string $id)
     {
         $dosen = DosenModel::find($id);
-        return view('biodata.dosen.confirm_ajax', ['dosen' => $dosen]);
+        return view('biodata.dosen.confirm_ajax', compact('dosen'));
     }
-
 
     public function delete_ajax(Request $request, $id)
     {
-        if ($request->ajax() || $request->wantsJson()) {
+        if ($request->ajax()) {
             $dosen = DosenModel::find($id);
             if ($dosen) {
                 $dosen->delete();
@@ -147,120 +206,35 @@ class DosenController extends Controller
         return redirect('/');
     }
 
-
-
-
-     public function edit_ajax(string $id)
-    {
-        $dose = DosenModel::find($id);
-
-        if (!$dosen) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Data dosen tidak ditemukan'
-            ]);
-        }
-
-        return view('biodata.dosen.edit_ajax', ['dosen' => $dosen]);
-    }
-
-
-
-
-
-    public function update_ajax(Request $request, $id)
-{
-    if (!$request->ajax()) {
-        return response()->json([
-            'status' => false,
-            'message' => 'Permintaan tidak valid.'
-        ]);
-    }
-
-    $validator = Validator::make($request->all(), [
-        'nidn' => 'required|string|max:20',
-        'nik' => 'required|string|max:20',
-        'dosen_nama' => 'required|string|max:100',
-        'no_telp' => 'nullable|string',
-        'alamat_asal' => 'nullable|string',
-        'alamat_sekarang' => 'nullable|string',
-        'jenis_kelamin' => 'required|string',
-        'jurusan_id' => 'required|integer',
-    ]);
-
-    if ($validator->fails()) {
-        return response()->json([
-            'status' => false,
-            'message' => 'Validasi gagal.',
-            'msgField' => $validator->errors()
-        ]);
-    }
-
-    $dosen = DosenModel::find($id);
-
-    if (!$dosen) {
-        return response()->json([
-            'status' => false,
-            'message' => 'Data dosen tidak ditemukan.'
-        ]);
-    }
-
-    try {
-        $dosen->update($request->all());
-
-        return response()->json([
-            'status' => true,
-            'message' => 'Data dosen berhasil diperbarui.'
-        ]);
-    } catch (\Exception $e) {
-        return response()->json([
-            'status' => false,
-            'message' => 'Gagal memperbarui data dosen.',
-            'error' => $e->getMessage()
-        ]);
-    }
-    return redirect('/');
-}
-
-
-
-
-
- // Menampilkan form import tendik
     public function import()
     {
         return view('biodata.dosen.import');
     }
 
-
-
-
-
     public function import_ajax(Request $request)
-{
-    if ($request->ajax() || $request->wantsJson()) {
-        $rules = [
-            'file_dosen' => ['required', 'mimes:xlsx', 'max:1024']
-        ];
+    {
+        if ($request->ajax()) {
+            $rules = [
+                'file_dosen' => ['required', 'mimes:xlsx', 'max:1024']
+            ];
 
-        $validator = Validator::make($request->all(), $rules);
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Validasi Gagal',
-                'msgField' => $validator->errors()
-            ]);
-        }
+            $validator = Validator::make($request->all(), $rules);
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Validasi Gagal',
+                    'msgField' => $validator->errors()
+                ]);
+            }
 
-        $file = $request->file('file_dosen');
-        $reader = IOFactory::createReader('Xlsx');
-        $reader->setReadDataOnly(true);
-        $spreadsheet = $reader->load($file->getRealPath());
-        $sheet = $spreadsheet->getActiveSheet();
-        $data = $sheet->toArray(null, false, true, true);
+            $file = $request->file('file_dosen');
+            $reader = IOFactory::createReader('Xlsx');
+            $reader->setReadDataOnly(true);
+            $spreadsheet = $reader->load($file->getRealPath());
+            $sheet = $spreadsheet->getActiveSheet();
+            $data = $sheet->toArray(null, false, true, true);
 
-        $insert = [];
-        if (count($data) > 1) {
+            $insert = [];
             foreach ($data as $rowNumber => $row) {
                 if ($rowNumber > 1) {
                     $insert[] = [
@@ -284,91 +258,75 @@ class DosenController extends Controller
                     'message' => 'Data dosen berhasil diimport'
                 ]);
             }
+
+            return response()->json([
+                'status' => false,
+                'message' => 'Tidak ada data yang diimport'
+            ]);
         }
 
-        return response()->json([
-            'status' => false,
-            'message' => 'Tidak ada data yang diimport'
-        ]);
+        return redirect('/');
     }
 
-    return redirect('/');
-}
+    public function export_excel()
+    {
+        $dosen = DosenModel::select('nidn', 'nik', 'dosen_nama', 'no_telp', 'alamat_asal', 'alamat_sekarang', 'jenis_kelamin')
+            ->orderBy('dosen_nama')
+            ->get();
 
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
 
+        $sheet->setCellValue('A1', 'No');
+        $sheet->setCellValue('B1', 'NIDN');
+        $sheet->setCellValue('C1', 'NIK');
+        $sheet->setCellValue('D1', 'Nama Dosen');
+        $sheet->setCellValue('E1', 'No Telepon');
+        $sheet->setCellValue('F1', 'Alamat Asal');
+        $sheet->setCellValue('G1', 'Alamat Sekarang');
+        $sheet->setCellValue('H1', 'Jenis Kelamin');
 
+        $sheet->getStyle('A1:H1')->getFont()->setBold(true);
 
+        $no = 1;
+        $baris = 2;
+        foreach ($dosen as $value) {
+            $sheet->setCellValue('A' . $baris, $no++);
+            $sheet->setCellValue('B' . $baris, $value->nidn);
+            $sheet->setCellValue('C' . $baris, $value->nik);
+            $sheet->setCellValue('D' . $baris, $value->dosen_nama);
+            $sheet->setCellValue('E' . $baris, $value->no_telp);
+            $sheet->setCellValue('F' . $baris, $value->alamat_asal);
+            $sheet->setCellValue('G' . $baris, $value->alamat_sekarang);
+            $sheet->setCellValue('H' . $baris, $value->jenis_kelamin);
+            $baris++;
+        }
 
-public function export_excel()
-{
-    $dosen = DosenModel::select('nidn', 'nik', 'dosen_nama', 'no_telp', 'alamat_asal', 'alamat_sekarang', 'jenis_kelamin')
-        ->orderBy('dosen_nama')
-        ->get();
+        foreach (range('A', 'H') as $col) {
+            $sheet->getColumnDimension($col)->setAutoSize(true);
+        }
 
-    $spreadsheet = new Spreadsheet();
-    $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('Data Dosen');
+        $filename = 'Data_Dosen_' . date('Y-m-d_H-i-s') . '.xlsx';
 
-    $sheet->setCellValue('A1', 'No');
-    $sheet->setCellValue('B1', 'NIDN');
-    $sheet->setCellValue('C1', 'NIK');
-    $sheet->setCellValue('D1', 'Nama Dosen');
-    $sheet->setCellValue('E1', 'No Telepon');
-    $sheet->setCellValue('F1', 'Alamat Asal');
-    $sheet->setCellValue('G1', 'Alamat Sekarang');
-    $sheet->setCellValue('H1', 'Jenis Kelamin');
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="' . $filename . '"');
+        header('Cache-Control: max-age=0');
 
-    $sheet->getStyle('A1:H1')->getFont()->setBold(true);
-
-    $no = 1;
-    $baris = 2;
-    foreach ($dosen as $value) {
-        $sheet->setCellValue('A' . $baris, $no++);
-        $sheet->setCellValue('B' . $baris, $value->nidn);
-        $sheet->setCellValue('C' . $baris, $value->nik);
-        $sheet->setCellValue('D' . $baris, $value->dosen_nama);
-        $sheet->setCellValue('E' . $baris, $value->no_telp);
-        $sheet->setCellValue('F' . $baris, $value->alamat_asal);
-        $sheet->setCellValue('G' . $baris, $value->alamat_sekarang);
-        $sheet->setCellValue('H' . $baris, $value->jenis_kelamin);
-        $baris++;
+        $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
+        $writer->save('php://output');
+        exit;
     }
 
-    foreach (range('A', 'H') as $col) {
-        $sheet->getColumnDimension($col)->setAutoSize(true);
+    public function export_pdf()
+    {
+        $dosen = DosenModel::with('jurusan')->orderBy('dosen_nama')->get();
+
+        $pdf = Pdf::loadView('biodata.dosen.export_pdf', ['dosen' => $dosen]);
+        $pdf->setPaper('a4', 'portrait');
+        $pdf->setOption("isRemoteEnabled", true);
+        $pdf->render();
+
+        return $pdf->stream('Data Dosen ' . date('Y-m-d H:i:s') . '.pdf');
     }
-
-    $sheet->setTitle('Data Dosen');
-    $filename = 'Data_Dosen_' . date('Y-m-d_H-i-s') . '.xlsx';
-
-    header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-    header('Content-Disposition: attachment;filename="' . $filename . '"');
-    header('Cache-Control: max-age=0');
-
-    $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
-    $writer->save('php://output');
-    exit;
-}
-
-
-
-
-
-public function export_pdf()
-{
-    $dosen = DosenModel::select('nidn', 'nik', 'dosen_nama', 'no_telp', 'alamat_asal', 'alamat_sekarang', 'jenis_kelamin', 'jurusan_id')
-        ->orderBy('dosen_nama')
-        ->get();
-
-    $pdf = Pdf::loadView('biodata.dosen.export_pdf', ['dosen' => $dosen]);
-    $pdf->setPaper('a4', 'portrait');
-    $pdf->setOption("isRemoteEnabled", true);
-    $pdf->render();
-
-    return $pdf->stream('Data Dosen ' . date('Y-m-d H:i:s') . '.pdf');
-}
-
-
-    
-
-
 }

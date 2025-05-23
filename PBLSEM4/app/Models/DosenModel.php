@@ -26,7 +26,7 @@ class DosenModel extends Model
 
     public function jurusan()
 {
-    return $this->belongsTo(Jurusan::class, 'jurusan_id');
+    return $this->belongsTo(JurusanModel::class, 'jurusan_id');
 }
 
 }
