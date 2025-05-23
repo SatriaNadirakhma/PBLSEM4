@@ -145,7 +145,7 @@ Route::middleware(['auth'])->group(function () {
     });
 
     Route::prefix('biodata/mahasiswa')
-    ->middleware(['auth', 'role:admin,mahasiswa'])
+->middleware(['auth', 'role:admin,mahasiswa'])
     ->name('biodata.mahasiswa.')
     ->group(function () {
 
@@ -219,7 +219,7 @@ Route::middleware(['auth'])->group(function () {
     }); 
 
     // Rute pendaftaran     
-    Route::prefix('pendaftaran')->group(function () {
+    Route::prefix('pendaftaran')->name('pendaftaran.index')->group(function () {
         Route::get('/', [PendaftaranController::class, 'index']);
     });
 
