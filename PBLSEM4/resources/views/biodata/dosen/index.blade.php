@@ -36,10 +36,6 @@
                             </select>
                             <small class="form-text text-muted">Pilih jurusan untuk memfilter data dosen</small>
                         </div>
-                        <label for="searchInput" class="col-md-2 col-form-label">Cari Nama</label>
-                        <div class="col-md-4">
-                            <input type="text" id="searchInput" class="form-control form-control-sm" placeholder="Cari nama dosen...">
-                        </div>
                     </div>
                 </div>
             </div>
@@ -96,7 +92,7 @@
             processing: true,
             serverSide: true,
             ajax: {
-                url: "{{ route('biodata.dosen.list') }}", // ✅ gunakan nama route yang benar
+                url: "{{ route('biodata.dosen.list') }}", 
                 type: "GET",
                 data: function (d) {
                     d.search_query = $('#searchInput').val();

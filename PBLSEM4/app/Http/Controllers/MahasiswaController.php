@@ -38,6 +38,10 @@ class MahasiswaController extends Controller
             $mahasiswa->where('mahasiswa_nama', 'like', '%' . $request->search_query . '%');
         }
 
+        if ($request->has('prodi_id') && $request->prodi_id != '') {
+            $mahasiswa->where('prodi_id', $request->prodi_id);
+        }
+
 
         return DataTables::of($mahasiswa)
             ->addIndexColumn()
