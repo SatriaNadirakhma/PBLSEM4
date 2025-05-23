@@ -251,9 +251,13 @@ Route::middleware(['auth'])->group(function () {
         
     });
 
-    //RUTE DATA DIRI
+    // RUTE DATA DIRI
     Route::prefix('datadiri')->middleware(['auth'])->group(function () {
         Route::get('/', [DataDiriController::class, 'index'])->name('datadiri.index');
+
+        // Tambahkan ini untuk AJAX update
+        Route::post('/mahasiswa/update', [DataDiriController::class, 'updateMahasiswa'])->name('datadiri.mahasiswa.update');
     });
+
 
 });
