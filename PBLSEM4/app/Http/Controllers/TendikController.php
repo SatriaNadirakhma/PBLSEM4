@@ -33,7 +33,7 @@ class TendikController extends Controller
 
     public function list(Request $request)
     {
-    $tendik = TendikModel::select('tendik_id', 'nip', 'nik', 'tendik_nama', 'no_telp', 'alamat_asal', 'alamat_sekarang', 'jenis_kelamin', 'kampus_id')
+    $tendik = TendikModel::select('tendik_id', 'nip', 'nik', 'tendik_nama', 'jenis_kelamin', 'kampus_id')
         ->with('kampus'); // Pastikan relasi kampus sudah dimuat
 
     // Filter berdasarkan nama kampus

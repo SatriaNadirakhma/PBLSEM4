@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login | siPinta</title>
+    <title>Login | Sipinta</title>
+    <link rel="icon" href="{{ asset('img/logo.png') }}" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('adminlte/plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('adminlte/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') }}">
@@ -12,7 +13,7 @@
     <style>
         * { margin: 0; padding: 0; font-family: 'Inter', sans-serif; box-sizing: border-box; }
         
-        body { display: flex; height: 100vh; background-color: #1a1a1a; }
+        body { display: flex; height: 100vh; background-color: #ffffff; }
         .left {
             flex: 1;
             background: url('{{ asset('img/gedung_polinema1.jpg') }}') no-repeat center center;
@@ -22,6 +23,8 @@
             justify-content: left;
             color: white;
             padding: 3rem;
+            border-radius: 20px;
+            margin: 0.6rem;
         }
 
         .right { flex: 1; background: white; display: flex; justify-content: center; align-items: center; padding: 2rem; }
@@ -33,19 +36,19 @@
         }
 
         .left h2 {
-            font-size: 2rem;
-            line-height: 1.5;
+            font-size: 2.10rem;
+            line-height: 1.15;
             font-weight: 600;
             max-width: 70%;
         }
         .logo-container {
             position: absolute;
-            top: 1.5rem;
-            left: 1.5rem;
+            top: 2rem;
+            left: 2rem;
         }
         
         .logo-container img{
-        height: 50px;
+        height: 30px;
         }
 
         .login-box img {
