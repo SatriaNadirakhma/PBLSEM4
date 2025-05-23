@@ -127,7 +127,7 @@ Route::middleware(['auth'])->group(function () {
     });
 
     // Rute BIODATA
-    Route::prefix('biodata.tendik')->name('biodata.tendik.')->middleware(['auth', 'role:admin'])->group(function () {
+    Route::prefix('biodata/tendik')->name('biodata.tendik.')->middleware(['auth', 'role:admin'])->group(function () {
         Route::get('/', [TendikController::class, 'index'])->name('index');
         Route::post('/list', [TendikController::class, 'list'])->name('list');
         Route::get('/{id}/show_ajax', [TendikController::class, 'show_ajax'])->name('show_ajax');
