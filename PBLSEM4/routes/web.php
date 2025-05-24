@@ -150,8 +150,7 @@ Route::middleware(['auth'])->group(function () {
     ->group(function () {
 
     Route::get('/', [MahasiswaController::class, 'index'])->name('index');
-    
-    // ✅ Ganti POST jadi GET untuk list agar cocok dengan ajax type: "GET"
+
     Route::get('/list', [MahasiswaController::class, 'list'])->name('list');
 
     Route::get('mahasiswa/{id}/show_ajax', [MahasiswaController::class, 'show_ajax'])->name('show_ajax');
@@ -219,8 +218,9 @@ Route::middleware(['auth'])->group(function () {
     }); 
 
     // Rute pendaftaran     
-    Route::prefix('pendaftaran')->name('pendaftaran.index')->group(function () {
-        Route::get('/', [PendaftaranController::class, 'index']);
+    Route::prefix('pendaftaran')->name('pendaftaran.')->group(function () {
+        Route::get('/', [PendaftaranController::class, 'index'])->name('index');
+        Route::post('/store_ajax', [PendaftaranController::class, 'store_ajax'])->name('store_ajax');
     });
 
     //Rute Riwayat Pendaftaran
