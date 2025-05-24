@@ -101,41 +101,14 @@
         <button id="btn-submit" type="submit" class="btn btn-primary btn-sm">Kirim</button>
     </form>
 </div>
+@endsection 
 
-@push('scripts')
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+@push('js')
 <script>
 $(document).ready(function () {
-    // Fungsi untuk menampilkan SweetAlert
-    function Swal.fire(options) {
-        const {
-            icon = 'success',
-            title = '',
-            text = '',
-            confirmButtonText = 'OK',
-            showCancelButton = false,
-            cancelButtonText = 'Batal',
-            callback = null
-        } = options;
-
-        return Swal.fire({
-            icon: icon,
-            title: title,
-            text: text,
-            confirmButtonText: confirmButtonText,
-            showCancelButton: showCancelButton,
-            cancelButtonText: cancelButtonText
-        }).then((result) => {
-            if (result.isConfirmed && callback) {
-                callback();
-            }
-        });
-    }
-
     $('#form-pendaftaran').on('submit', function(e) {
         e.preventDefault();
-        
-        // Konfirmasi sebelum submit dengan SweetAlert
+
         Swal.fire({
             icon: 'question',
             title: 'Konfirmasi Pendaftaran',
@@ -193,7 +166,7 @@ $(document).ready(function () {
                             title: 'Gagal Mengirim',
                             text: errorMessage + '\n\nAnda masih bisa memperbaiki dan mengirim ulang.'
                         });
-                        
+
                         btn.prop('disabled', false).text('Kirim');
                     }
                 });
@@ -204,4 +177,3 @@ $(document).ready(function () {
 </script>
 @endpush
 
-@endsection
