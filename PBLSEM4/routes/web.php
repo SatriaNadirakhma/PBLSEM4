@@ -269,6 +269,9 @@ Route::middleware(['auth'])->group(function () {
 
         // Tambahkan ini untuk AJAX update
         Route::post('/mahasiswa/update', [DataDiriController::class, 'updateMahasiswa'])->name('datadiri.mahasiswa.update');
+        // Tambahkan untuk update dosen
+        Route::post('/dosen/update', [DataDiriController::class, 'updateDosen'])->name('datadiri.dosen.update');
+
     });
 
 

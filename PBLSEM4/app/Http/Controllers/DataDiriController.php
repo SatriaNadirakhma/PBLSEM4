@@ -63,6 +63,27 @@ class DataDiriController extends Controller
         return response()->json(['message' => 'Data berhasil diperbarui.']);
     }
 
+    public function updateDosen(Request $request)
+    {
+        $request->validate([
+            'no_telp' => 'required|string|max:20',
+            'alamat_asal' => 'required|string|max:255',
+            'alamat_sekarang' => 'required|string|max:255',
+        ]);
+
+        $user = Auth::user();
+        $dosen = DosenModel::where('dosen_id', $user->dosen_id)->firstOrFail();
+
+        $dosen->update([
+            'no_telp' => $request->no_telp,
+            'alamat_asal' => $request->alamat_asal,
+            'alamat_sekarang' => $request->alamat_sekarang,
+        ]);
+
+        return response()->json(['message' => 'Data berhasil diperbarui.']);
+    }
+
+
 }
 
 
