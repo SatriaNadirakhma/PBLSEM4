@@ -74,17 +74,41 @@
                     <th>Jenis Kelamin</th>
                     <td>{{ ucfirst($pendaftaran->mahasiswa->jenis_kelamin ?? '-') }}</td>
                 </tr>
-                <tr>
+                 <tr>
                     <th>Scan KTP</th>
-                    <td>{{ $pendaftaran->scan_ktp ?? '-' }}</td>
+                    <td>
+                        @if($pendaftaran->scan_ktp)
+                            <a href="{{ asset('storage/' . $pendaftaran->scan_ktp) }}" target="_blank">
+                                <img src="{{ asset('storage/' . $pendaftaran->scan_ktp) }}" class="img-thumbnail" width="150">
+                            </a>
+                        @else
+                            -
+                        @endif
+                    </td>
                 </tr>
                 <tr>
                     <th>Scan KTM</th>
-                    <td>{{ $pendaftaran->scan_ktm ?? '-' }}</td>
+                    <td>
+                        @if($pendaftaran->scan_ktm)
+                            <a href="{{ asset('storage/' . $pendaftaran->scan_ktm) }}" target="_blank">
+                                <img src="{{ asset('storage/' . $pendaftaran->scan_ktm) }}" class="img-thumbnail" width="150">
+                            </a>
+                        @else
+                            -
+                        @endif
+                    </td>
                 </tr>
                 <tr>
                     <th>Pas Foto</th>
-                    <td>{{ $pendaftaran->pas_foto ?? '-' }}</td>
+                    <td>
+                        @if($pendaftaran->pas_foto)
+                            <a href="{{ asset('storage/' . $pendaftaran->pas_foto) }}" target="_blank">
+                                <img src="{{ asset('storage/' . $pendaftaran->pas_foto) }}" class="img-thumbnail" width="150">
+                            </a>
+                        @else
+                            -
+                        @endif
+                    </td>
                 </tr>
                 <tr>
                     <th>Jadwal yang Dipilih</th>
