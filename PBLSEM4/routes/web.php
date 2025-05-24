@@ -271,6 +271,8 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/mahasiswa/update', [DataDiriController::class, 'updateMahasiswa'])->name('datadiri.mahasiswa.update');
         // Tambahkan untuk update dosen
         Route::post('/dosen/update', [DataDiriController::class, 'updateDosen'])->name('datadiri.dosen.update');
+        //update tendik
+        Route::post('/tendik/update', [DataDiriController::class, 'updateTendik'])->name('datadiri.tendik.update');
 
     });
 
