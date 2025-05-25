@@ -26,7 +26,7 @@
                 </div>
               </div>
               <div class="team-content">
-                <h4>Daniel Mitchell</h4>
+                <h4>Satria Rakhmadani</h4>
                 <span class="position">Creative Director</span>
               </div>
             </div>
@@ -47,7 +47,7 @@
                 </div>
               </div>
               <div class="team-content">
-                <h4>Rebecca Taylor</h4>
+                <h4>Aqila Nur Azza</h4>
                 <span class="position">Lead Developer</span>
               </div>
             </div>
@@ -68,7 +68,7 @@
                 </div>
               </div>
               <div class="team-content">
-                <h4>Marcus Johnson</h4>
+                <h4>Faiza Anasthasya Eka Valen</h4>
                 <span class="position">UI/UX Designer</span>
               </div>
             </div>
@@ -89,7 +89,28 @@
                 </div>
               </div>
               <div class="team-content">
-                <h4>Jessica Parker</h4>
+                <h4>Lyra Faiqah Bilqis</h4>
+                <span class="position">Marketing Strategist</span>
+              </div>
+            </div>
+          </div><!-- End Team Member -->
+
+          <div class="col-md-6 col-lg-3" data-aos="zoom-in" data-aos-delay="400">
+            <div class="team-card">
+              <div class="team-image">
+                <img src="assets/img/person/person-f-3.webp" class="img-fluid" alt="">
+                <div class="team-overlay">
+                  <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</p>
+                  <div class="team-social">
+                    <a href=""><i class="bi bi-twitter-x"></i></a>
+                    <a href=""><i class="bi bi-facebook"></i></a>
+                    <a href=""><i class="bi bi-instagram"></i></a>
+                    <a href=""><i class="bi bi-linkedin"></i></a>
+                  </div>
+                </div>
+              </div>
+              <div class="team-content">
+                <h4>M. Reishi Fauzi</h4>
                 <span class="position">Marketing Strategist</span>
               </div>
             </div>
