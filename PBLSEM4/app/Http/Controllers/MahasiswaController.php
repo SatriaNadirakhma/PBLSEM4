@@ -21,7 +21,7 @@ class MahasiswaController extends Controller
         ];
 
         $page = (object) ['title' => 'Daftar Mahasiswa'];
-        $activeMenu = 'mahasiswa';
+        $activeMenu = 'peserta-mahasiswa';
         $prodi = ProdiModel::all();
 
         return view('biodata.mahasiswa.index', compact('breadcrumb', 'page', 'activeMenu', 'prodi'));

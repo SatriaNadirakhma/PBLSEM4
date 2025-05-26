@@ -27,7 +27,7 @@
               </div>
               <div class="team-content">
                 <h4>Satria Rakhmadani</h4>
-                <span class="position">Creative Director</span>
+                <span class="position">Project Manager</span>
               </div>
             </div>
           </div><!-- End Team Member -->
@@ -48,7 +48,7 @@
               </div>
               <div class="team-content">
                 <h4>Aqila Nur Azza</h4>
-                <span class="position">Lead Developer</span>
+                <span class="position">Back End Developer</span>
               </div>
             </div>
           </div><!-- End Team Member -->
@@ -69,7 +69,7 @@
               </div>
               <div class="team-content">
                 <h4>Faiza Anasthasya Eka Valen</h4>
-                <span class="position">UI/UX Designer</span>
+                <span class="position">Back End Developer</span>
               </div>
             </div>
           </div><!-- End Team Member -->
@@ -90,7 +90,7 @@
               </div>
               <div class="team-content">
                 <h4>Lyra Faiqah Bilqis</h4>
-                <span class="position">Marketing Strategist</span>
+                <span class="position">Front End Developer</span>
               </div>
             </div>
           </div><!-- End Team Member -->
@@ -111,7 +111,7 @@
               </div>
               <div class="team-content">
                 <h4>M. Reishi Fauzi</h4>
-                <span class="position">Marketing Strategist</span>
+                <span class="position">Front End Developer</span>
               </div>
             </div>
           </div><!-- End Team Member -->
