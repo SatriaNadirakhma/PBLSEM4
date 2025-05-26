@@ -108,5 +108,15 @@
 </script>
 
 @stack('js') <!-- Digunakan untuk memanggil custom js dari perintah push('js') pada masing-masing view -->
+
+<script>
+  function updateClock() {
+    const now = new Date();
+    const time = now.toLocaleTimeString('en-GB'); // Format HH:MM:SS
+    document.getElementById('clock').textContent = time;
+  }
+  setInterval(updateClock, 1000); // Update setiap 1 detik
+  updateClock(); // Jalankan pertama kali
+</script>
 </body>
 </html>

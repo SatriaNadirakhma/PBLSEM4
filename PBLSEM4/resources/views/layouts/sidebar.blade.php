@@ -240,6 +240,13 @@
                 @endif
             @endauth
 
+            <div class="text-center">
+                <div class="border border-secondary text-white px-3 py-1 rounded-pill d-inline-flex align-items-center gap-2 small">
+                    <i class="bi bi-clock"></i> <!-- Bootstrap Icons -->
+                    <span id="clock">00:00:00</span>
+                </div>
+            </div>
+
         </ul>
     </nav>
 </div>
