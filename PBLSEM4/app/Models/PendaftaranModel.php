@@ -35,4 +35,11 @@ class PendaftaranModel extends Model
     {
         return $this->hasOne(DetailPendaftaranModel::class, 'pendaftaran_id');
     }
+
+    public function detail_terakhir()
+    {
+        return $this->hasOne(DetailPendaftaranModel::class, 'pendaftaran_id')->latestOfMany('created_at');
+    }
+
+
 }

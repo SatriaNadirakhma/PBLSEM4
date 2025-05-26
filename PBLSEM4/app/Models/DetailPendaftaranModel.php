@@ -10,6 +10,9 @@ class DetailPendaftaranModel extends Model
     protected $primaryKey = 'detail_id';
     public $timestamps = true;
     protected $guarded = [];
+    protected $keyType = 'int'; // (kalau detail_id integer)
+    public $incrementing = true; // (kalau auto-increment)
+
 
     protected $fillable = ['status', 'catatan'];
 
@@ -17,4 +20,5 @@ class DetailPendaftaranModel extends Model
     {
         return $this->belongsTo(PendaftaranModel::class, 'pendaftaran_id');
     }
+
 }
