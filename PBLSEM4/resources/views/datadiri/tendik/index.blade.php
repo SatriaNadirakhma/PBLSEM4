@@ -74,7 +74,14 @@
                         </button>
                     </div>
                     <div class="modal-body">
-
+                    <div class="alert alert-warning d-flex align-items-center" role="alert">
+                        <i class="fas fa-exclamation-triangle mr-2"></i>
+                        <div>
+                            Anda hanya bisa mengubah <strong>No. Telepon</strong>, <strong>Alamat Asal</strong>, dan <strong>Alamat Sekarang</strong>. 
+                            Untuk mengubah data lainnya harap menghubungi admin.
+                        </div>
+                    </div>
+                    
                     <div class="form-group">
                         <label>Tendik ID</label>
                         <input type="text" class="form-control bg-light text-muted readonly-field" value="{{ $tendik->tendik_id }}" readonly>
@@ -157,16 +164,40 @@
         $('#form-edit').on('submit', function (e) {
             e.preventDefault();
 
-            $.ajax({
-                url: '{{ route("datadiri.tendik.update") }}',
-                method: 'POST',
-                data: $(this).serialize(),
-                success: function (res) {
-                    alert(res.message);
-                    location.reload();
-                },
-                error: function () {
-                    alert('Terjadi kesalahan saat menyimpan data.');
+            Swal.fire({
+                title: 'Simpan perubahan?',
+                text: "Pastikan data yang diubah sudah benar",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Simpan',
+                cancelButtonText: 'Batal',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '{{ route("datadiri.tendik.update") }}',
+                        method: 'POST',
+                        data: $('#form-edit').serialize(),
+                        success: function (res) {
+                            Swal.fire({
+                                title: 'Berhasil!',
+                                text: res.message,
+                                icon: 'success',
+                                timer: 2000,
+                                showConfirmButton: false
+                            }).then(() => {
+                                location.reload();
+                            });
+                        },
+                        error: function (xhr) {
+                            Swal.fire({
+                                title: 'Gagal!',
+                                text: 'Terjadi kesalahan saat menyimpan data.',
+                                icon: 'error',
+                                confirmButtonText: 'OK'
+                            });
+                        }
+                    });
                 }
             });
         });
