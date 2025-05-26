@@ -68,8 +68,7 @@ class RiwayatController extends Controller
                 return date('d-m-Y', strtotime($r->tanggal_pendaftaran));
             })
             ->addColumn('status', function($r) {
-                // Ambil detail pertama jika detail relasi many
-                $detail = $r->detail->first();
+                $detail = $r->detail_terakhir;
                 return $detail ? ucfirst($detail->status) : '';
             })
             ->addColumn('aksi', function ($r) {
