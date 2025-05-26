@@ -164,7 +164,7 @@ $(document).ready(function () {
                         Swal.fire({
                             icon: 'error',
                             title: 'Gagal Mengirim',
-                            text: errorMessage + '\n\nAnda masih bisa memperbaiki dan mengirim ulang.'
+                            text: 'Maaf, Anda sudah mendaftar. Silahkan tunggu hasil verifikasi oleh admin.'
                         });
 
                         btn.prop('disabled', false).text('Kirim');
