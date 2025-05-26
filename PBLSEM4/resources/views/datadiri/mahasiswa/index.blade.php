@@ -60,9 +60,14 @@
                     </tr>
                     <tr>
                         <th>Status</th>
-                        <td>{{ $mahasiswa->status }}</td>
+                        <td>
+                            @if($mahasiswa->status == 'aktif')
+                                <span class="badge badge-success">Aktif</span>
+                            @else($mahasiswa->status == 'alumni')
+                                <span class="badge badge-danger">Nonaktif</span>
+                            @endif
+                        </td>
                     </tr>
-                    <tr>
                         <th>Program Studi</th>
                         <td>{{ $mahasiswa->prodi->prodi_nama ?? '-' }}</td>
                     </tr>
@@ -82,6 +87,13 @@
                         </button>
                     </div>
                     <div class="modal-body">
+                    <div class="alert alert-warning d-flex align-items-center" role="alert">
+                        <i class="fas fa-exclamation-triangle mr-2"></i>
+                        <div>
+                            Anda hanya bisa mengubah <strong>No. Telepon</strong>, <strong>Alamat Asal</strong>, dan <strong>Alamat Sekarang</strong>. 
+                            Untuk mengubah data lainnya harap menghubungi admin.
+                        </div>
+                    </div>
 
                     <!-- 1. NIM -->
                     <div class="form-group">
@@ -181,16 +193,40 @@
         $('#form-edit').on('submit', function (e) {
             e.preventDefault();
 
-            $.ajax({
-                url: '{{ route("datadiri.mahasiswa.update") }}',
-                method: 'POST',
-                data: $(this).serialize(),
-                success: function (res) {
-                    alert(res.message);
-                    location.reload();
-                },
-                error: function (xhr) {
-                    alert('Terjadi kesalahan');
+            Swal.fire({
+                title: 'Simpan perubahan?',
+                text: "Pastikan data yang diubah sudah benar",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Simpan',
+                cancelButtonText: 'Batal',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '{{ route("datadiri.mahasiswa.update") }}',
+                        method: 'POST',
+                        data: $('#form-edit').serialize(),
+                        success: function (res) {
+                            Swal.fire({
+                                title: 'Berhasil!',
+                                text: res.message,
+                                icon: 'success',
+                                timer: 2000,
+                                showConfirmButton: false
+                            }).then(() => {
+                                location.reload();
+                            });
+                        },
+                        error: function (xhr) {
+                            Swal.fire({
+                                title: 'Gagal!',
+                                text: 'Terjadi kesalahan saat menyimpan data.',
+                                icon: 'error',
+                                confirmButtonText: 'OK'
+                            });
+                        }
+                    });
                 }
             });
         });
