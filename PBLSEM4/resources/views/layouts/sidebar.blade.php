@@ -11,6 +11,32 @@
         </div>
     </div> -->
 
+    <div class="mb-3 mt-2">
+        <!-- Tombol toggle collapse -->
+        <button class="btn bg-dark w-100 text-start d-flex align-items-center justify-content-between" 
+                type="button" 
+                data-bs-toggle="collapse" 
+                data-bs-target="#infoCollapse" 
+                aria-expanded="true" 
+                aria-controls="infoCollapse">
+            <span class="d-flex align-items-center">
+                <i class="fas fa-info-circle me-2 mr-3 text-white"></i>
+                <strong class="text-white">Informasi</strong>
+            </span>
+            <i class="fas fa-chevron-down text-white"></i>
+        </button>
+
+        <!-- Konten collapse -->
+        <div class="collapse show" id="infoCollapse">
+            <div class="alert mb-0 border-start border-2 border-light bg-dark text-white rounded-0">
+                <small>User bisa mengakses menu yang ada di sidebar berikut</small>
+            </div>
+        </div>
+    </div>
+
+
+
+
     <!-- Sidebar Menu -->
     <nav class="mt-3">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="true">
@@ -194,7 +220,7 @@
 
             @auth
                 @if(in_array(Auth::user()->role, ['mahasiswa', 'dosen', 'tendik']))
-                    <li class="nav-item">
+                    <li class="nav-item mt-1">
                         <a href="{{ route('datadiri.index') }}" class="nav-link {{ ($activeMenu === 'datadiri') ? 'active' : '' }}">
                             <i class="nav-icon fas fa-id-card"></i>
                             <p>Data Diri</p>
@@ -205,9 +231,9 @@
 
             @auth
                 @if(in_array(Auth::user()->role, ['mahasiswa', 'dosen', 'tendik']))
-                    <li class="nav-item">
+                    <li class="nav-item mt-1">
                         <a href="{{ route('pendaftaran.index') }}" class="nav-link {{ ($activeMenu === 'pendaftaran') ? 'active' : '' }}">
-                            <i class="nav-icon fas fa-id-card"></i>
+                            <i class="nav-icon fas fa-file-alt"></i>
                             <p>Pendaftaran</p>
                         </a>
                     </li>
