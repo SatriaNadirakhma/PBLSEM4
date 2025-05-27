@@ -104,7 +104,7 @@
                 <button type="submit" class="form-button">Masuk!</button>
 
                 <div class="form-links">
-                    <a href="/register">Belum Daftar?</a> | 
+                    <a href="/register">Lupa Password?</a> | 
                     <a href="/">Kembali ke Halaman Awal</a>
                 </div>
             </form>

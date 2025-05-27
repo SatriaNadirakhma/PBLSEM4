@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container mt-4">
-    <h1>{{ $page->title }}</h1>
+    <!-- <h1>{{ $page->title }}</h1> -->
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             @foreach ($breadcrumb->list as $item)
