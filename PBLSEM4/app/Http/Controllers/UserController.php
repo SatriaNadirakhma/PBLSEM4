@@ -243,42 +243,65 @@ class UserController extends Controller
         }
     }
 
-    // public function confirm_ajax($user_id)
-    // {
-    //     $user = UserModel::with(['admin', 'mahasiswa', 'dosen', 'tendik'])->find($user_id);
+    public function edit_ajax($user_id)
+    {
+        $user = UserModel::with(['admin', 'mahasiswa', 'dosen', 'tendik'])->find($user_id);
 
-    //     if (!$user) {
-    //         return view('user.confirm_ajax', compact('user'));
-    //     }
+        if (!$user) {
+            return response()->json([
+                'status' => false,
+                'message' => 'User tidak ditemukan'
+            ]);
+        }
 
-    //     return view('user.confirm_ajax', compact('user'));
-    // }
+        $roles = ['admin', 'mahasiswa', 'dosen', 'tendik'];
 
-    // public function delete_ajax($id)
-    // {
-    //     try {
-    //         $user = UserModel::find($id);
-    //         if (!$user) {
-    //             return response()->json([
-    //                 'status' => false,
-    //                 'message' => 'User tidak ditemukan'
-    //             ]);
-    //         }
+        $availableUsers = [
+            'admin' => AdminModel::whereNotIn('admin_id', UserModel::where('role', 'admin')->pluck('username'))->get(),
+            'mahasiswa' => MahasiswaModel::whereNotIn('nim', UserModel::where('role', 'mahasiswa')->pluck('username'))->get(),
+            'dosen' => DosenModel::whereNotIn('nidn', UserModel::where('role', 'dosen')->pluck('username'))->get(),
+            'tendik' => TendikModel::whereNotIn('nip', UserModel::where('role', 'tendik')->pluck('username'))->get(),
+        ];
 
-    //         // Karena onDelete cascade sudah ada, hapus langsung user
-    //         $user->delete();
+        return view('user.edit_ajax', compact('user', 'roles', 'availableUsers'));
+    }
 
-    //         return response()->json([
-    //             'status' => true,
-    //             'message' => 'User berhasil dihapus'
-    //         ]);
-    //     } catch (\Exception $e) {
-    //         return response()->json([
-    //             'status' => false,
-    //             'message' => 'Gagal menghapus user: ' . $e->getMessage()
-    //         ]);
-    //     }
-    // }
+    public function confirm_ajax($user_id)
+    {
+        $user = UserModel::with(['admin', 'mahasiswa', 'dosen', 'tendik'])->find($user_id);
+
+        if (!$user) {
+            return view('user.confirm_ajax', compact('user'));
+        }
+
+        return view('user.confirm_ajax', compact('user'));
+    }
+
+    public function delete_ajax($id)
+    {
+        try {
+            $user = UserModel::find($id);
+            if (!$user) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'User tidak ditemukan'
+                ]);
+            }
+
+            // Karena onDelete cascade sudah ada, hapus langsung user
+            $user->delete();
+
+            return response()->json([
+                'status' => true,
+                'message' => 'User berhasil dihapus'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Gagal menghapus user: ' . $e->getMessage()
+            ]);
+        }
+    }
 
     public function profile() 
     {

@@ -141,17 +141,18 @@
                             text: response.message || 'Login berhasil!',
                             showConfirmButton: false,
                             timer: 1500,
-                            heightAuto: false // Mencegah pergeseran tampilan
+                            heightAuto: false
                         }).then(() => {
                             window.location.href = response.redirect;
                         });
 
                     } else {
                         Swal.fire({
-                        icon: 'error',
-                        title: 'Login Gagal',
-                        text: response.message || 'Username atau password salah.'
-                        }); 
+                            icon: 'error',
+                            title: 'Login Gagal',
+                            text: response.message || 'Username atau password salah.',
+                            heightAuto: false
+                        });
                     }
 
                 },
