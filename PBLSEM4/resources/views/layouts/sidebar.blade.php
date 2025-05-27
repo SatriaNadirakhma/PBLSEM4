@@ -1,6 +1,6 @@
 <div class="sidebar">
     <!-- SidebarSearch Form -->
-    <!-- <div class="form-inline mt-2">
+     <div class="form-inline mt-2">
         <div class="input-group" data-widget="sidebar-search">
             <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
             <div class="input-group-append">
@@ -9,11 +9,11 @@
                 </button>
             </div>
         </div>
-    </div> -->
+    </div> 
 
-    <div class="mb-3 mt-2">
+    <!-- <div class="mb-3 mt-2"> -->
         <!-- Tombol toggle collapse -->
-        <button class="btn bg-dark w-100 text-start d-flex align-items-center justify-content-between" 
+        <!-- <button class="btn bg-dark w-100 text-start d-flex align-items-center justify-content-between" 
                 type="button" 
                 data-bs-toggle="collapse" 
                 data-bs-target="#infoCollapse" 
@@ -24,15 +24,15 @@
                 <strong class="text-white">Informasi</strong>
             </span>
             <i class="fas fa-chevron-down text-white"></i>
-        </button>
+        </button> -->
 
         <!-- Konten collapse -->
-        <div class="collapse show" id="infoCollapse">
+        <!-- <div class="collapse show" id="infoCollapse">
             <div class="alert mb-0 border-start border-2 border-light bg-dark text-white rounded-0">
                 <small>User bisa mengakses menu yang ada di sidebar berikut</small>
             </div>
         </div>
-    </div>
+    </div> -->
 
 
 
