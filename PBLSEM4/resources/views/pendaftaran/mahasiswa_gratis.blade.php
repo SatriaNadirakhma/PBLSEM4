@@ -89,9 +89,11 @@
                     <select name="jadwal_id" class="form-control form-control-sm" required>
                         <option value="">-- Pilih Jadwal --</option>
                         @foreach($jadwalList as $jadwal)
+                         @if(\Carbon\Carbon::parse($jadwal->tanggal_pelaksanaan)->gte(\Carbon\Carbon::today()))
                             <option value="{{ $jadwal->jadwal_id }}">
                                 {{ \Carbon\Carbon::parse($jadwal->tanggal_pelaksanaan)->format('d/m/Y') }} - {{ \Carbon\Carbon::parse($jadwal->jam_mulai)->format('H:i:s') }}
                             </option>
+                        @endif
                         @endforeach
                     </select>
                 </div>
