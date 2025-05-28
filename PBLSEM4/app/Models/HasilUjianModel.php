@@ -24,10 +24,12 @@ class HasilUjianModel extends Model
 
     public function jadwal()
     {
-        return $this->belongsTo(JadwalModel::class, 'jadwal_id');
+        return $this->belongsTo(JadwalModel::class, 'jadwal_id', 'jadwal_id');
     }
 
-     public function user()
+    public function user()
     {
-        return $this->belongsTo(UserModel::class, 'user_id');
-    }}
+        return $this->belongsTo(UserModel::class, 'user_id', 'user_id');
+    }
+
+}

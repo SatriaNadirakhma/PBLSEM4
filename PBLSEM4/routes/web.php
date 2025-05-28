@@ -218,6 +218,18 @@ Route::middleware(['auth'])->group(function () {
     // Rute jadwal
     Route::prefix('jadwal')->group(function () {
         Route::get('/', [JadwalController::class, 'index']);
+        Route::post('/list', [JadwalController::class, 'list'])->name('jadwal.list');
+        Route::get('/{id}/show_ajax', [JadwalController::class, 'show_ajax'])->name('jadwal.show_ajax');
+        Route::get('/create_ajax', [JadwalController::class, 'create_ajax'])->name('jadwal.create_ajax');
+        Route::post('/ajax', [JadwalController::class, 'store_ajax'])->name('jadwal.store_ajax');
+        Route::get('/{id}/delete_ajax', [JadwalController::class, 'confirm_ajax'])->name('jadwal.confirm_ajax');
+        Route::delete('/{id}/delete_ajax', [JadwalController::class, 'delete_ajax'])->name('jadwal.delete_ajax');
+        Route::get('/{id}/edit_ajax', [JadwalController::class, 'edit_ajax'])->name('jadwal.edit_ajax');
+        Route::put('/{id}/update_ajax', [JadwalController::class, 'update_ajax'])->name('jadwal.update_ajax');
+        Route::get('/import', [JadwalController::class, 'import'])->name('jadwal.import');
+        Route::post('/import_ajax', [JadwalController::class, 'import_ajax'])->name('jadwal.import_ajax');
+        Route::get('/export_excel', [JadwalController::class, 'export_excel'])->name('jadwal.export_excel');
+        Route::get('/export_pdf', [JadwalController::class, 'export_pdf'])->name('jadwal.export_pdf');
     }); 
 
     // Rute pendaftaran     
@@ -250,7 +262,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{id}/show_ajax', [HasilUjianController::class, 'show_ajax'])->name('hasil_ujian.show_ajax');
         Route::get('/create_ajax', [HasilUjianController::class, 'create_ajax'])->name('hasil_ujian.create_ajax');
         Route::post('/ajax', [HasilUjianController::class, 'store_ajax'])->name('hasil_ujian.store_ajax');
-        Route::get('/{id}/delete_ajax', [HasilUjianController::class, 'confirm_ajax'])->name('hasil_ujian.confirm_ajax');
+        Route::get('/{id}/delete_ajax', [HasilUjianController::class, 'confirm_ajax'])->name('hasil_ujian.confirm_ajax');  
         Route::delete('/{id}/delete_ajax', [HasilUjianController::class, 'delete_ajax'])->name('hasil_ujian.delete_ajax');
         Route::get('/{id}/edit_ajax', [HasilUjianController::class, 'edit_ajax'])->name('hasil_ujian.edit_ajax');
         Route::put('/{id}/update_ajax', [HasilUjianController::class, 'update_ajax'])->name('hasil_ujian.update_ajax');
@@ -259,10 +271,22 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/export_excel', [HasilUjianController::class, 'export_excel'])->name('hasil_ujian.export_excel');
         Route::get('/export_pdf', [HasilUjianController::class, 'export_pdf'])->name('hasil_ujian.export_pdf');
     });
-
+    
     // Rute Informasi
     Route::prefix('informasi')->group(function () {
         Route::get('/', [InformasiController::class, 'index']);
+        Route::post('/list', [InformasiController::class, 'list'])->name('informasi.list');
+        Route::get('/{id}/show_ajax', [InformasiController::class, 'show_ajax'])->name('informasi.show_ajax');
+        Route::get('/create_ajax', [InformasiController::class, 'create_ajax'])->name('informasi.create_ajax');
+        Route::post('/ajax', [InformasiController::class, 'store_ajax'])->name('informasi.store_ajax');
+        Route::get('/{id}/delete_ajax', [InformasiController::class, 'confirm_ajax'])->name('informasi.confirm_ajax');  
+        Route::delete('/{id}/delete_ajax', [InformasiController::class, 'delete_ajax'])->name('informasi.delete_ajax');
+        Route::get('/{id}/edit_ajax', [InformasiController::class, 'edit_ajax'])->name('informasi.edit_ajax');
+        Route::put('/{id}/update_ajax', [InformasiController::class, 'update_ajax'])->name('informasi.update_ajax');
+        Route::get('/import', [InformasiController::class, 'import'])->name('informasi.import');
+        Route::post('/import_ajax', [InformasiController::class, 'import_ajax'])->name('informasi.import_ajax');
+        Route::get('/export_excel', [InformasiController::class, 'export_excel'])->name('informasi.export_excel');
+        Route::get('/export_pdf', [InformasiController::class, 'export_pdf'])->name('informasi.export_pdf');
         
     });
 
