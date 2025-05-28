@@ -8,12 +8,10 @@ use App\Models\JadwalModel;
 use App\Models\UserModel;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Validator;
-use PhpOffice\PhpSpreadsheet\IOFactory;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use Barryvdh\DomPDF\Facade\Pdf;
 
 class HasilUjianController extends Controller
 {
+    // Menampilkan halaman utama hasil ujian
     public function index()
     {
         $breadcrumb = (object) [
@@ -22,7 +20,7 @@ class HasilUjianController extends Controller
         ];
 
         $page = (object) [
-            'title' => 'Daftar hasil ujian dalam sistem',
+            'title' => 'Daftar hasil ujian peserta TOEIC',
         ];
 
         $activeMenu = 'hasil_ujian';
@@ -30,224 +28,237 @@ class HasilUjianController extends Controller
         return view('hasil_ujian.index', compact('breadcrumb', 'page', 'activeMenu'));
     }
 
+    // Mengambil data hasil ujian untuk DataTables
     public function list(Request $request)
     {
-        $data = HasilUjianModel::with(['jadwal', 'user']);
+        $hasilUjian = HasilUjianModel::with([
+            'jadwal',
+            'user.mahasiswa',
+            'user.dosen',
+            'user.tendik',
+        ])->select('hasil_ujian.*');
 
-        return DataTables::of($data)
+        if ($request->has('search_query') && $request->search_query != '') {
+            $hasilUjian->where(function($q) use ($request) {
+                $q->whereHas('user.mahasiswa', function($q2) use ($request) {
+                    $q2->where('mahasiswa_nama', 'like', '%' . $request->search_query . '%');
+                })
+                ->orWhereHas('user.dosen', function($q3) use ($request) {
+                    $q3->where('dosen_nama', 'like', '%' . $request->search_query . '%');
+                })
+                ->orWhereHas('user.tendik', function($q4) use ($request) {
+                    $q4->where('tendik_nama', 'like', '%' . $request->search_query . '%');
+                });
+            });
+        }
+
+        return DataTables::of($hasilUjian)
             ->addIndexColumn()
-            ->addColumn('jadwal', fn($row) => $row->jadwal->nama ?? '-')
-            ->addColumn('user', fn($row) => $row->user->name ?? '-')
-            ->addColumn('aksi', function ($row) {
-                $id = $row->hasil_id;
-                return '
-                    <button onclick="modalAction(\'' . url("/hasil_ujian/$id/show_ajax") . '\')" class="btn btn-info btn-sm">Detail</button>
-                    <button onclick="modalAction(\'' . url("/hasil_ujian/$id/edit_ajax") . '\')" class="btn btn-warning btn-sm">Edit</button>
-                    <button onclick="modalAction(\'' . url("/hasil_ujian/$id/delete_ajax") . '\')" class="btn btn-danger btn-sm">Hapus</button>';
+            ->addColumn('nama', function ($h) {
+                $user = $h->user;
+                if ($user) {
+                    if ($user->mahasiswa) {
+                        return $user->mahasiswa->mahasiswa_nama;
+                    } elseif ($user->dosen) {
+                        return $user->dosen->dosen_nama;
+                    } elseif ($user->tendik) {
+                        return $user->tendik->tendik_nama;
+                    } else {
+                        return $user->nama ?? '-';
+                    }
+                }
+                return '-';
             })
-            ->rawColumns(['aksi'])
+            ->addColumn('tanggal_pelaksanaan', function ($h) {
+                return $h->jadwal ? \Carbon\Carbon::parse($h->jadwal->tanggal_pelaksanaan)->format('d/m/Y') : '-';
+            })
+            ->addColumn('nilai_listening', fn($h) => $h->nilai_listening ?? 0)
+            ->addColumn('nilai_reading', fn($h) => $h->nilai_reading ?? 0)
+            ->addColumn('nilai_total', fn($h) => $h->nilai_total ?? 0)
+            ->addColumn('status_lulus', function($h) {
+                $status = $h->status_lulus ?? 'Tidak Lulus';
+                $badgeClass = $status == 'Lulus' ? 'badge bg-success' : 'badge bg-danger';
+                return '<span class="' . $badgeClass . '">' . $status . '</span>';
+            })
+            ->addColumn('role', function ($h) {
+                return $h->user ? ucfirst($h->user->role) : '-';
+            })
+            ->addColumn('aksi', function ($h) {
+                $btn  = '<button onclick="modalAction(\'' . url('/hasil-ujian/' . $h->hasil_id . '/show_ajax') . '\')" 
+                            class="btn btn-info btn-sm rounded-pill shadow-sm me-1 px-3 py-1" style="font-size: 0.85rem;">
+                            <i class="fa fa-eye me-1"></i> Detail
+                        </button>';
+
+                $btn .= '<button onclick="modalAction(\'' . url('/hasil-ujian/' . $h->hasil_id . '/edit_ajax') . '\')" 
+                            class="btn btn-warning btn-sm rounded-pill shadow-sm me-1 px-3 py-1" style="font-size: 0.85rem;">
+                            <i class="fa fa-edit me-1"></i> Edit
+                        </button>';
+
+                $btn .= '<button onclick="modalAction(\'' . url('/hasil-ujian/' . $h->hasil_id . '/delete_ajax') . '\')" 
+                            class="btn btn-danger btn-sm rounded-pill shadow-sm px-3 py-1" style="font-size: 0.85rem;">
+                            <i class="fa fa-trash me-1"></i> Hapus
+                        </button>';
+
+                return $btn;
+            })
+            ->rawColumns(['aksi', 'status_lulus'])
             ->make(true);
     }
 
+    // Menampilkan detail hasil ujian
+    public function show_ajax($id)
+    {
+        $hasilUjian = HasilUjianModel::with(['jadwal', 'user.mahasiswa', 'user.dosen', 'user.tendik'])->find($id);
+        if (!$hasilUjian) {
+            return response()->json(['status' => false, 'message' => 'Data tidak ditemukan']);
+        }
+        return view('hasil_ujian.show_ajax', compact('hasilUjian'));
+    }
+
+    // Form tambah data
     public function create_ajax()
     {
         $jadwal = JadwalModel::all();
-        $user = UserModel::all();
-        return view('hasil_ujian.create_ajax', compact('jadwal', 'user'));
+        $users = UserModel::all();
+        return view('hasil_ujian.create_ajax', compact('jadwal', 'users'));
     }
 
+    // Menyimpan data hasil ujian
     public function store_ajax(Request $request)
     {
-        HasilUjianModel::create([
-            'nilai_listening' => $request->nilai_listening,
-            'nilai_reading' => $request->nilai_reading,
-            'nilai_total' => $request->nilai_total,
-            'status_lulus' => $request->status_lulus,
-            'catatan' => $request->catatan,
-            'jadwal_id' => $request->jadwal_id,
-            'user_id' => $request->user_id,
-        ]);
+        $rules = [
+            'nilai_listening' => 'required|integer|min:0|max:495',
+            'nilai_reading' => 'required|integer|min:0|max:495',
+            'jadwal_id' => 'required|exists:jadwal,jadwal_id',
+            'user_id' => 'required|exists:users,id',
+            'catatan' => 'nullable|string|max:255',
+        ];
 
+        $validator = Validator::make($request->all(), $rules);
 
-        $validator = Validator::make($request->all(), $request->rules());
         if ($validator->fails()) {
             return response()->json([
                 'status' => false,
-                'message' => 'Validasi gagal',
-                'msgField' => $validator->errors()
+                'message' => 'Validasi Gagal',
+                'msgField' => $validator->errors(),
             ]);
         }
 
         try {
-            HasilUjianModel::create($request->all());
+            $hasilUjian = new HasilUjianModel();
+            $hasilUjian->nilai_listening = $request->input('nilai_listening');
+            $hasilUjian->nilai_reading = $request->input('nilai_reading');
+            $hasilUjian->nilai_total = $request->input('nilai_listening') + $request->input('nilai_reading');
+            $hasilUjian->status_lulus = $hasilUjian->nilai_total >= 600 ? 'Lulus' : 'Tidak Lulus';
+            $hasilUjian->jadwal_id = $request->input('jadwal_id');
+            $hasilUjian->user_id = $request->input('user_id');
+            $hasilUjian->catatan = $request->input('catatan');
+            $hasilUjian->save();
 
             return response()->json([
                 'status' => true,
-                'message' => 'Data berhasil disimpan'
+                'message' => 'Data hasil ujian berhasil disimpan',
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => false,
-                'message' => 'Gagal menyimpan data: ' . $e->getMessage()
+                'message' => 'Gagal menyimpan data: ' . $e->getMessage(),
             ]);
         }
     }
 
-    public function show_ajax($id)
-    {
-        $hasil = HasilUjianModel::with(['jadwal', 'user'])->findOrFail($id);
-        return view('hasil_ujian.show_ajax', compact('hasil'));
-    }
-
+    // Form edit data
     public function edit_ajax($id)
     {
-        $hasil = HasilUjianModel::findOrFail($id);
+        $hasilUjian = HasilUjianModel::find($id);
+        if (!$hasilUjian) {
+            return response()->json(['status' => false, 'message' => 'Data tidak ditemukan']);
+        }
         $jadwal = JadwalModel::all();
-        $user = UserModel::all();
-        return view('hasil_ujian.edit_ajax', compact('hasil', 'jadwal', 'user'));
+        $users = UserModel::all();
+        return view('hasil_ujian.edit_ajax', compact('hasilUjian', 'jadwal', 'users'));
     }
 
+    // Memperbarui data hasil ujian
     public function update_ajax(Request $request, $id)
     {
         $rules = [
-            'nilai_listening' => 'required|numeric|min:0|max:495',
-            'nilai_reading'   => 'required|numeric|min:0|max:495',
-            'nilai_total'     => 'required|numeric|min:0|max:990',
-            'status_lulus'    => 'required|in:lulus,tidak_lulus',
-            'jadwal_id'       => 'required|exists:jadwal,jadwal_id',
-            'user_id'         => 'required|exists:users,id',
+            'nilai_listening' => 'required|integer|min:0|max:495',
+            'nilai_reading' => 'required|integer|min:0|max:495',
+            'jadwal_id' => 'required|exists:jadwal,jadwal_id',
+            'user_id' => 'required|exists:users,id',
+            'catatan' => 'nullable|string|max:255',
         ];
 
         $validator = Validator::make($request->all(), $rules);
+
         if ($validator->fails()) {
             return response()->json([
                 'status' => false,
-                'message' => 'Validasi gagal',
-                'msgField' => $validator->errors()
+                'message' => 'Validasi Gagal',
+                'msgField' => $validator->errors(),
             ]);
         }
 
-        $hasil = HasilUjianModel::findOrFail($id);
-        $hasil->update($request->all());
+        $hasilUjian = HasilUjianModel::find($id);
+        if (!$hasilUjian) {
+            return response()->json(['status' => false, 'message' => 'Data tidak ditemukan']);
+        }
 
-        return response()->json([
-            'status' => true,
-            'message' => 'Data berhasil diperbarui'
-        ]);
-    }
+        try {
+            $hasilUjian->update([
+                'nilai_listening' => $request->input('nilai_listening'),
+                'nilai_reading' => $request->input('nilai_reading'),
+                'nilai_total' => $request->input('nilai_listening') + $request->input('nilai_reading'),
+                'status_lulus' => ($request->input('nilai_listening') + $request->input('nilai_reading')) >= 600 ? 'Lulus' : 'Tidak Lulus',
+                'jadwal_id' => $request->input('jadwal_id'),
+                'user_id' => $request->input('user_id'),
+                'catatan' => $request->input('catatan'),
+            ]);
 
-    public function confirm_ajax($id)
-    {
-        $hasil = HasilUjianModel::findOrFail($id);
-        return view('hasil_ujian.confirm_ajax', compact('hasil'));
-    }
-
-    public function delete_ajax(Request $request, $id)
-    {
-        $hasil = HasilUjianModel::find($id);
-        if ($hasil) {
-            $hasil->delete();
             return response()->json([
                 'status' => true,
-                'message' => 'Data berhasil dihapus'
+                'message' => 'Data hasil ujian berhasil diperbarui',
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Gagal memperbarui data: ' . $e->getMessage(),
             ]);
         }
-
-        return response()->json([
-            'status' => false,
-            'message' => 'Data tidak ditemukan'
-        ]);
     }
 
-    public function import()
+    // Form konfirmasi hapus
+    public function confirm_ajax($id)
     {
-        return view('hasil_ujian.import');
+        $hasilUjian = HasilUjianModel::with(['jadwal', 'user.mahasiswa', 'user.dosen', 'user.tendik'])->find($id);
+        if (!$hasilUjian) {
+            return response()->json(['status' => false, 'message' => 'Data tidak ditemukan']);
+        }
+        return view('hasil_ujian.confirm_ajax', compact('hasilUjian'));
     }
 
-    public function import_ajax(Request $request)
+    // Menghapus data hasil ujian
+    public function delete_ajax(Request $request, $id)
     {
-        $validator = Validator::make($request->all(), [
-            'file_hasil_ujian' => 'required|mimes:xlsx|max:1024'
-        ]);
+        if ($request->ajax() || $request->wantsJson()) {
+            $hasilUjian = HasilUjianModel::find($id);
+            if (!$hasilUjian) {
+                return response()->json(['status' => false, 'message' => 'Data tidak ditemukan']);
+            }
 
-        if ($validator->fails()) {
-            return response()->json(['status' => false, 'message' => 'Validasi gagal', 'msgField' => $validator->errors()]);
+            try {
+                $hasilUjian->delete();
+                return response()->json(['status' => true, 'message' => 'Data berhasil dihapus']);
+            } catch (\Exception $e) {
+                return response()->json(['status' => false, 'message' => 'Gagal menghapus data: ' . $e->getMessage()]);
+            }
         }
+        
+        return redirect('/');
 
-        $file = $request->file('file_hasil_ujian');
-        $spreadsheet = IOFactory::load($file->getRealPath());
-        $sheet = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
-
-        $data = [];
-        foreach ($sheet as $index => $row) {
-            if ($index <= 1) continue; // skip header
-            $data[] = [
-                'nilai_listening' => $row['A'],
-                'nilai_reading'   => $row['B'],
-                'nilai_total'     => $row['C'],
-                'status_lulus'    => $row['D'],
-                'jadwal_id'       => $row['E'],
-                'user_id'         => $row['F'],
-                'created_at'      => now()
-            ];
-        }
-
-        if (count($data)) {
-            HasilUjianModel::insertOrIgnore($data);
-            return response()->json(['status' => true, 'message' => 'Data berhasil diimport']);
-        }
-
-        return response()->json(['status' => false, 'message' => 'Tidak ada data untuk diimport']);
+        
     }
 
-    public function export_excel()
-    {
-        $hasil = HasilUjianModel::with(['jadwal', 'user'])->get();
-
-        $spreadsheet = new Spreadsheet();
-        $sheet = $spreadsheet->getActiveSheet();
-
-        $sheet->setCellValue('A1', 'No');
-        $sheet->setCellValue('B1', 'Listening');
-        $sheet->setCellValue('C1', 'Reading');
-        $sheet->setCellValue('D1', 'Total');
-        $sheet->setCellValue('E1', 'Status');
-        $sheet->setCellValue('F1', 'Jadwal');
-        $sheet->setCellValue('G1', 'User');
-
-        $row = 2;
-        $no = 1;
-        foreach ($hasil as $item) {
-            $sheet->setCellValue('A' . $row, $no++);
-            $sheet->setCellValue('B' . $row, $item->nilai_listening);
-            $sheet->setCellValue('C' . $row, $item->nilai_reading);
-            $sheet->setCellValue('D' . $row, $item->nilai_total);
-            $sheet->setCellValue('E' . $row, $item->status_lulus);
-            $sheet->setCellValue('F' . $row, $item->jadwal->nama ?? '-');
-            $sheet->setCellValue('G' . $row, $item->user->name ?? '-');
-            $row++;
-        }
-
-        foreach (range('A', 'G') as $col) {
-            $sheet->getColumnDimension($col)->setAutoSize(true);
-        }
-
-        $filename = 'Hasil_Ujian_' . now()->format('Ymd_His') . '.xlsx';
-
-        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header("Content-Disposition: attachment;filename=\"$filename\"");
-        header('Cache-Control: max-age=0');
-
-        IOFactory::createWriter($spreadsheet, 'Xlsx')->save('php://output');
-        exit;
-    }
-
-    public function export_pdf()
-    {
-        $hasil = HasilUjianModel::with(['jadwal', 'user'])->get();
-
-        $pdf = Pdf::loadView('hasil_ujian.export_pdf', compact('hasil'));
-        $pdf->setPaper('a4', 'portrait');
-        return $pdf->stream('Hasil_Ujian_' . now()->format('Ymd_His') . '.pdf');
-    }
+    
 }
