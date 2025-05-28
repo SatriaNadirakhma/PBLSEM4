@@ -219,6 +219,17 @@
             @endauth
 
             @auth
+                @if(Auth::user()->role == 'admin')
+                    <li class="nav-item mt-1">
+                        <a href="{{ route('kirimpesan.index') }}" class="nav-link {{ in_array($activeMenu, ['kirimpesan']) ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-paper-plane"></i>
+                            <p>KIRIM PESAN</p>
+                        </a>
+                    </li>
+                @endif
+            @endauth
+
+            @auth
                 @if(in_array(Auth::user()->role, ['mahasiswa', 'dosen', 'tendik']))
                     <li class="nav-item mt-1">
                         <a href="{{ route('datadiri.index') }}" class="nav-link {{ ($activeMenu === 'datadiri') ? 'active' : '' }}">
