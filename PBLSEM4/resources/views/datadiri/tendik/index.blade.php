@@ -81,13 +81,6 @@
                             Untuk mengubah data lainnya harap menghubungi admin.
                         </div>
                     </div>
-                    
-                    <div class="form-group">
-                        <label>Tendik ID</label>
-                        <input type="text" class="form-control bg-light text-muted readonly-field" value="{{ $tendik->tendik_id }}" readonly>
-                        <div class="readonly-feedback">Kolom ini tidak dapat diubah</div>
-                    </div>
-
                     <div class="form-group">
                         <label>NIP</label>
                         <input type="text" class="form-control bg-light text-muted readonly-field" value="{{ $tendik->nip }}" readonly>
