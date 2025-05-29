@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\UserModel;
+use App\Models\PendaftaranModel;
 use App\Models\DetailPendaftaranModel;
 use App\Models\AdminModel;
 use App\Models\MahasiswaModel;
@@ -58,7 +59,7 @@ class DashboardController extends Controller
         // Ambil data pendaftar per bulan (12 bulan) untuk tahun berjalan
         $currentYear = Carbon::now()->year;
 
-        $pendaftarPerBulan = DetailPendaftaranModel::select(
+        $pendaftarPerBulan = PendaftaranModel::select(
             DB::raw('MONTH(created_at) as bulan'),
             DB::raw('COUNT(*) as total')
         )

@@ -39,6 +39,15 @@
             <p style="font-size: 1rem; line-height: 1.6;">{{ $pesan }}</p>
         </div>
 
+        <!-- Debug Info - Remove this after fixing -->
+        <!-- <div class="alert alert-info" style="font-size: 0.85rem;">
+            <strong>Debug Info:</strong><br>
+            Role: {{ $role }}<br>
+            Data Pendaftar: {{ json_encode($dataPendaftarPerBulan ?? 'Not Set') }}<br>
+            Jumlah Lolos: {{ $jumlah_lolos ?? 'Not Set' }}<br>
+            Jumlah Tidak Lolos: {{ $jumlah_tidak_lolos ?? 'Not Set' }}
+        </div> -->
+
     </div>
 </div>
 
@@ -75,34 +84,111 @@
     </div>
 </div>
 
-<div class="mt-5 container" style="height: 400px;">
-    <h5>Statistik Pendaftar Per Bulan Tahun {{ \Carbon\Carbon::now()->year }}</h5>
-    <canvas id="lineChart" style="width: 100%; height: 300px;"></canvas>
-
-    <h5 class="mt-5">Persentase Peserta Lolos dan Tidak Lolos</h5>
-    <canvas id="pieChart" style="width: 100%; height: 300px;"></canvas>
+<!-- Charts Section -->
+<div class="mt-5 container">
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Statistik Pendaftar Per Bulan {{ \Carbon\Carbon::now()->year }}</h5>
+                </div>
+                <div class="card-body">
+                    <div style="height: 300px; position: relative;">
+                        <canvas id="lineChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Persentase Peserta Lolos vs Tidak Lolos</h5>
+                </div>
+                <div class="card-body">
+                    <div style="height: 300px; position: relative;">
+                        <canvas id="pieChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 @endif
 
 @endsection
 
 @section('scripts')
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
 <script>
-window.onload = function() {
-    const dataPendaftarPerBulan = @json($dataPendaftarPerBulan ?? Array(12).fill(0));
-    console.log("Data pendaftar per bulan:", dataPendaftarPerBulan);
+// Wait for everything to load including Chart.js
+window.addEventListener('load', function() {
+    console.log('Window fully loaded, Chart.js available:', typeof Chart !== 'undefined');
+    
+    // Check if we're admin
+    const userRole = '{{ $role }}';
+    console.log('User role:', userRole);
+    
+    if (userRole === 'admin') {
+        // Add small delay to ensure DOM is ready
+        setTimeout(function() {
+            initializeCharts();
+        }, 100);
+    }
+});
+
+function initializeCharts() {
+    console.log('Initializing charts...');
+    
+    // Get data from PHP
+    const dataPendaftarPerBulan = {!! json_encode($dataPendaftarPerBulan ?? array_fill(0, 12, 0)) !!};
+    const jumlahLolos = {{ $jumlah_lolos ?? 0 }};
+    const jumlahTidakLolos = {{ $jumlah_tidak_lolos ?? 0 }};
+    
+    console.log('Chart data received:', {
+        dataPendaftarPerBulan: dataPendaftarPerBulan,
+        jumlahLolos: jumlahLolos,
+        jumlahTidakLolos: jumlahTidakLolos
+    });
+
+    // Check if Chart.js is loaded
+    if (typeof Chart === 'undefined') {
+        console.error('Chart.js is not loaded');
+        return;
+    }
+
+    // Initialize charts
+    try {
+        initLineChart(dataPendaftarPerBulan);
+        initPieChart(jumlahLolos, jumlahTidakLolos);
+    } catch (error) {
+        console.error('Error initializing charts:', error);
+    }
+}
+
+function initLineChart(data) {
+    console.log('Initializing line chart with data:', data);
+    
+    const lineCanvas = document.getElementById('lineChart');
+    if (!lineCanvas) {
+        console.error('Line chart canvas not found');
+        return;
+    }
 
     const bulanLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+    const ctx = lineCanvas.getContext('2d');
 
-    const ctxLine = document.getElementById('lineChart').getContext('2d');
-    const lineChart = new Chart(ctxLine, {
+    // Destroy existing chart if any
+    if (window.lineChartInstance) {
+        window.lineChartInstance.destroy();
+    }
+
+    window.lineChartInstance = new Chart(ctx, {
         type: 'line',
         data: {
             labels: bulanLabels,
             datasets: [{
                 label: 'Jumlah Pendaftar',
-                data: dataPendaftarPerBulan,
+                data: data,
                 fill: false,
                 borderColor: 'rgba(54, 162, 235, 1)',
                 backgroundColor: 'rgba(54, 162, 235, 0.2)',
@@ -114,51 +200,111 @@ window.onload = function() {
         },
         options: {
             responsive: true,
+            maintainAspectRatio: false,
+            interaction: {
+                intersect: false
+            },
             scales: {
                 y: {
                     beginAtZero: true,
                     ticks: {
-                        precision: 0
+                        precision: 0,
+                        stepSize: 1
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    position: 'top'
+                },
+                tooltip: {
+                    mode: 'index'
+                }
+            }
+        }
+    });
+    
+    console.log('Line chart initialized successfully');
+}
+
+function initPieChart(lolos, tidakLolos) {
+    console.log('Initializing pie chart with data:', { lolos, tidakLolos });
+    
+    const pieCanvas = document.getElementById('pieChart');
+    if (!pieCanvas) {
+        console.error('Pie chart canvas not found');
+        return;
+    }
+
+    const ctx = pieCanvas.getContext('2d');
+    
+    // Handle case when no data
+    const totalData = lolos + tidakLolos;
+    let chartData, chartLabels, backgroundColors, borderColors;
+    
+    if (totalData === 0) {
+        chartData = [1];
+        chartLabels = ['Belum Ada Data'];
+        backgroundColors = ['rgba(128, 128, 128, 0.7)'];
+        borderColors = ['rgba(128, 128, 128, 1)'];
+    } else {
+        chartData = [lolos, tidakLolos];
+        chartLabels = ['Lolos (' + lolos + ')', 'Tidak Lolos (' + tidakLolos + ')'];
+        backgroundColors = [
+            'rgba(75, 192, 192, 0.7)',
+            'rgba(255, 99, 132, 0.7)'
+        ];
+        borderColors = [
+            'rgba(75, 192, 192, 1)',
+            'rgba(255, 99, 132, 1)'
+        ];
+    }
+
+    // Destroy existing chart if any
+    if (window.pieChartInstance) {
+        window.pieChartInstance.destroy();
+    }
+
+    window.pieChartInstance = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: chartLabels,
+            datasets: [{
+                label: 'Status Kelulusan',
+                data: chartData,
+                backgroundColor: backgroundColors,
+                borderColor: borderColors,
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        padding: 20,
+                        usePointStyle: true
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const label = context.label || '';
+                            const value = context.parsed;
+                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                            const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
+                            return label + ': ' + value + ' (' + percentage + '%)';
+                        }
                     }
                 }
             }
         }
     });
-
-    const jumlahLolos = {{ $jumlah_lolos ?? 0 }};
-    const jumlahTidakLolos = {{ $jumlah_tidak_lolos ?? 0 }};
-    console.log("Jumlah Lolos:", jumlahLolos, "Jumlah Tidak Lolos:", jumlahTidakLolos);
-
-    const ctxPie = document.getElementById('pieChart').getContext('2d');
-    const pieChart = new Chart(ctxPie, {
-        type: 'pie',
-        data: {
-            labels: ['Lolos', 'Tidak Lolos'],
-            datasets: [{
-                label: 'Status Kelulusan',
-                data: [jumlahLolos, jumlahTidakLolos],
-                backgroundColor: [
-                    'rgba(75, 192, 192, 0.7)',
-                    'rgba(255, 99, 132, 0.7)'
-                ],
-                borderColor: [
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(255, 99, 132, 1)'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    position: 'bottom'
-                }
-            }
-        }
-    });
-};
+    
+    console.log('Pie chart initialized successfully');
+}
 </script>
 
 @endsection
-
