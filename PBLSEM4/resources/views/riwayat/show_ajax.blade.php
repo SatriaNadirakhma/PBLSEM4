@@ -125,7 +125,7 @@
 
                 <tr>
                     <th>Tanggal Verifikasi</th>
-                    <td>{{ $pendaftaran->updated_at ? $pendaftaran->updated_at->format('d-m-Y H:i') : '-' }}</td>
+                    <td>{{ $pendaftaran->updated_at ? $pendaftaran->updated_at->format('d-m-Y - H:i:s') : '-' }}</td>
                 </tr>
 
             </table>
