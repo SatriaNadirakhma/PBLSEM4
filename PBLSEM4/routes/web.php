@@ -243,6 +243,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/', [RiwayatController::class, 'index'])->name('riwayat.index');
         Route::post('/list', [RiwayatController::class, 'list'])->name('riwayat.list');
         Route::get('/{id}/show_ajax', [RiwayatController::class, 'show_ajax']);
+        Route::get('export_pdf', [RiwayatController::class, 'export_pdf'])->name('riwayat.export_pdf');
     });
 
     // Rute detail pendaftaran  
