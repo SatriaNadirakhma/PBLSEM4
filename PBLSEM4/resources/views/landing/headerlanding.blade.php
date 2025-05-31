@@ -11,7 +11,7 @@
         <ul>
           <li><a href="#hero" class="active">Halaman Awal</a></li>
           <li><a href="#about">Tentang Kami</a></li>
-          <li><a href="#services">Fitur</a></li>
+          <li><a href="#fitur">Fitur</a></li>
           <li><a href="#portfolio">Seputar TOEIC</a></li>
           <li><a href="#pricing">Benefit</a></li>
           <li><a href="#team">Team</a></li>

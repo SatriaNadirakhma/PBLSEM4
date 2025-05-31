@@ -1,45 +1,72 @@
-<!-- About Section -->
-    <section id="about" class="about section">
+<!-- Logo Section -->
+<section class="py-5 position-relative text-center text-dark" style="background: url('{{ asset('img/gedung_background.png') }}') center center / cover no-repeat;">
+  <div class="position-absolute top-0 start-0 w-100 h-100" style="background-color: rgba(255, 255, 255, 0.57); z-index: 1;"></div>
 
-      <div class="container">
-
-        <div class="row gy-4">
-
-          <div class="col-lg-6 content" data-aos="fade-up" data-aos-delay="100">
-            <p class="who-we-are">Who We Are</p>
-            <h3>Unleashing Potential with Creative Strategy</h3>
-            <p class="fst-italic">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-              magna aliqua.
-            </p>
-            <ul>
-              <li><i class="bi bi-check-circle"></i> <span>Ullamco laboris nisi ut aliquip ex ea commodo consequat.</span></li>
-              <li><i class="bi bi-check-circle"></i> <span>Duis aute irure dolor in reprehenderit in voluptate velit.</span></li>
-              <li><i class="bi bi-check-circle"></i> <span>Ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate trideta storacalaperda mastiro dolore eu fugiat nulla pariatur.</span></li>
-            </ul>
-            <a href="#" class="read-more"><span>Read More</span><i class="bi bi-arrow-right"></i></a>
-          </div>
-
-          <div class="col-lg-6 about-images" data-aos="fade-up" data-aos-delay="200">
-            <div class="row gy-4">
-              <div class="col-lg-6">
-                <img src="{{ asset('invent/img/about/about-portrait-1.webp') }}" class="img-fluid" alt="">
-              </div>
-              <div class="col-lg-6">
-                <div class="row gy-4">
-                  <div class="col-lg-12">
-                    <img src="{{ asset('invent/img/about/about-8.webp') }}" class="img-fluid" alt="">
-                  </div>
-                  <div class="col-lg-12">
-                    <img src="{{ asset('invent/img/about/about-12.webp') }}" class="img-fluid" alt="">
-                  </div>
-                </div>
-              </div>
-            </div>
-
-          </div>
-
-        </div>
+  <div class="container position-relative" style="z-index: 2;">
+    <p class="fw-semibold">Dukungan Institusi & Eksternal</p>
+    <div class="row justify-content-center align-items-center g-4">
+      <div class="col-4 col-md-2">
+        <img src="{{ asset('img/logo_polinema.png') }}" alt="Logo Polinema" class="img-fluid" style="max-height: 80px;">
+      </div>
+      <div class="col-8 col-md-4">
+        <img src="{{ asset('img/logo_polinema.png') }}" alt="Logo Unit Bahasa" class="img-fluid" style="max-height: 80px;">
+         <p class="mt-2 mb-0 small" style="color: #4B0082;">
+  Unit Pelaksana Akademik Bahasa<br><strong>Politeknik Negeri Malang</strong>
+</p>
 
       </div>
-    </section><!-- /About Section -->
+      <div class="col-4 col-md-2">
+        <img src="{{ asset('img/logo_itc.png') }}" alt="Logo ITC" class="img-fluid" style="max-height: 80px;">
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<style>
+  /* Efek hover zoom pada gambar */
+  .img-hover-zoom img {
+    transition: transform 0.4s ease;
+  }
+
+  .img-hover-zoom:hover img {
+    transform: scale(1.08);
+  }
+</style>
+
+<section id="about" class="about section bg-primary text-white py-5">
+
+  <div class="container" data-aos="fade-up">
+
+    <div class="row justify-content-center mb-4">
+      <div class="col-lg-10 text-center">
+        <h2 class="text-white fw-bold">Tentang Kami</h2>
+        <p class="mt-3 fs-5">
+          Kami membuat peramban untuk mahasiswa dalam mendaftar uji TOEIC di Civitas Akademika Politeknik Negeri Malang.
+        </p>
+        <a href="#about" class="btn btn-outline-light mt-3">Tentang Kami</a>
+      </div>
+    </div>
+
+    <div class="row g-4 mt-4">
+      <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+        <div class="img-hover-zoom rounded-4 shadow overflow-hidden">
+          <img src="{{ asset('img/about_section1.png') }}" class="img-fluid w-100 h-100 object-fit-cover" style="aspect-ratio: 4/3;" alt="Graduation Image">
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+        <div class="img-hover-zoom rounded-4 shadow overflow-hidden">
+          <img src="{{ asset('img/about_section2.jpg') }}" class="img-fluid w-100 h-100 object-fit-cover" style="aspect-ratio: 4/3;" alt="Students Gathering">
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
+        <div class="img-hover-zoom rounded-4 shadow overflow-hidden">
+          <img src="{{ asset('img/about_section3.jpg') }}" class="img-fluid w-100 h-100 object-fit-cover" style="aspect-ratio: 4/3;" alt="Writing Test">
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</section>
