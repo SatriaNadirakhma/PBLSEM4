@@ -22,6 +22,7 @@ use App\Http\Controllers\RiwayatController;
 use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\VerifikasiPendaftaranController;
 use App\Http\Controllers\DataDiriController;
+use App\Http\Controllers\KirimPesanController;
 use Illuminate\Http\Request;
 
 /*
@@ -235,6 +236,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/', [RiwayatController::class, 'index'])->name('riwayat.index');
         Route::post('/list', [RiwayatController::class, 'list'])->name('riwayat.list');
         Route::get('/{id}/show_ajax', [RiwayatController::class, 'show_ajax']);
+        Route::get('export_pdf', [RiwayatController::class, 'export_pdf'])->name('riwayat.export_pdf');
     });
 
     // Rute detail pendaftaran  
@@ -294,6 +296,15 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/tendik/update', [DataDiriController::class, 'updateTendik'])->name('datadiri.tendik.update');
 
     });
+
+    //rute kirim pesan
+    Route::prefix('kirimpesan')->group(function () {
+        Route::get('/', [KirimPesanController::class, 'index'])->name('kirimpesan.index');
+        Route::post('/list', [KirimPesanController::class, 'list'])->name('kirimpesan.list');
+        Route::get('{id}/form', [KirimPesanController::class, 'form'])->name('kirimpesan.form');
+        Route::post('/kirim', [KirimPesanController::class, 'kirim'])->name('kirimpesan.kirim');
+    });
+
 
 
 });

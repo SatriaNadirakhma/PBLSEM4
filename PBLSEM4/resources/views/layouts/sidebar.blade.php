@@ -186,8 +186,8 @@
 
             @auth
             @if(Auth::user()->role == 'admin')
-            <li class="nav-item mt-1 has-treeview {{ in_array($activeMenu, ['info-jadwal', 'info-pengumuman', 'info-zoom']) ? 'menu-open' : '' }}">
-                <a href="#" class="nav-link {{ in_array($activeMenu, ['info-jadwal', 'info-pengumuman', 'info-zoom']) ? 'active' : '' }}">
+            <li class="nav-item mt-1 has-treeview {{ in_array($activeMenu, ['jadwal', 'informasi', 'hasil_ujian']) ? 'menu-open' : '' }}">
+                <a href="#" class="nav-link {{ in_array($activeMenu, ['jadwal', 'informasi', 'hasil_ujian']) ? 'active' : '' }}">
                     <i class="nav-icon fas fa-info-circle"></i>
                     <p>
                         PUSAT INFORMASI
@@ -196,19 +196,19 @@
                 </a>
                 <ul class="nav nav-treeview">
                     <li class="nav-item ml-2">
-                        <a href="{{ url('/informasi/jadwal') }}" class="nav-link {{ ($activeMenu == 'info-jadwal') ? 'active' : '' }}">
+                        <a href="{{ url('jadwal') }}" class="nav-link {{ ($activeMenu == 'jadwal') ? 'active' : '' }}">
                             <i class="far fa-circle nav-icon"></i>
                             <p>Jadwal</p>
                         </a>
                     </li>
                     <li class="nav-item ml-2">
-                        <a href="{{ url('/informasi/pengumuman') }}" class="nav-link {{ ($activeMenu == 'info-pengumuman') ? 'active' : '' }}">
+                        <a href="{{ url('informasi') }}" class="nav-link {{ ($activeMenu == 'informasi') ? 'active' : '' }}">
                             <i class="far fa-circle nav-icon"></i>
                             <p>Pengumuman</p>
                         </a>
                     </li>
                     <li class="nav-item ml-2">
-                        <a href="{{ url('/informasi/zoom') }}" class="nav-link {{ ($activeMenu == 'info-zoom') ? 'active' : '' }}">
+                        <a href="{{ url('hasil_ujian') }}" class="nav-link {{ ($activeMenu == 'hasil_ujian') ? 'active' : '' }}">
                             <i class="far fa-circle nav-icon"></i>
                             <p>Hasil Ujian</p>
                         </a>
@@ -216,6 +216,17 @@
                 </ul>
             </li>
             @endif
+            @endauth
+
+            @auth
+                @if(Auth::user()->role == 'admin')
+                    <li class="nav-item mt-1">
+                        <a href="{{ route('kirimpesan.index') }}" class="nav-link {{ in_array($activeMenu, ['kirimpesan']) ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-paper-plane"></i>
+                            <p>KIRIM PESAN</p>
+                        </a>
+                    </li>
+                @endif
             @endauth
 
             @auth

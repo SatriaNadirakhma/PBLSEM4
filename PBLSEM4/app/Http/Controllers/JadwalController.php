@@ -83,7 +83,7 @@ class JadwalController extends Controller
             if ($request->ajax() || $request->wantsJson()) {
                 $rules = [
                     'tanggal_pelaksanaan' => 'required|date',
-                    'jam_mulai' => 'required|time_format:H:i',
+                    'jam_mulai' => 'required|date_format:H:i',
                     'keterangan' => 'required|string|max:100',
                 ];
 
