@@ -10,11 +10,12 @@ use Illuminate\Support\Facades\Log;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use Barryvdh\DomPDF\Facade\Pdf;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class JadwalController extends Controller
 {
 
-    // Menampilkan halaman utama kampus
+    // Menampilkan halaman utama Jadwal
     public function index()
     {
         $breadcrumb = (object) [
@@ -32,7 +33,7 @@ class JadwalController extends Controller
     }
 
 
-    // Mengambil data kampus untuk DataTables
+    // Mengambil data Jadwal untuk DataTables
     public function list(Request $request)
     {
         $jadwal = JadwalModel::select('jadwal_id', 'tanggal_pelaksanaan','jam_mulai','keterangan');
@@ -105,6 +106,7 @@ class JadwalController extends Controller
                         'status' => true,
                         'message' => 'Data jadwal berhasil disimpan',
                     ]);
+
                 } catch (\Exception $e) {
                     return response()->json([
                         'status' => false,
@@ -204,10 +206,11 @@ class JadwalController extends Controller
                 'status' => true,
                 'message' => 'Data jadwal berhasil diperbarui.'
             ]);
+
         } catch (\Exception $e) {
             return response()->json([
                 'status' => false,
-                'message' => 'Gagal memperbarui data kampus.',
+                'message' => 'Gagal memperbarui data Jadwal.',
                 'error' => $e->getMessage()
             ]);
         }
@@ -225,7 +228,7 @@ class JadwalController extends Controller
     {
         if ($request->ajax() || $request->wantsJson()) {
             $rules = [
-                'file_jadwal' => ['required', 'mimes:xlsx', 'max:1024']
+                'file_jadwal' => ['required', 'mimes:xlsx', 'max:2025']
             ];
 
             $validator = Validator::make($request->all(), $rules);
@@ -238,6 +241,14 @@ class JadwalController extends Controller
             }
 
             $file = $request->file('file_jadwal');
+
+            if (!$file) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'File tidak ditemukan!'
+                ]);
+            }
+
             $reader = IOFactory::createReader('Xlsx');
             $reader->setReadDataOnly(true);
             $spreadsheet = $reader->load($file->getRealPath());
@@ -246,22 +257,34 @@ class JadwalController extends Controller
 
             $insert = [];
             if (count($data) > 1) {
-                foreach ($data as $baris => $value) {
+                foreach ($data as $baris => $value) { 
                     if ($baris > 1) { // baris ke-1 adalah header
+                        // Tanggal
+                        if (is_numeric($value['A'])) {
+                            $tanggal = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($value['A'])->format('Y-m-d');
+                        } else {
+                            $tanggal = \Carbon\Carbon::parse($value['A'])->format('Y-m-d');
+                        }
+
+                        // Jam mulai
+                        if (is_numeric($value['B'])) {
+                            $jam_mulai = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($value['B'])->format('H:i');
+                        } else {
+                            $jam_mulai = \Carbon\Carbon::parse($value['B'])->format('H:i');
+                        }
+
                         $insert[] = [
-                            'tanggal_pelaksanaan' => \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($value['A'])->format('Y-m-d'),
-                            'jam_mulai' => \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($value['B'])->format('H:i'),
+                            'tanggal_pelaksanaan' => $tanggal,
+                            'jam_mulai' => $jam_mulai,
                             'keterangan' => $value['C'],
-                            'created_by' => auth()->user()->id, // ID user yang mengimpor
-                            'updated_by' => auth()->user()->id, // ID user yang mengimpor
                             'updated_at' => now(),
                             'created_at'  => now(),
                         ];
                     }
                 }
 
-                if (count($insert) > 0) {
-                    JadwalModel::insertOrIgnore($insert);
+                if (count($insert) > 0) { 
+                    JadwalModel::insertOrIgnore($insert); 
                     return response()->json([
                         'status' => true,
                         'message' => 'Data jadwal berhasil diimport'
@@ -278,7 +301,8 @@ class JadwalController extends Controller
         return redirect('/');
     }
 
-    // Export data kampus ke Excel
+
+    // Export data Jadwal ke Excel
     public function export_excel()
     {
         $jadwal = JadwalModel::select('tanggal_pelaksanaan', 'jam_mulai', 'keterangan')
@@ -325,7 +349,7 @@ class JadwalController extends Controller
         exit;
     }
 
-    // Export data kampus ke PDF
+    // Export data Jadwal ke PDF
     public function export_pdf()
     {
         $jadwal = JadwalModel::select('tanggal_pelaksanaan', 'jam_mulai', 'keterangan')
@@ -339,4 +363,31 @@ class JadwalController extends Controller
 
         return $pdf->stream('Data Jadwal ' . date('Y-m-d H:i:s') . '.pdf');
     }
+
+
+    public function download_template()
+    {
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        // Header
+        $sheet->setCellValue('A1', 'Tanggal Pelaksanaan');
+        $sheet->setCellValue('B1', 'Jam Mulai');
+        $sheet->setCellValue('C1', 'Keterangan');
+
+        // Contoh baris
+        $sheet->setCellValue('A2', '2025-06-02');
+        $sheet->setCellValue('B2', '09:00');
+        $sheet->setCellValue('C2', 'TOEIC Batch 1');
+
+        $filename = 'template_Jadwal.xlsx';
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="' . $filename . '"');
+        header('Cache-Control: max-age=0');
+
+        $writer = new Xlsx($spreadsheet);
+        $writer->save('php://output');
+        exit;
+    }
+
 }

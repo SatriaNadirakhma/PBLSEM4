@@ -223,6 +223,9 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/import_ajax', [JadwalController::class, 'import_ajax'])->name('jadwal.import_ajax');
         Route::get('/export_excel', [JadwalController::class, 'export_excel'])->name('jadwal.export_excel');
         Route::get('/export_pdf', [JadwalController::class, 'export_pdf'])->name('jadwal.export_pdf');
+        Route::get('/jadwal/download-template', [JadwalController::class, 'download_template']);
+
+
     }); 
 
     // Rute pendaftaran     
@@ -281,6 +284,8 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/import_ajax', [InformasiController::class, 'import_ajax'])->name('informasi.import_ajax');
         Route::get('/export_excel', [InformasiController::class, 'export_excel'])->name('informasi.export_excel');
         Route::get('/export_pdf', [InformasiController::class, 'export_pdf'])->name('informasi.export_pdf');
+        Route::get('/informasi/download-template', [InformasiController::class, 'download_template']);
+        
         
     });
 
