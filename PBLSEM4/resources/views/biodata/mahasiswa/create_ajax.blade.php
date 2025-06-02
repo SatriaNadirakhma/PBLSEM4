@@ -47,25 +47,41 @@
                 <div class="form-group">
                     <label>Jenis Kelamin</label>
                     <select name="jenis_kelamin" id="jenis_kelamin" class="form-control" required>
-                        <option value="">Pilih</option>
-                        <option value="Laki-laki">Laki-laki</option>
-                        <option value="Perempuan">Perempuan</option>
+                        <option value="">- Pilih Jenis Kelamin -</option>
+                        @foreach($mahasiswa as $m)
+                            <option value="{{ $m->jenis_kelamin }}">{{ $l->jenis_kelamin }}</option>
+                        @endforeach
                     </select>
                     <small id="error-jenis_kelamin" class="error-text text-danger"></small>
                 </div>
                 <div class="form-group">
                     <label>Status</label>
-                    <input type="text" name="status" id="status" class="form-control">
+                    <select name="status" id="status" class="form-control" required></select>
+                        <option value="">- Pilih Status -</option>
+                        @foreach($mahasiswa as $m)
+                            <option value="{{ $m->status }}">{{ $m->status }}</option>
+                        @endforeach
+                    </select>
                     <small id="error-status" class="error-text text-danger"></small>
                 </div>
                 <div class="form-group">
                     <label>Keterangan</label>
-                    <input type="text" name="keterangan" id="keterangan" class="form-control">
+                    <select name="keterangan" id="status" class="form-control" required></select>
+                        <option value="">- Pilih Keterangan -</option>
+                        @foreach($mahasiswa as $m)
+                            <option value="{{ $m->keterangan }}">{{ $m->keterangan }}</option>
+                        @endforeach
+                    </select>
                     <small id="error-keterangan" class="error-text text-danger"></small>
                 </div>
                 <div class="form-group">
                     <label>Prodi</label>
-                    <input type="number" name="prodi_id" id="prodi_id" class="form-control" required>
+                    <select name="keterangan" id="status" class="form-control" required></select>
+                        <option value="">- Pilih Program Studi -</option>
+                        @foreach($prodi as $p)
+                            <option value="{{ $p->prodi_id }}">{{ $p->prodi_nama }}</option>
+                        @endforeach
+                    </select>
                     <small id="error-prodi_id" class="error-text text-danger"></small>
                 </div>
             </div>
@@ -84,7 +100,13 @@ $(document).ready(function() {
             nim: { required: true, minlength: 3, maxlength: 20 },
             nik: { required: true, minlength: 3, maxlength: 20 },
             mahasiswa_nama: { required: true, minlength: 3, maxlength: 100 },
+            angkatan: { required: true, digits: true, minlength: 4, maxlength: 4 },
+            no_telp: { required: false, digits: true, minlength: 10, maxlength: 15 },
+            alamat_asal: { required: false, minlength: 5, maxlength: 255 },
+            alamat_sekarang: { required: false, minlength: 5, maxlength: 255 },
             jenis_kelamin: { required: true },
+            status: { required: true },
+            keterangan: { required: true },
             prodi_id: { required: true }
         },
         submitHandler: function(form) {

@@ -222,8 +222,19 @@
                 @if(Auth::user()->role == 'admin')
                     <li class="nav-item mt-1">
                         <a href="{{ route('kirimpesan.index') }}" class="nav-link {{ in_array($activeMenu, ['kirimpesan']) ? 'active' : '' }}">
-                            <i class="nav-icon fas fa-paper-plane"></i>
+                            <i class="nav-icon fab fa-whatsapp"></i>
                             <p>KIRIM PESAN</p>
+                        </a>
+                    </li>
+                @endif
+            @endauth
+
+            @auth
+                @if(Auth::user()->role == 'admin')
+                    <li class="nav-item mt-1">
+                        <a href="{{ route('kirimemail.index') }}" class="nav-link {{ in_array($activeMenu, ['kirimemail']) ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-envelope"></i>
+                            <p>KIRIM EMAIL</p>
                         </a>
                     </li>
                 @endif
