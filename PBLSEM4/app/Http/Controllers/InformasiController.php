@@ -109,6 +109,12 @@ class InformasiController extends Controller
         return redirect('/');
     }
 
+    public function create_ajax()
+    {
+        $jurusan = InformasiModel::all();
+        return view('informasi.create_ajax');
+    }
+
     // confirm ajax
     public function confirm_ajax(string $id){
 
