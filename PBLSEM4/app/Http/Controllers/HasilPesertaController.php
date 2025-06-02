@@ -8,7 +8,7 @@ class HasilPesertaController extends Controller
     public function index()
     {
         $breadcrumb = (object) [
-            'title' => 'Riwayat Hasil Ujian',
+            'title' => 'Hasil Ujian Anda',
             'list' => ['Home', 'Hasil Ujian'],
         ];
         

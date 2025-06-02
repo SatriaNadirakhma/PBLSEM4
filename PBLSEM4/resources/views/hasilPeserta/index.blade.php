@@ -9,7 +9,6 @@
                     <i class="fas fa-poll text-white fs-4"></i>
                 </div>
                 <div>
-                    <h2 class="mb-1 text-dark fw-bold">Hasil Ujian Anda</h2>
                     <p class="text-muted mb-0">Ringkasan hasil ujian dan pencapaian Anda</p>
                 </div>
             </div>
