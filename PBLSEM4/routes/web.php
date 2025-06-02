@@ -24,6 +24,7 @@ use App\Http\Controllers\VerifikasiPendaftaranController;
 use App\Http\Controllers\DataDiriController;
 use App\Http\Controllers\KirimPesanController;
 use App\Http\Controllers\HasilPesertaController;
+use App\Http\Controllers\KirimEmailController;
 use Illuminate\Http\Request;
 
 /*
@@ -224,6 +225,9 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/import_ajax', [JadwalController::class, 'import_ajax'])->name('jadwal.import_ajax');
         Route::get('/export_excel', [JadwalController::class, 'export_excel'])->name('jadwal.export_excel');
         Route::get('/export_pdf', [JadwalController::class, 'export_pdf'])->name('jadwal.export_pdf');
+        Route::get('/jadwal/download-template', [JadwalController::class, 'download_template']);
+
+
     }); 
 
     // Rute pendaftaran     
@@ -290,6 +294,8 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/import_ajax', [InformasiController::class, 'import_ajax'])->name('informasi.import_ajax');
         Route::get('/export_excel', [InformasiController::class, 'export_excel'])->name('informasi.export_excel');
         Route::get('/export_pdf', [InformasiController::class, 'export_pdf'])->name('informasi.export_pdf');
+        Route::get('/informasi/download-template', [InformasiController::class, 'download_template']);
+        
         
     });
 
@@ -314,6 +320,11 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/kirim', [KirimPesanController::class, 'kirim'])->name('kirimpesan.kirim');
     });
 
-
+    Route::prefix('kirimemail')->group(function () {
+        Route::get('/', [KirimEmailController::class, 'index'])->name('kirimemail.index');
+        Route::post('/list', [KirimEmailController::class, 'list'])->name('kirimemail.list');
+        Route::get('{id}/form', [KirimEmailController::class, 'form'])->name('kirimemail.form');
+        Route::post('/kirim', [KirimEmailController::class, 'kirim'])->name('kirimemail.kirim');
+    });
 
 });

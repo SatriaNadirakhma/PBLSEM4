@@ -103,6 +103,7 @@ class MahasiswaController extends Controller
                     'status' => true,
                     'message' => 'Data mahasiswa berhasil disimpan',
                 ]);
+                
             } catch (\Exception $e) {
                 return response()->json([
                     'status' => false,

@@ -11,10 +11,15 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label>Download Template</label>
-                    <a href="{{ asset('template_jadwal.xlsx') }}" class="btn btn-info btn-sm" download>
+                    {{-- <a href="{{ asset('file_jadwal.xlsx') }}" class="btn btn-info btn-sm" download>
                         <i class="fa fa-file-excel"></i> Download
+                    </a> --}}
+
+                    <a href="{{ url('/jadwal/jadwal/download-template') }}" class="btn btn-info btn-sm">
+                        <i class="fa fa-file-excel"></i> Download Template
                     </a>
-                    <small id="error-template" class="error-text form-text text-danger"></small>
+                    
+                    <small id="error-template" class="error-text form-text text-danger"></small> 
                 </div>
                 <div class="form-group">
                     <label>Pilih File</label>
