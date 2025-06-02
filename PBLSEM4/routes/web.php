@@ -23,6 +23,7 @@ use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\VerifikasiPendaftaranController;
 use App\Http\Controllers\DataDiriController;
 use App\Http\Controllers\KirimPesanController;
+use App\Http\Controllers\KirimEmailController;
 use Illuminate\Http\Request;
 
 /*
@@ -305,6 +306,11 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/kirim', [KirimPesanController::class, 'kirim'])->name('kirimpesan.kirim');
     });
 
-
+    Route::prefix('kirimemail')->group(function () {
+        Route::get('/', [KirimEmailController::class, 'index'])->name('kirimemail.index');
+        Route::post('/list', [KirimEmailController::class, 'list'])->name('kirimemail.list');
+        Route::get('{id}/form', [KirimEmailController::class, 'form'])->name('kirimemail.form');
+        Route::post('/kirim', [KirimEmailController::class, 'kirim'])->name('kirimemail.kirim');
+    });
 
 });
