@@ -23,6 +23,7 @@ use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\VerifikasiPendaftaranController;
 use App\Http\Controllers\DataDiriController;
 use App\Http\Controllers\KirimPesanController;
+use App\Http\Controllers\KirimEmailController;
 use Illuminate\Http\Request;
 
 /*
@@ -145,25 +146,18 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/export_pdf', [TendikController::class, 'export_pdf'])->name('export_pdf');
     });
 
-    Route::prefix('biodata/mahasiswa')
-->middleware(['auth', 'role:admin,mahasiswa'])
-    ->name('biodata.mahasiswa.')
-    ->group(function () {
-
+    Route::prefix('biodata/mahasiswa')->name('biodata.mahasiswa.')->middleware(['auth', 'role:admin,mahasiswa'])->group(function () {
     Route::get('/', [MahasiswaController::class, 'index'])->name('index');
-
     Route::get('/list', [MahasiswaController::class, 'list'])->name('list');
-
-    Route::get('mahasiswa/{id}/show_ajax', [MahasiswaController::class, 'show_ajax'])->name('show_ajax');
-    Route::get('mahasiswa/create_ajax', [MahasiswaController::class, 'create_ajax'])->name('create_ajax');
+    Route::get('{id}/show_ajax', [MahasiswaController::class, 'show_ajax'])->name('show_ajax');
+    Route::get('/create_ajax', [MahasiswaController::class, 'create_ajax'])->name('create_ajax');
     Route::post('/store_ajax', [MahasiswaController::class, 'store_ajax'])->name('store_ajax');
     Route::get('/{id}/delete_ajax', [MahasiswaController::class, 'confirm_ajax'])->name('confirm_ajax');
     Route::delete('/{id}/delete_ajax', [MahasiswaController::class, 'delete_ajax'])->name('delete_ajax');
     Route::get('/{id}/edit_ajax', [MahasiswaController::class, 'edit_ajax'])->name('edit_ajax');
     Route::put('/{id}/update_ajax', [MahasiswaController::class, 'update_ajax'])->name('update_ajax');
-
     Route::get('/import', [MahasiswaController::class, 'import'])->name('import');
-    Route::post('/import_ajax', [MahasiswaController::class, 'import_ajax'])->name('import_ajax');
+    Route::post('/import_ajax', [MahasiswaController::class, 'import_ajax'])->name('mahasiswa.import_ajax');
     Route::get('/export_excel', [MahasiswaController::class, 'export_excel'])->name('export_excel');
     Route::get('/export_pdf', [MahasiswaController::class, 'export_pdf'])->name('export_pdf');
 });
@@ -230,6 +224,9 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/import_ajax', [JadwalController::class, 'import_ajax'])->name('jadwal.import_ajax');
         Route::get('/export_excel', [JadwalController::class, 'export_excel'])->name('jadwal.export_excel');
         Route::get('/export_pdf', [JadwalController::class, 'export_pdf'])->name('jadwal.export_pdf');
+        Route::get('/jadwal/download-template', [JadwalController::class, 'download_template']);
+
+
     }); 
 
     // Rute pendaftaran     
@@ -243,6 +240,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/', [RiwayatController::class, 'index'])->name('riwayat.index');
         Route::post('/list', [RiwayatController::class, 'list'])->name('riwayat.list');
         Route::get('/{id}/show_ajax', [RiwayatController::class, 'show_ajax']);
+        Route::get('export_pdf', [RiwayatController::class, 'export_pdf'])->name('riwayat.export_pdf');
     });
 
     // Rute detail pendaftaran  
@@ -287,6 +285,8 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/import_ajax', [InformasiController::class, 'import_ajax'])->name('informasi.import_ajax');
         Route::get('/export_excel', [InformasiController::class, 'export_excel'])->name('informasi.export_excel');
         Route::get('/export_pdf', [InformasiController::class, 'export_pdf'])->name('informasi.export_pdf');
+        Route::get('/informasi/download-template', [InformasiController::class, 'download_template']);
+        
         
     });
 
@@ -311,6 +311,11 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/kirim', [KirimPesanController::class, 'kirim'])->name('kirimpesan.kirim');
     });
 
-
+    Route::prefix('kirimemail')->group(function () {
+        Route::get('/', [KirimEmailController::class, 'index'])->name('kirimemail.index');
+        Route::post('/list', [KirimEmailController::class, 'list'])->name('kirimemail.list');
+        Route::get('{id}/form', [KirimEmailController::class, 'form'])->name('kirimemail.form');
+        Route::post('/kirim', [KirimEmailController::class, 'kirim'])->name('kirimemail.kirim');
+    });
 
 });

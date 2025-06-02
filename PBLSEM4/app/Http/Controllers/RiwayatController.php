@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Models\PendaftaranModel;
 use Yajra\DataTables\DataTables;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Dompdf\Options;
 
 class RiwayatController extends Controller
 {
@@ -92,4 +94,37 @@ class RiwayatController extends Controller
 
         return view('riwayat.show_ajax', compact('pendaftaran'));
     }
+
+
+       public function export_pdf(Request $request)
+    {
+        $status = $request->status;
+        $tanggalAwal = $request->tanggal_awal;
+        $tanggalAkhir = $request->tanggal_akhir;
+
+        $query = PendaftaranModel::with(['mahasiswa.prodi.jurusan.kampus', 'jadwal', 'detail']);
+
+        if ($tanggalAwal && $tanggalAkhir) {
+            $query->whereBetween('tanggal_pendaftaran', [$tanggalAwal, $tanggalAkhir]);
+        } elseif ($tanggalAwal) {
+            $query->whereDate('tanggal_pendaftaran', '>=', $tanggalAwal);
+        } elseif ($tanggalAkhir) {
+            $query->whereDate('tanggal_pendaftaran', '<=', $tanggalAkhir);
+        }
+
+        if ($status == 'diterima' || $status == 'ditolak') {
+            $query->whereHas('detail', function ($q) use ($status) {
+                $q->where('status', $status);
+            });
+        }
+
+        $pendaftaran = $query->get();
+
+        $pdf = Pdf::loadView('riwayat.export_pdf', ['pendaftaran' => $pendaftaran])
+            ->setPaper('a4', 'landscape')
+            ->setOptions(['isRemoteEnabled' => true]);
+
+        return $pdf->stream('Data Pendaftaran ' . date('Y-m-d H-i-s') . '.pdf');
+    }
+
 }

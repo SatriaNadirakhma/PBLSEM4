@@ -50,7 +50,7 @@ $(document).ready(function() {
                 contentType: false,
                 success: function(response) {
                     if(response.status) {
-                        $('#modal-import-dosen').modal('hide');
+                        $('#modal-import-dosenz').modal('hide');
                         Swal.fire({
                             icon: 'success',
                             title: 'Berhasil',

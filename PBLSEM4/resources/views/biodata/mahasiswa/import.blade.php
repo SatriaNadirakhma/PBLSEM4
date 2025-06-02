@@ -1,30 +1,35 @@
 <form action="{{ url('/biodata/mahasiswa/import_ajax') }}" method="POST" id="form-import-mahasiswa" enctype="multipart/form-data">
     @csrf
-    <div id="modal-import-mahasiswa" class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Import Data Mahasiswa</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label>Download Template</label>
-                    <a href="{{ asset('template_mahasiswa.xlsx') }}" class="btn btn-info btn-sm" download>
-                        <i class="fa fa-file-excel"></i> Download
-                    </a>
-                    <small id="error-template" class="error-text form-text text-danger"></small>
+    <div class="modal fade" id="modal-import-mahasiswa" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Import Data Mahasiswa</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Tutup">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-                <div class="form-group">
-                    <label>Pilih File</label>
-                    <input type="file" name="file_mahasiswa" id="file_mahasiswa" class="form-control" required>
-                    <small id="error-file_mahasiswa" class="error-text form-text text-danger"></small>
+
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Download Template</label>
+                        <a href="{{ asset('template_mahasiswa.xlsx') }}" class="btn btn-info btn-sm" download>
+                            <i class="fa fa-file-excel"></i> Download
+                        </a>
+                        <small id="error-template" class="error-text form-text text-danger"></small>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Pilih File Excel</label>
+                        <input type="file" name="file_mahasiswa" id="file_mahasiswa" class="form-control" accept=".xlsx" required>
+                        <small id="error-file_mahasiswa" class="error-text form-text text-danger"></small>
+                    </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" data-dismiss="modal" class="btn btn-warning">Batal</button>
-                <button type="submit" class="btn btn-primary">Upload</button>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary">Upload</button>
+                </div>
             </div>
         </div>
     </div>
@@ -32,12 +37,20 @@
 
 <script>
 $(document).ready(function() {
+    $('#modal-import-mahasiswa').modal('show');
+
     $("#form-import-mahasiswa").validate({
         rules: {
             file_mahasiswa: {
                 required: true,
                 extension: "xlsx"
-            },
+            }
+        },
+        messages: {
+            file_mahasiswa: {
+                required: "Silakan pilih file untuk diunggah",
+                extension: "Format file harus .xlsx"
+            }
         },
         submitHandler: function(form) {
             var formData = new FormData(form);
@@ -49,6 +62,7 @@ $(document).ready(function() {
                 processData: false,
                 contentType: false,
                 success: function(response) {
+                    $('.error-text').text(''); // Clear all previous error messages
                     if(response.status) {
                         $('#modal-import-mahasiswa').modal('hide');
                         Swal.fire({
@@ -56,35 +70,33 @@ $(document).ready(function() {
                             title: 'Berhasil',
                             text: response.message
                         });
-                        if (typeof dataMahasiswa !== 'undefined') {
-                            dataMahasiswa.ajax.reload();
-                        } else {
-                            setTimeout(() => location.reload(), 1500);
+
+                        if (typeof tableMahasiswa !== 'undefined') {
+                            tableMahasiswa.ajax.reload(); // Reload table jika ada
                         }
                     } else {
-                        $('.error-text').text('');
                         if (response.msgField) {
-                            $.each(response.msgField, function(prefix, val) {
-                                $('#error-' + prefix).text(val[0]);
+                            $.each(response.msgField, function(key, message) {
+                                $('#error-' + key).text(message[0]);
                             });
                         }
                         Swal.fire({
                             icon: 'error',
-                            title: 'Terjadi Kesalahan',
+                            title: 'Gagal',
                             text: response.message
                         });
                     }
                 },
-                error: function(xhr, status, error) {
-                    console.log('AJAX Error:', xhr.responseText);
+                error: function(xhr) {
                     Swal.fire({
                         icon: 'error',
                         title: 'Kesalahan Server',
-                        text: 'Terjadi kesalahan saat mengunggah file: ' + (xhr.responseJSON?.message || 'Silakan coba lagi.')
+                        text: xhr.responseJSON?.message || 'Terjadi kesalahan saat mengunggah file.'
                     });
                 }
             });
-            return false;
+
+            return false; // Cegah form submit default
         },
         errorElement: 'span',
         errorPlacement: function(error, element) {
@@ -97,6 +109,10 @@ $(document).ready(function() {
         unhighlight: function(element) {
             $(element).removeClass('is-invalid');
         }
+    });
+
+    $('#modal-import-mahasiswa').on('hidden.bs.modal', function () {
+        $(this).remove(); // Hapus modal dari DOM setelah ditutup
     });
 });
 </script>
