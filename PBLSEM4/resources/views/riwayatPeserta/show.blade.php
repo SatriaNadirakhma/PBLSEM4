@@ -137,15 +137,27 @@
                             <label class="form-label fw-bold text-muted">Tanggal Pendaftaran</label>
                             <p class="form-control-plaintext border-bottom">
                                 <i class="fas fa-calendar-plus text-primary me-2"></i>
-                                {{ $item->tanggal_pendaftaran ? \Carbon\Carbon::parse($item->tanggal_pendaftaran)->format('d F Y, H:i') : 'N/A' }}
+                                {{ $item->tanggal_pendaftaran ? \Carbon\Carbon::parse($item->tanggal_pendaftaran)->format('d F Y, H:i:s') : 'N/A' }}
                             </p>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-bold text-muted">Tanggal Pelaksanaan</label>
-                            <p class="form-control-plaintext border-bottom">
+                           <div class="border-bottom py-1">
+                            @if(optional($item->jadwal)->tanggal_pelaksanaan && optional($item->jadwal)->jam_mulai)
                                 <i class="fas fa-calendar-check text-success me-2"></i>
-                                {{ optional($item->jadwal)->tanggal_pelaksanaan ? \Carbon\Carbon::parse($item->jadwal->tanggal_pelaksanaan)->format('d F Y') : 'N/A' }}
-                            </p>
+                                <span class="text-dark">
+                                    {{ \Carbon\Carbon::parse($item->jadwal->tanggal_pelaksanaan)->format('d F Y') }},
+                                    {{ \Carbon\Carbon::parse($item->jadwal->jam_mulai)->format('H:i:s') }} WIB
+                                </span>
+                            @elseif(optional($item->jadwal)->tanggal_pelaksanaan)
+                                <i class="fas fa-calendar-check text-success me-2"></i>
+                                <span class="text-dark">
+                                    {{ \Carbon\Carbon::parse($item->jadwal->tanggal_pelaksanaan)->format('d F Y') }}
+                                </span>
+                            @else
+                                <span class="text-muted">N/A</span>
+                            @endif
+                        </div>
                         </div>
                     </div>
                 </div>
