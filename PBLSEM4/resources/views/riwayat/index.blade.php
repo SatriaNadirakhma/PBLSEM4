@@ -85,11 +85,11 @@
             </select>
             </div>
             <div class="mb-3">
-        <label for="tanggal_awal" class="form-label">Tanggal Awal</label>
+        <label for="tanggal_awal" class="form-label">Tanggal Awal Pendaftaran</label>
         <input type="date" name="tanggal_awal" id="tanggal_awal" class="form-control" required>
         </div>
         <div class="mb-3">
-        <label for="tanggal_akhir" class="form-label">Tanggal Akhir</label>
+        <label for="tanggal_akhir" class="form-label">Tanggal Akhir Pendaftaran</label>
         <input type="date" name="tanggal_akhir" id="tanggal_akhir" class="form-control" required>
         </div>
 

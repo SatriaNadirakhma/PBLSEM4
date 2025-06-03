@@ -65,7 +65,13 @@
     <table class="border-bottom-header">
         <tr>
             <td width="15%" class="text-center">
-                <img src="{{ public_path('img/polinema-bw.png') }}" class="image">
+                @php
+                    $logoPath = public_path('img/polinema-bw.png');
+                    $logoBase64 = file_exists($logoPath) ? 'data:image/png;base64,' . base64_encode(file_get_contents($logoPath)) : '';
+                @endphp
+                @if($logoBase64)
+                    <img src="{{ $logoBase64 }}" class="image">
+                @endif
             </td>
             <td width="85%">
                 <span class="text-center d-block font-11 font-bold mb-1">
@@ -110,46 +116,60 @@
         </thead>
         <tbody>
             @foreach($pendaftaran as $p)
-            <tr>
-                <td class="text-center">{{ $loop->iteration }}</td>
-                <td>{{ $p->mahasiswa->mahasiswa_nama }}</td>
-                <td>{{ $p->mahasiswa->nim }}</td>
-                <td>{{ $p->mahasiswa->nik }}</td>
-                <td>{{ $p->mahasiswa->no_telp }}</td>
-                <td>{{ $p->mahasiswa->alamat_asal }}</td>
-                <td>{{ $p->mahasiswa->alamat_sekarang }}</td>
-                <td>{{ $p->mahasiswa->prodi->prodi_nama }}</td>
-                <td>{{ $p->mahasiswa->prodi->jurusan->jurusan_nama }}</td>
-                <td>{{ $p->mahasiswa->prodi->jurusan->kampus->kampus_nama }}</td>
-                <td>
-                    @if($p->mahasiswa->scan_ktp)
-                        <a href="{{ asset('storage/pendaftaran/scan_ktp/' . $p->mahasiswa->scan_ktp) }}" target="_blank">
-                            <img src="{{ asset('storage/pendaftaran/scan_ktp/' . $p->mahasiswa->scan_ktp) }}" class="img-thumbnail" width="150">
-                        </a>
-                    @else
-                        -
-                    @endif
-                </td>
-                <td>
-                    @if($p->mahasiswa->scan_ktm)
-                        <a href="{{ asset('storage/pendaftaran/scan_ktm/' . $p->mahasiswa->scan_ktm) }}" target="_blank">
-                            <img src="{{ asset('storage/pendaftaran/scan_ktm/' . $p->mahasiswa->scan_ktm) }}" class="img-thumbnail" width="150">
-                        </a>
-                    @else
-                        -
-                    @endif
-                </td>
-                <td>
-                    @if($p->mahasiswa->pas_foto)
-                        <a href="{{ asset('storage/pendaftaran/pas_foto/' . $p->mahasiswa->pas_foto) }}" target="_blank">
-                            <img src="{{ asset('storage/pendaftaran/pas_foto/' . $p->mahasiswa->pas_foto) }}" class="img-thumbnail" width="150">
-                        </a>
-                    @else
-                        -
-                    @endif
-                </td>
-                <td>{{ $p->jadwal->tanggal_pelaksanaan . ' - ' . $p->jadwal->jam_mulai }}</td>
-            </tr>
+                <tr>
+                    <td class="text-center">{{ $loop->iteration }}</td>
+                    <td>{{ $p->mahasiswa->mahasiswa_nama }}</td>
+                    <td>{{ $p->mahasiswa->nim }}</td>
+                    <td>{{ $p->mahasiswa->nik }}</td>
+                    <td>{{ $p->mahasiswa->no_telp }}</td>
+                    <td>{{ $p->mahasiswa->alamat_asal }}</td>
+                    <td>{{ $p->mahasiswa->alamat_sekarang }}</td>
+                    <td>{{ $p->mahasiswa->prodi->prodi_nama }}</td>
+                    <td>{{ $p->mahasiswa->prodi->jurusan->jurusan_nama }}</td>
+                    <td>{{ $p->mahasiswa->prodi->jurusan->kampus->kampus_nama }}</td>
+
+                    {{-- Scan KTP --}}
+                    @php
+                        $ktpPath = public_path('storage/pendaftaran/scan_ktp/' . $p->scan_ktp);
+                        $ktpBase64 = file_exists($ktpPath) ? 'data:image/jpeg;base64,' . base64_encode(file_get_contents($ktpPath)) : null;
+                    @endphp
+                    <td>
+                        @if($ktpBase64)
+                            <img src="{{ $ktpBase64 }}" width="100">
+                        @else
+                            -
+                        @endif
+                    </td>
+
+                    {{-- Scan KTM --}}
+                    @php
+                        $ktmPath = public_path('storage/pendaftaran/scan_ktm/' . $p->scan_ktm);
+                        $ktmBase64 = file_exists($ktmPath) ? 'data:image/jpeg;base64,' . base64_encode(file_get_contents($ktmPath)) : null;
+                    @endphp
+                    <td>
+                        @if($ktmBase64)
+                            <img src="{{ $ktmBase64 }}" width="100">
+                        @else
+                            -
+                        @endif
+                    </td>
+
+                    {{-- Pas Foto --}}
+                    @php
+                        $fotoPath = public_path('storage/pendaftaran/pas_foto/' . $p->pas_foto);
+                        $fotoBase64 = file_exists($fotoPath) ? 'data:image/jpeg;base64,' . base64_encode(file_get_contents($fotoPath)) : null;
+                    @endphp
+                    <td>
+                        @if($fotoBase64)
+                            <img src="{{ $fotoBase64 }}" width="100">
+                        @else
+                            -
+                        @endif
+                    </td>
+                    
+
+                    <td>{{ $p->jadwal->tanggal_pelaksanaan . ' - ' . $p->jadwal->jam_mulai }}</td>
+                </tr>
             @endforeach
         </tbody>
     </table>

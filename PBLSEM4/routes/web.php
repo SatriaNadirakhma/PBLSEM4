@@ -23,6 +23,7 @@ use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\VerifikasiPendaftaranController;
 use App\Http\Controllers\DataDiriController;
 use App\Http\Controllers\KirimPesanController;
+use App\Http\Controllers\HasilPesertaController;
 use App\Http\Controllers\KirimEmailController;
 use Illuminate\Http\Request;
 
@@ -242,6 +243,14 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{id}/show_ajax', [RiwayatController::class, 'show_ajax']);
         Route::get('export_pdf', [RiwayatController::class, 'export_pdf'])->name('riwayat.export_pdf');
     });
+
+    //Rute Hasil Peserta
+    Route::prefix('hasilPeserta')->group(function () {
+        Route::get('/', [HasilPesertaController::class, 'index'])->name('hasilPeserta.index');
+
+    });
+
+    
 
     // Rute detail pendaftaran  
     Route::prefix('detail_pendaftaran')->group(function () {

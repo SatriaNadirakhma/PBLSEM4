@@ -262,6 +262,17 @@
                 @endif
             @endauth
 
+            @auth
+                @if(in_array(Auth::user()->role, ['mahasiswa', 'dosen', 'tendik']))
+                    <li class="nav-item mt-1">
+                        <a href="{{ route('hasilPeserta.index') }}" class="nav-link {{ ($activeMenu === 'hasilPeserta') ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-poll"></i>
+                            <p>Hasil Ujian</p>
+                        </a>
+                    </li>
+                @endif
+            @endauth
+
             <div class="text-center">
                 <div class="border border-secondary text-white px-3 py-1 rounded-pill d-inline-flex align-items-center gap-2 small">
                     <i class="bi bi-clock"></i> <!-- Bootstrap Icons -->
