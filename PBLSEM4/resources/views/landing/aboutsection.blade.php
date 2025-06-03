@@ -4,23 +4,30 @@
 
   <div class="container position-relative" style="z-index: 2;">
     <p class="fw-semibold">Dukungan Institusi & Eksternal</p>
-    <div class="row justify-content-center align-items-center g-4">
-      <div class="col-4 col-md-2">
-        <img src="{{ asset('img/logo_polinema.png') }}" alt="Logo Polinema" class="img-fluid" style="max-height: 80px;">
+    <div class="row justify-content-center align-items-center text-center">
+      
+      <!-- Logo Kiri (Polinema) -->
+      <div class="col-6 col-md-3 d-flex justify-content-center">
+        <img src="{{ asset('img/logo_polinema.png') }}" alt="Logo Polinema" class="img-fluid" style="max-height: 110px;">
       </div>
-      <div class="col-8 col-md-4">
-        <img src="{{ asset('img/logo_polinema.png') }}" alt="Logo Unit Bahasa" class="img-fluid" style="max-height: 80px;">
-         <p class="mt-2 mb-0 small" style="color: #4B0082;">
-  Unit Pelaksana Akademik Bahasa<br><strong>Politeknik Negeri Malang</strong>
-</p>
 
+      <!-- Logo Tengah (Unit Bahasa) - tetap, disejajarkan -->
+      <div class="col-12 col-md-4 d-flex flex-column align-items-center">
+        <img src="{{ asset('img/logo_polinema.png') }}" alt="Logo Unit Bahasa" class="img-fluid" style="max-height: 80px;">
+        <p class="mt-2 mb-0 small text-center" style="color: #4B0082;">
+          Unit Pelaksana Akademik Bahasa<br><strong>Politeknik Negeri Malang</strong>
+        </p>
       </div>
-      <div class="col-4 col-md-2">
-        <img src="{{ asset('img/logo_itc.png') }}" alt="Logo ITC" class="img-fluid" style="max-height: 80px;">
+
+      <!-- Logo Kanan (ITC) -->
+      <div class="col-6 col-md-3 d-flex justify-content-center">
+        <img src="{{ asset('img/logo_itc.png') }}" alt="Logo ITC" class="img-fluid" style="max-height: 300px;">
       </div>
+
     </div>
   </div>
 </section>
+
 
 
 

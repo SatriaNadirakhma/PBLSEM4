@@ -48,8 +48,12 @@
 
   @include('landing.faqsection')
 
-  @include('landing.teamsection')
+  @include('landing.benefitsection')
 
+    @include('landing.cobasection')
+
+  @include('landing.teamsection')
+  
   @include('landing.footerlanding')
 
 <!-- Scroll Top -->
