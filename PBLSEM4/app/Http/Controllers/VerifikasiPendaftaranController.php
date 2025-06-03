@@ -87,7 +87,13 @@ public function list(Request $request)
             'status' => $request->status,
             'catatan' => $request->catatan,
         ]);
-
+        
+        // Jika status adalah "diterima", ubah keterangan mahasiswa menjadi "berbayar"
+        if ($request->status === 'diterima' && $detail->pendaftaran && $detail->pendaftaran->mahasiswa) {
+            $detail->pendaftaran->mahasiswa->update([
+                'keterangan' => 'berbayar',
+            ]);
+        }
         return response()->json(['success' => true, 'message' => 'Status berhasil diperbarui!']);
     }
 
