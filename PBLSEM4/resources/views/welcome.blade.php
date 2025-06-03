@@ -30,202 +30,15 @@
         100% { transform: scale(1); }
     }
 
-    /* Main container styling */
-    .info-section {
-        background: linear-gradient(135deg, #f8f9ff 0%, #e8f2ff 100%);
-        border-radius: 20px;
-        padding: 2rem;
-        margin-top: 2rem;
-        box-shadow: 0 10px 30px rgba(0, 123, 255, 0.1);
-        position: relative;
-        overflow: hidden;
-    }
-
-    .info-section::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 4px;
-        background: linear-gradient(90deg, #007bff, #0056b3, #007bff);
-        background-size: 200% 100%;
-        animation: gradient-shift 3s ease infinite;
-    }
-
     @keyframes gradient-shift {
         0% { background-position: 0% 50%; }
         50% { background-position: 100% 50%; }
         100% { background-position: 0% 50%; }
     }
 
-    /* Header styling */
-    .section-header {
-        text-align: center;
-        margin-bottom: 2.5rem;
-        animation: fadeInUp 0.8s ease-out;
-    }
-
-    .section-title {
-        font-size: 2.2rem;
-        font-weight: 700;
-        background: linear-gradient(135deg, #007bff, #0056b3);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        margin-bottom: 0.5rem;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .section-subtitle {
-        color: #6c757d;
-        font-size: 1.1rem;
-        font-weight: 400;
-    }
-
-    /* Card styling */
-    .info-card {
-        background: white;
-        border-radius: 16px;
-        box-shadow: 0 8px 25px rgba(0, 123, 255, 0.08);
-        border: none;
-        margin-bottom: 1.5rem;
-        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        position: relative;
-        overflow: hidden;
-    }
-
-    .info-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 5px;
-        height: 100%;
-        background: linear-gradient(180deg, #007bff, #0056b3);
-    }
-
-    .info-card:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 15px 35px rgba(0, 123, 255, 0.15);
-    }
-
-    .card-body-custom {
-        padding: 2rem;
-        position: relative;
-        z-index: 2;
-    }
-
-    /* Title styling */
-    .info-title {
-        background: linear-gradient(135deg, #007bff, #0056b3);
-        color: white;
-        padding: 12px 20px;
-        border-radius: 50px;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        font-size: 1rem;
-        display: inline-flex;
-        align-items: center;
-        margin-bottom: 1.5rem;
-        box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
-        transition: all 0.3s ease;
-        position: relative;
-        overflow: hidden;
-    }
-
-    .info-title::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-        transition: left 0.5s ease;
-    }
-
-    .info-card:hover .info-title::before {
-        left: 100%;
-    }
-
-    .info-title i {
-        margin-right: 8px;
-        font-size: 1.1rem;
-    }
-
-    /* Content styling */
-    .info-content {
-        color: #495057;
-        font-size: 1.15rem;
-        line-height: 1.6;
-        margin: 0;
-        font-weight: 400;
-    }
-
-    /* Empty state styling */
-    .empty-state {
-        text-align: center;
-        background: linear-gradient(135deg, #fff3cd, #ffeaa7);
-        border: none;
-        border-radius: 16px;
-        padding: 3rem 2rem;
-        box-shadow: 0 8px 25px rgba(255, 193, 7, 0.1);
-        animation: pulse 2s infinite;
-    }
-
-    .empty-state i {
-        font-size: 3rem;
-        color: #856404;
-        margin-bottom: 1rem;
-        display: block;
-    }
-
-    .empty-state-text {
-        color: #856404;
-        font-size: 1.2rem;
-        font-weight: 500;
-        margin: 0;
-    }
-
-    /* Animation classes */
-    .animate-card {
-        animation: slideInLeft 0.8s ease-out backwards;
-    }
-
-    /* Responsive design */
-    @media (max-width: 768px) {
-        .section-title {
-            font-size: 1.8rem;
-        }
-        
-        .info-section {
-            padding: 1.5rem;
-            margin-top: 1rem;
-        }
-        
-        .card-body-custom {
-            padding: 1.5rem;
-        }
-        
-        .info-title {
-            font-size: 0.9rem;
-            padding: 10px 16px;
-        }
-        
-        .info-content {
-            font-size: 1rem;
-        }
-    }
-
-    /* Additional enhancements */
-    .icon-bounce {
-        animation: bounce 2s infinite;
+    @keyframes rotate {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
     }
 
     @keyframes bounce {
@@ -268,11 +81,6 @@
         height: 200%;
         background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
         animation: rotate 20s linear infinite;
-    }
-
-    @keyframes rotate {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
     }
 
     .header-content {
@@ -319,10 +127,6 @@
         padding: 2.5rem;
     }
 
-    .welcome-section {
-        animation: slideInLeft 0.8s ease-out 0.2s backwards;
-    }
-
     /* Profile Welcome */
     .profile-welcome {
         display: flex;
@@ -334,6 +138,7 @@
         border-left: 5px solid #007bff;
         position: relative;
         overflow: hidden;
+        animation: slideInLeft 0.8s ease-out 0.2s backwards;
     }
 
     .profile-welcome::before {
@@ -399,14 +204,301 @@
         transition: all 0.3s ease;
     }
 
-    .bg-gradient-primary {
-        background: linear-gradient(135deg, #007bff, #0056b3);
+    .bg-gradient-danger {
+        background: linear-gradient(135deg, #dc3545, #c82333);
         color: white;
     }
 
     .role-badge:hover {
         transform: translateY(-2px);
         box-shadow: 0 6px 16px rgba(0, 123, 255, 0.3);
+    }
+
+    /* Admin Statistics Section */
+    .admin-stats-section {
+        margin-top: 2rem;
+        animation: fadeInUp 0.8s ease-out 0.4s backwards;
+    }
+
+    .section-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .section-title {
+        font-size: 2rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #007bff, #0056b3);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+
+    .section-subtitle {
+        color: #6c757d;
+        font-size: 1.1rem;
+        font-weight: 400;
+    }
+
+    /* Modern Statistics Cards */
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 3rem;
+    }
+
+    .stat-card {
+        background: white;
+        border-radius: 16px;
+        padding: 1.5rem;
+        box-shadow: 0 8px 25px rgba(0, 123, 255, 0.08);
+        border: none;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        position: relative;
+        overflow: hidden;
+        animation: slideInLeft 0.6s ease-out backwards;
+    }
+
+    .stat-card:nth-child(1) { animation-delay: 0.1s; }
+    .stat-card:nth-child(2) { animation-delay: 0.2s; }
+    .stat-card:nth-child(3) { animation-delay: 0.3s; }
+    .stat-card:nth-child(4) { animation-delay: 0.4s; }
+    .stat-card:nth-child(5) { animation-delay: 0.5s; }
+    .stat-card:nth-child(6) { animation-delay: 0.6s; }
+
+    .stat-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 5px;
+        height: 100%;
+        transition: width 0.3s ease;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(0, 123, 255, 0.15);
+    }
+
+    .stat-card:hover::before {
+        width: 100%;
+        opacity: 0.1;
+    }
+
+    .stat-card.primary::before { background: linear-gradient(180deg, #007bff, #0056b3); }
+    .stat-card.dark::before { background: linear-gradient(180deg, #343a40, #23272b); }
+    .stat-card.success::before { background: linear-gradient(180deg, #28a745, #1e7e34); }
+    .stat-card.info::before { background: linear-gradient(180deg, #17a2b8, #117a8b); }
+    .stat-card.warning::before { background: linear-gradient(180deg, #ffc107, #e0a800); }
+    .stat-card.secondary::before { background: linear-gradient(180deg, #6c757d, #5a6268); }
+
+    .stat-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 1rem;
+    }
+
+    .stat-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.25rem;
+        transition: transform 0.3s ease;
+    }
+
+    .stat-card:hover .stat-icon {
+        transform: scale(1.1);
+    }
+
+    .stat-icon.primary { background: linear-gradient(135deg, #007bff, #0056b3); }
+    .stat-icon.dark { background: linear-gradient(135deg, #343a40, #23272b); }
+    .stat-icon.success { background: linear-gradient(135deg, #28a745, #1e7e34); }
+    .stat-icon.info { background: linear-gradient(135deg, #17a2b8, #117a8b); }
+    .stat-icon.warning { background: linear-gradient(135deg, #ffc107, #e0a800); color: #212529; }
+    .stat-icon.secondary { background: linear-gradient(135deg, #6c757d, #5a6268); }
+
+    .stat-title {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #6c757d;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 0.5rem;
+    }
+
+    .stat-value {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #2c3e50;
+        margin: 0;
+    }
+
+    /* Status Cards Section */
+    .status-section {
+        margin-top: 3rem;
+        animation: fadeInUp 0.8s ease-out 0.6s backwards;
+    }
+
+    .status-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 1.2rem;
+        margin-bottom: 3rem;
+    }
+
+    .status-card {
+        background: white;
+        border-radius: 14px;
+        padding: 1.25rem;
+        box-shadow: 0 6px 20px rgba(0, 123, 255, 0.06);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        animation: slideInLeft 0.6s ease-out backwards;
+    }
+
+    .status-card:nth-child(1) { animation-delay: 0.7s; }
+    .status-card:nth-child(2) { animation-delay: 0.8s; }
+    .status-card:nth-child(3) { animation-delay: 0.9s; }
+    .status-card:nth-child(4) { animation-delay: 1.0s; }
+    .status-card:nth-child(5) { animation-delay: 1.1s; }
+
+    .status-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(0, 123, 255, 0.12);
+    }
+
+    /* Charts Section */
+    .charts-section {
+        margin-top: 3rem;
+        animation: fadeInUp 0.8s ease-out 0.8s backwards;
+    }
+
+    .chart-card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 8px 25px rgba(0, 123, 255, 0.08);
+        overflow: hidden;
+        margin-bottom: 2rem;
+        transition: all 0.3s ease;
+    }
+
+    .chart-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 30px rgba(0, 123, 255, 0.12);
+    }
+
+    .chart-header {
+        background: linear-gradient(135deg, #f8f9ff 0%, #e8f2ff 100%);
+        padding: 1.5rem;
+        border-bottom: 1px solid #e9ecef;
+    }
+
+    .chart-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #2c3e50;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .chart-body {
+        padding: 2rem;
+    }
+
+    /* Quick Actions Section */
+    .quick-actions {
+        margin-top: 3rem;
+        animation: fadeInUp 0.8s ease-out 1s backwards;
+    }
+
+    .actions-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .action-card {
+        background: white;
+        border-radius: 14px;
+        padding: 1.5rem;
+        text-align: center;
+        box-shadow: 0 6px 20px rgba(0, 123, 255, 0.06);
+        transition: all 0.3s ease;
+        text-decoration: none;
+        color: inherit;
+        border: 2px solid transparent;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .action-card::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(45deg, transparent, rgba(0, 123, 255, 0.05), transparent);
+        transform: rotate(-45deg);
+        transition: all 0.5s ease;
+        opacity: 0;
+    }
+
+    .action-card:hover::before {
+        opacity: 1;
+        transform: rotate(-45deg) translate(50%, 50%);
+    }
+
+    .action-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 30px rgba(0, 123, 255, 0.15);
+        border-color: #007bff;
+        text-decoration: none;
+        color: inherit;
+    }
+
+    .action-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #007bff, #0056b3);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1rem;
+        font-size: 1.5rem;
+        transition: transform 0.3s ease;
+        position: relative;
+        z-index: 2;
+    }
+
+    .action-card:hover .action-icon {
+        transform: scale(1.1);
+    }
+
+    .action-title {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #2c3e50;
+        margin: 0;
+        position: relative;
+        z-index: 2;
     }
 
     /* Responsive Design */
@@ -437,36 +529,27 @@
         .welcome-greeting {
             font-size: 1.3rem;
         }
-        
-    }
 
-    /* Animation keyframes */
-    @keyframes fadeInUp {
-        from {
-            opacity: 0;
-            transform: translateY(30px);
+        .section-title {
+            font-size: 1.6rem;
         }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
 
-    @keyframes slideInLeft {
-        from {
-            opacity: 0;
-            transform: translateX(-30px);
+        .stats-grid {
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
         }
-        to {
-            opacity: 1;
-            transform: translateX(0);
-        }
-    }
 
-    @keyframes gradient-shift {
-        0% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-        100% { background-position: 0% 50%; }
+        .stat-card {
+            padding: 1rem;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+        }
+
+        .chart-body {
+            padding: 1rem;
+        }
     }
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
@@ -480,7 +563,7 @@
                 <div class="dashboard-icon">
                     <i class="fas fa-tachometer-alt"></i>
                 </div>
-                <h3 class="dashboard-title">Dashboard</h3>
+                <h3 class="dashboard-title">Dashboard Admin</h3>
             </div>
             <div class="header-decoration"></div>
         </div>
@@ -516,98 +599,148 @@
         @endphp
 
         <div class="dashboard-body">
-            <div class="welcome-section">
-                <!-- Profile Section -->
-                <div class="profile-welcome">
-                    <div class="profile-avatar">
-                        <i class="{{ $roleIcon }}"></i>
-                    </div>
-                    <div class="welcome-content">
-                        <h4 class="welcome-greeting">
-                            Halo, <span class="user-name">{{ $nama }}</span>!
-                        </h4>
-                        <div class="role-badge {{ $roleColor }}">
-                            <i class="{{ $roleIcon }} mr-2"></i>
-                            <span class="role-text">{{ ucfirst($role) }}</span>
-                        </div>
+            <!-- Profile Section -->
+            <div class="profile-welcome">
+                <div class="profile-avatar">
+                    <i class="{{ $roleIcon }}"></i>
+                </div>
+                <div class="welcome-content">
+                    <h4 class="welcome-greeting">
+                        Selamat datang, <span class="user-name">{{ $nama }}</span>!
+                    </h4>
+                    <div class="role-badge {{ $roleColor }}">
+                        <i class="{{ $roleIcon }} mr-2"></i>
+                        <span class="role-text">{{ ucfirst($role) }}</span>
                     </div>
                 </div>
             </div>
-        </div>
-        {{-- <!-- Debug Info - Remove this after fixing -->
-        <!-- <div class="alert alert-info" style="font-size: 0.85rem;">
-            <strong>Debug Info:</strong><br>
-            Role: {{ $role }}<br>
-            Data Pendaftar: {{ json_encode($dataPendaftarPerBulan ?? 'Not Set') }}<br>
-            Jumlah Lolos: {{ $jumlah_lolos ?? 'Not Set' }}<br>
-            Jumlah Tidak Lolos: {{ $jumlah_tidak_lolos ?? 'Not Set' }}
-        </div> --> --}}
 
-        @if(isset($user) && $user->role === 'admin')
-            <div class="container-fluid px-3">
-                <div class="d-flex flex-nowrap overflow-auto py-2" style="gap: 0;">
+            @if(isset($user) && $user->role === 'admin')
+                <!-- Admin Statistics Section -->
+                <div class="admin-stats-section">
+                    <div class="section-header">
+                        <h2 class="section-title">
+                            <i class="fas fa-users"></i>
+                            Statistik Pengguna
+                        </h2>
+                        <p class="section-subtitle">Ringkasan data pengguna sistem</p>
+                    </div>
+
                     @php
-                        $cards = [
-                            ['bg' => 'bg-primary text-white', 'title' => 'Jumlah User', 'count_var' => 'jumlah_user', 'icon' => 'fa-users'],
-                            ['bg' => 'bg-dark text-white', 'title' => 'Admin', 'count_var' => 'jumlah_admin', 'icon' => 'fa-user-shield'],
-                            ['bg' => 'bg-success text-white', 'title' => 'Mahasiswa', 'count_var' => 'jumlah_mahasiswa', 'icon' => 'fa-user-graduate'],
-                            ['bg' => 'bg-info text-white', 'title' => 'Dosen', 'count_var' => 'jumlah_dosen', 'icon' => 'fa-chalkboard-teacher'],
-                            ['bg' => 'bg-warning text-dark', 'title' => 'Tendik', 'count_var' => 'jumlah_tendik', 'icon' => 'fa-briefcase'],
-                            ['bg' => 'bg-secondary text-white', 'title' => 'Jumlah Pendaftar', 'count_var' => 'jumlah_pendaftar', 'icon' => 'fa-clipboard-list'],
-                            ['bg' => 'bg-light text-dark', 'title' => 'Status Menunggu', 'count_var' => 'status_menunggu', 'icon' => 'fa-clock'],
-                            ['bg' => 'bg-success text-white', 'title' => 'Status Diterima', 'count_var' => 'status_diterima', 'icon' => 'fa-check-circle'],
-                            ['bg' => 'bg-danger text-white', 'title' => 'Status Ditolak', 'count_var' => 'status_ditolak', 'icon' => 'fa-times-circle'],
-                            ['bg' => 'bg-success text-white', 'title' => 'Peserta Lolos', 'count_var' => 'jumlah_lolos', 'icon' => 'fa-thumbs-up'],
-                            ['bg' => 'bg-danger text-white', 'title' => 'Peserta Tidak Lolos', 'count_var' => 'jumlah_tidak_lolos', 'icon' => 'fa-thumbs-down'],
+                        $userStats = [
+                            ['title' => 'Total User', 'count_var' => 'jumlah_user', 'icon' => 'fa-users', 'color' => 'primary'],
+                            ['title' => 'Admin', 'count_var' => 'jumlah_admin', 'icon' => 'fa-user-shield', 'color' => 'dark'],
+                            ['title' => 'Mahasiswa', 'count_var' => 'jumlah_mahasiswa', 'icon' => 'fa-user-graduate', 'color' => 'success'],
+                            ['title' => 'Dosen', 'count_var' => 'jumlah_dosen', 'icon' => 'fa-chalkboard-teacher', 'color' => 'info'],
+                            ['title' => 'Tendik', 'count_var' => 'jumlah_tendik', 'icon' => 'fa-briefcase', 'color' => 'warning'],
+                            ['title' => 'Pendaftar', 'count_var' => 'jumlah_pendaftar', 'icon' => 'fa-clipboard-list', 'color' => 'secondary'],
                         ];
                     @endphp
 
-                    @foreach ($cards as $index => $card)
-                        <div 
-                            class="card {{ $card['bg'] }} text-center shadow-sm p-2" 
-                            style="width: 90px; aspect-ratio: 1 / 1; flex: 0 0 auto; margin-right: {{ $index < count($cards) - 1 ? '8px' : '0' }};">
-                            <div class="card-body p-1 d-flex flex-column justify-content-center align-items-center">
-                                <div class="fs-7 mb-1" style="font-size: 0.75rem;">{{ $card['title'] }}</div>
-                                {{-- Tambahkan ID untuk memperbarui secara real-time. Gunakan slug untuk ID HTML yang valid. --}}
-                                <div class="fs-6 fw-bold" style="font-size: 1rem;" id="card-count-{{ \Illuminate\Support\Str::slug($card['count_var'], '-') }}">
-                                    {{ ${$card['count_var']} ?? 0 }} {{-- Menggunakan variabel PHP yang sesuai --}}
+                    <div class="stats-grid">
+                        @foreach ($userStats as $stat)
+                            <div class="stat-card {{ $stat['color'] }}">
+                                <div class="stat-header">
+                                    <div class="stat-icon {{ $stat['color'] }}">
+                                        <i class="fas {{ $stat['icon'] }}"></i>
+                                    </div>
                                 </div>
-                                <i class="fa {{ $card['icon'] }}" style="font-size: 1rem; margin-top: 2px;"></i>
+                                <div class="stat-title">{{ $stat['title'] }}</div>
+                                <div class="stat-value" id="card-count-{{ \Illuminate\Support\Str::slug($stat['count_var'], '-') }}">
+                                    {{ ${$stat['count_var']} ?? 0 }}
+                                </div>
                             </div>
-                        </div>
-                    @endforeach
-                </div>
-            </div>
+                        @endforeach
+                    </div>
 
-            <div class="mt-5 container">
-                <div class="row">
-                    <div class="col-md-6 mb-4">
-                        <div class="card">
-                            <div class="card-header">
-                                <h5 class="card-title mb-0">Statistik Pendaftar Per Bulan {{ \Carbon\Carbon::now()->year }}</h5>
-                            </div>
-                            <div class="card-body">
-                                <div style="height: 300px; position: relative;">
-                                    <canvas id="lineChart"></canvas>
+                    <!-- Status Section -->
+                    <div class="status-section">
+                        <div class="section-header">
+                            <h2 class="section-title">
+                                <i class="fas fa-chart-line"></i>
+                                Status Pendaftaran
+                            </h2>
+                            <p class="section-subtitle">Status dan hasil seleksi peserta</p>
+                        </div>
+
+                        @php
+                            $statusStats = [
+                                ['title' => 'Menunggu', 'count_var' => 'status_menunggu', 'icon' => 'fa-clock', 'color' => 'warning'],
+                                ['title' => 'Diterima', 'count_var' => 'status_diterima', 'icon' => 'fa-check-circle', 'color' => 'success'],
+                                ['title' => 'Ditolak', 'count_var' => 'status_ditolak', 'icon' => 'fa-times-circle', 'color' => 'danger'],
+                                ['title' => 'Lolos', 'count_var' => 'jumlah_lolos', 'icon' => 'fa-thumbs-up', 'color' => 'success'],
+                                ['title' => 'Tidak Lolos', 'count_var' => 'jumlah_tidak_lolos', 'icon' => 'fa-thumbs-down', 'color' => 'danger'],
+                            ];
+                        @endphp
+
+                        <div class="status-grid">
+                            @foreach ($statusStats as $stat)
+                                <div class="status-card">
+                                    <div class="stat-header">
+                                        <div class="stat-icon {{ $stat['color'] }}">
+                                            <i class="fas {{ $stat['icon'] }}"></i>
+                                        </div>
+                                    </div>
+                                    <div class="stat-title">{{ $stat['title'] }}</div>
+                                    <div class="stat-value" id="card-count-{{ \Illuminate\Support\Str::slug($stat['count_var'], '-') }}">
+                                        {{ ${$stat['count_var']} ?? 0 }}
+                                    </div>
                                 </div>
-                            </div>
+                            @endforeach
                         </div>
                     </div>
-                    <div class="col-md-6 mb-4">
-                        <div class="card">
-                            <div class="card-header">
-                                <h5 class="card-title mb-0">Persentase Peserta Lolos vs Tidak Lolos</h5>
+
+                    <!-- Charts Section -->
+                    <div class="charts-section">
+                        <div class="section-header">
+                            <h2 class="section-title">
+                                <i class="fas fa-chart-bar"></i>
+                                Analisis Data
+                            </h2>
+                            <p class="section-subtitle">Visualisasi data dan tren</p>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-8 mb-4">
+                                <div class="chart-card">
+                                    <div class="chart-header">
+                                        <h6 class="chart-title">
+                                            <i class="fas fa-chart-line"></i>
+                                            Statistik Pendaftar Per Bulan {{ \Carbon\Carbon::now()->year }}
+                                        </h6>
+                                    </div>
+                                    <div class="chart-body">
+                                        <div style="height: 350px; position: relative;">
+                                            <canvas id="lineChart"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="card-body">
-                                <div style="height: 300px; position: relative;">
-                                    <canvas id="pieChart"></canvas>
+                            <div class="col-lg-4 mb-4">
+                                <div class="chart-card">
+                                    <div class="chart-header">
+                                        <h6 class="chart-title">
+                                            <i class="fas fa-chart-pie"></i>
+                                            Persentase Hasil Seleksi
+                                        </h6>
+                                    </div>
+                                    <div class="chart-body">
+                                        <div style="height: 300px; position: relative;">
+                                            <canvas id="pieChart"></canvas>
+                                        </div>
+                                        <div class="mt-3 text-center">
+                                            <small class="text-muted">
+                                                <i class="fas fa-circle text-success me-1"></i>Lolos
+                                                <i class="fas fa-circle text-danger me-1 ms-3"></i>Tidak Lolos
+                                            </small>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        @endif
+            @endif
 
         @if($role === 'mahasiswa')
             <div class="info-section">
