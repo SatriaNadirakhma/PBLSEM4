@@ -330,7 +330,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/', [KirimEmailController::class, 'index'])->name('kirimemail.index');
         Route::post('/list', [KirimEmailController::class, 'list'])->name('kirimemail.list');
         Route::get('{id}/form', [KirimEmailController::class, 'form'])->name('kirimemail.form');
-        Route::post('/kirim', [KirimEmailController::class, 'kirim'])->name('kirimemail.kirim');
+        Route::post('/kirim-email', [KirimEmailController::class, 'kirim'])->name('kirimemail.kirim');
     });
 
 });
