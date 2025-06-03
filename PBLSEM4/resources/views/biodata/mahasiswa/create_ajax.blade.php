@@ -49,14 +49,14 @@
                     <select name="jenis_kelamin" id="jenis_kelamin" class="form-control" required>
                         <option value="">- Pilih Jenis Kelamin -</option>
                         @foreach($mahasiswa as $m)
-                            <option value="{{ $m->jenis_kelamin }}">{{ $l->jenis_kelamin }}</option>
+                            <option value="{{ $m->jenis_kelamin }}">{{ $m->jenis_kelamin }}</option>
                         @endforeach
                     </select>
                     <small id="error-jenis_kelamin" class="error-text text-danger"></small>
                 </div>
                 <div class="form-group">
                     <label>Status</label>
-                    <select name="status" id="status" class="form-control" required></select>
+                    <select name="status" id="status" class="form-control" required>
                         <option value="">- Pilih Status -</option>
                         @foreach($mahasiswa as $m)
                             <option value="{{ $m->status }}">{{ $m->status }}</option>
@@ -66,7 +66,7 @@
                 </div>
                 <div class="form-group">
                     <label>Keterangan</label>
-                    <select name="keterangan" id="status" class="form-control" required></select>
+                    <select name="keterangan" id="keterangan" class="form-control" required>
                         <option value="">- Pilih Keterangan -</option>
                         @foreach($mahasiswa as $m)
                             <option value="{{ $m->keterangan }}">{{ $m->keterangan }}</option>
@@ -76,7 +76,7 @@
                 </div>
                 <div class="form-group">
                     <label>Prodi</label>
-                    <select name="keterangan" id="status" class="form-control" required></select>
+                    <select name="prodi" id="prodi" class="form-control" required>
                         <option value="">- Pilih Program Studi -</option>
                         @foreach($prodi as $p)
                             <option value="{{ $p->prodi_id }}">{{ $p->prodi_nama }}</option>

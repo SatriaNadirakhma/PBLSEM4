@@ -266,6 +266,58 @@ class UserController extends Controller
         return view('user.edit_ajax', compact('user', 'roles', 'availableUsers'));
     }
 
+    public function update_ajax(Request $request, $user_id)
+{
+    $user = UserModel::find($user_id);
+
+    if (!$user) {
+        return response()->json([
+            'status' => false,
+            'message' => 'User tidak ditemukan',
+        ]);
+    }
+
+    // Validasi input
+    $validator = Validator::make($request->all(), [
+        'username' => 'required|min:3|unique:user,username,' . $user_id . ',user_id',
+        'email' => 'required|email|unique:user,email,' . $user_id . ',user_id',
+        'password' => 'nullable|min:5',
+        'profile' => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json([
+            'status' => false,
+            'message' => 'Validasi gagal',
+            'msgField' => $validator->errors()
+        ]);
+    }
+
+    // Update data user
+    $user->username = $request->username;
+    $user->email = $request->email;
+
+    if ($request->filled('password')) {
+        $user->password = bcrypt($request->password);
+    }
+
+    // Handle foto profil
+    if ($request->hasFile('profile')) {
+        $file = $request->file('profile');
+        $filename = time() . '_' . $file->getClientOriginalName();
+        $file->move(public_path('uploads/profile'), $filename);
+        $user->profile = $filename;
+    }
+
+    $user->save();
+
+    return response()->json([
+        'status' => true,
+        'message' => 'Data user berhasil diperbarui.'
+    ]);
+}
+
+
     public function confirm_ajax($user_id)
     {
         $user = UserModel::with(['admin', 'mahasiswa', 'dosen', 'tendik'])->find($user_id);
