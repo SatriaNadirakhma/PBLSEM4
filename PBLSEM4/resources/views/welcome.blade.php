@@ -1,12 +1,40 @@
 @extends('layouts.template')
+@push('css')
+<style>
+    .animated {
+        animation-duration: 0.4s;
+        animation-fill-mode: both;
+    }
+
+    .fadeIn {
+        animation-name: fadeIn;
+    }
+
+    .judul-animasi {
+    text-transform: uppercase; /* Huruf kapital semua */
+    background-color: #007bff; /* Biru (Bootstrap primary blue) */
+    color: white;              /* Warna teks putih supaya kontras */
+    padding: 3px 8px;          /* Ruang di dalam kotak */
+    display: inline-block;     /* Biar kotak pas di belakang teks */
+    border-radius: 4px;        /* Sudut kotak agak membulat */
+    font-weight: bold;         /* Pasti bold */
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+@endpush
 
 @section('content')
 
-<div class="card shadow-sm">
-    <div class="card-header bg-primary text-white">
-        <h3 class="card-title mb-0">Dashboard</h3>
-    </div>
-    <div class="card-body">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h3 class="card-title mb-0">Dashboard</h3>
+        </div>
+        <div class="card-body">
 
         @php
             $role = $user->role;
@@ -33,12 +61,14 @@
             }
         @endphp
 
-        <div class="mb-4">
-            <h5 class="mb-1">Halo, <strong>{{ $nama }}</strong>!</h5>
-            <span class="badge bg-info text-dark text-capitalize mb-3 px-3 py-1">{{ $role }}</span>
-            <p style="font-size: 1rem; line-height: 1.6;">{{ $pesan }}</p>
-        </div>
+            <div class="mb-4">
+                <h5 class="mb-1">Halo, <strong>{{ $nama }}</strong>!</h5>
+                <span class="badge bg-info text-dark text-capitalize mb-3 px-3 py-1">{{ $role }}</span>
+                <p style="font-size: 1rem; line-height: 1.6;">{{ $pesan }}</p>
+            </div>
 
+        </div>
+    </div>
         <!-- Debug Info - Remove this after fixing -->
         <!-- <div class="alert alert-info" style="font-size: 0.85rem;">
             <strong>Debug Info:</strong><br>
@@ -70,19 +100,19 @@
             ];
         @endphp
 
-        @foreach ($cards as $index => $card)
-        <div 
-            class="card {{ $card['bg'] }} text-center shadow-sm p-2" 
-            style="width: 90px; aspect-ratio: 1 / 1; flex: 0 0 auto; margin-right: {{ $index < count($cards) - 1 ? '8px' : '0' }};">
-            <div class="card-body p-1 d-flex flex-column justify-content-center align-items-center">
-                <div class="fs-7 mb-1" style="font-size: 0.75rem;">{{ $card['title'] }}</div>
-                <div class="fs-6 fw-bold" style="font-size: 1rem;">{{ $card['count'] }}</div>
-                <i class="fa {{ $card['icon'] }}" style="font-size: 1rem; margin-top: 2px;"></i>
+            @foreach ($cards as $index => $card)
+            <div 
+                class="card {{ $card['bg'] }} text-center shadow-sm p-2" 
+                style="width: 90px; aspect-ratio: 1 / 1; flex: 0 0 auto; margin-right: {{ $index < count($cards) - 1 ? '8px' : '0' }};">
+                <div class="card-body p-1 d-flex flex-column justify-content-center align-items-center">
+                    <div class="fs-7 mb-1" style="font-size: 0.75rem;">{{ $card['title'] }}</div>
+                    <div class="fs-6 fw-bold" style="font-size: 1rem;">{{ $card['count'] }}</div>
+                    <i class="fa {{ $card['icon'] }}" style="font-size: 1rem; margin-top: 2px;"></i>
+                </div>
             </div>
+            @endforeach
         </div>
-        @endforeach
     </div>
-</div>
 
 <!-- Charts Section -->
 <div class="mt-5 container">

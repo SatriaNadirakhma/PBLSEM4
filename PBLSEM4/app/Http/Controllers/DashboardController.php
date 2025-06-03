@@ -11,6 +11,7 @@ use App\Models\MahasiswaModel;
 use App\Models\DosenModel;
 use App\Models\TendikModel;
 use App\Models\HasilUjianModel;
+use App\Models\InformasiModel;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -78,6 +79,12 @@ class DashboardController extends Controller
             }
         }
 
+        $informasi = collect(); // Default kosong
+
+        if ($user && $user->role === 'mahasiswa') {
+            $informasi = InformasiModel::latest()->get(); // ambil semua informasi, urutkan terbaru dulu
+        }
+
         // Kirim semua data ke view 'welcome'
         return view('welcome', compact(
             'breadcrumb',
@@ -94,7 +101,9 @@ class DashboardController extends Controller
             'jumlah_lolos',
             'jumlah_tidak_lolos',
             'user',
-            'dataPendaftarPerBulan'
+            'dataPendaftarPerBulan',
+              'informasi'
+
         ));
     }
 }
