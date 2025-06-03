@@ -173,7 +173,7 @@ class JadwalController extends Controller
 
         $validator = Validator::make($request->all(), [
             'tanggal_pelaksanaan' => 'required|date',
-            'jam_mulai' => 'required|date_format:H:i;s',
+            'jam_mulai' => 'required|date_format:H:i:s',
             'keterangan' => 'required|string|max:100',
         ]);
 
