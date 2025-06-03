@@ -48,9 +48,18 @@ class MahasiswaController extends Controller
                 return $t->prodi->prodi_nama ?? '-';
             })
             ->addColumn('aksi', function ($t) {
-                $btn = '<button onclick="modalAction(\'' . route('biodata.mahasiswa.show_ajax', $t->mahasiswa_id) . '\')" class="btn btn-info btn-sm me-1">Detail</button>';
-                $btn .= '<button onclick="modalAction(\'' . route('biodata.mahasiswa.edit_ajax', $t->mahasiswa_id) . '\')" class="btn btn-warning btn-sm me-1">Edit</button>';
-                $btn .= '<button onclick="modalAction(\'' . route('biodata.mahasiswa.confirm_ajax', $t->mahasiswa_id) . '\')" class="btn btn-danger btn-sm">Hapus</button>';
+                $btn = '<button onclick="modalAction(\'' . route('biodata.mahasiswa.show_ajax', $t->mahasiswa_id) . '\')" 
+                            class="btn btn-info btn-sm rounded-pill shadow-sm me-1 px-3 py-1" style="font-size: 0.85rem;">
+                            <i class="fa fa-eye me-1"></i> Detail
+                        </button>';
+                $btn .= '<button onclick="modalAction(\'' . route('biodata.mahasiswa.edit_ajax', $t->mahasiswa_id) . '\')"  
+                            class="btn btn-warning btn-sm rounded-pill shadow-sm me-1 px-3 py-1" style="font-size: 0.85rem;">
+                            <i class="fa fa-edit me-1"></i> Edit
+                        </button>';
+                $btn .= '<button onclick="modalAction(\'' . route('biodata.mahasiswa.confirm_ajax', $t->mahasiswa_id) . '\')"  
+                            class="btn btn-danger btn-sm rounded-pill shadow-sm px-3 py-1" style="font-size: 0.85rem;">
+                            <i class="fa fa-trash me-1"></i> Hapus
+                        </button>';
                 return $btn;
             })
             ->rawColumns(['aksi'])
