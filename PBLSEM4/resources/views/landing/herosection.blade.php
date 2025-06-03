@@ -32,43 +32,11 @@
           </div>
         </div>
 
-        <div class="row feature-boxes">
-          <div class="col-lg-4 mb-4 mb-lg-0" data-aos="fade-up" data-aos-delay="200">
-            <div class="feature-box">
-              <div class="feature-icon me-sm-4 mb-3 mb-sm-0">
-                <i class="bi bi-gear"></i>
-              </div>
-              <div class="feature-content">
-                <h3 class="feature-title">Rapid Deployment</h3>
-                <p class="feature-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis.</p>
-              </div>
-            </div>
-          </div>
+        
 
-          <div class="col-lg-4 mb-4 mb-lg-0" data-aos="fade-up" data-aos-delay="300">
-            <div class="feature-box">
-              <div class="feature-icon me-sm-4 mb-3 mb-sm-0">
-                <i class="bi bi-window"></i>
-              </div>
-              <div class="feature-content">
-                <h3 class="feature-title">Advanced Security</h3>
-                <p class="feature-text">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-              </div>
-            </div>
-          </div>
+   
 
-          <div class="col-lg-4" data-aos="fade-up" data-aos-delay="400">
-            <div class="feature-box">
-              <div class="feature-icon me-sm-4 mb-3 mb-sm-0">
-                <i class="bi bi-headset"></i>
-              </div>
-              <div class="feature-content">
-                <h3 class="feature-title">Dedicated Support</h3>
-                <p class="feature-text">Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-              </div>
-            </div>
-          </div>
-        </div>
+          
 
       </div>
 
