@@ -78,72 +78,93 @@
             Jumlah Tidak Lolos: {{ $jumlah_tidak_lolos ?? 'Not Set' }}
         </div> -->
 
-    </div>
-</div>
+    @if($role === 'admin')
+        <div class="container-fluid px-3">
+            <div class="d-flex flex-nowrap overflow-auto py-2" style="gap: 0;">
+                @php
+                    $cards = [
+                        ['bg' => 'bg-primary text-white', 'title' => 'Jumlah User', 'count' => $jumlah_user, 'icon' => 'fa-users'],
+                        ['bg' => 'bg-dark text-white', 'title' => 'Admin', 'count' => $jumlah_admin ?? 0, 'icon' => 'fa-user-shield'],
+                        ['bg' => 'bg-success text-white', 'title' => 'Mahasiswa', 'count' => $jumlah_mahasiswa, 'icon' => 'fa-user-graduate'],
+                        ['bg' => 'bg-info text-white', 'title' => 'Dosen', 'count' => $jumlah_dosen, 'icon' => 'fa-chalkboard-teacher'],
+                        ['bg' => 'bg-warning text-dark', 'title' => 'Tendik', 'count' => $jumlah_tendik, 'icon' => 'fa-briefcase'],
+                        ['bg' => 'bg-secondary text-white', 'title' => 'Jumlah Pendaftar', 'count' => $jumlah_pendaftar, 'icon' => 'fa-clipboard-list'],
+                        ['bg' => 'bg-light text-dark', 'title' => 'Status Menunggu', 'count' => $status_menunggu, 'icon' => 'fa-clock'],
+                        ['bg' => 'bg-success text-white', 'title' => 'Status Diterima', 'count' => $status_diterima, 'icon' => 'fa-check-circle'],
+                        ['bg' => 'bg-danger text-white', 'title' => 'Status Ditolak', 'count' => $status_ditolak, 'icon' => 'fa-times-circle'],
+                        ['bg' => 'bg-success text-white', 'title' => 'Peserta Lolos', 'count' => $jumlah_lolos ?? 0, 'icon' => 'fa-thumbs-up'],
+                        ['bg' => 'bg-danger text-white', 'title' => 'Peserta Tidak Lolos', 'count' => $jumlah_tidak_lolos ?? 0, 'icon' => 'fa-thumbs-down'],
+                    ];
+                @endphp
 
-@if($role === 'admin')
-<div class="container-fluid px-3">
-    <div class="d-flex flex-nowrap overflow-auto py-2" style="gap: 0;">
-        @php
-            $cards = [
-                ['bg' => 'bg-primary text-white', 'title' => 'Jumlah User', 'count' => $jumlah_user, 'icon' => 'fa-users'],
-                ['bg' => 'bg-dark text-white', 'title' => 'Admin', 'count' => $jumlah_admin ?? 0, 'icon' => 'fa-user-shield'],
-                ['bg' => 'bg-success text-white', 'title' => 'Mahasiswa', 'count' => $jumlah_mahasiswa, 'icon' => 'fa-user-graduate'],
-                ['bg' => 'bg-info text-white', 'title' => 'Dosen', 'count' => $jumlah_dosen, 'icon' => 'fa-chalkboard-teacher'],
-                ['bg' => 'bg-warning text-dark', 'title' => 'Tendik', 'count' => $jumlah_tendik, 'icon' => 'fa-briefcase'],
-                ['bg' => 'bg-secondary text-white', 'title' => 'Jumlah Pendaftar', 'count' => $jumlah_pendaftar, 'icon' => 'fa-clipboard-list'],
-                ['bg' => 'bg-light text-dark', 'title' => 'Status Menunggu', 'count' => $status_menunggu, 'icon' => 'fa-clock'],
-                ['bg' => 'bg-success text-white', 'title' => 'Status Diterima', 'count' => $status_diterima, 'icon' => 'fa-check-circle'],
-                ['bg' => 'bg-danger text-white', 'title' => 'Status Ditolak', 'count' => $status_ditolak, 'icon' => 'fa-times-circle'],
-                ['bg' => 'bg-success text-white', 'title' => 'Peserta Lolos', 'count' => $jumlah_lolos ?? 0, 'icon' => 'fa-thumbs-up'],
-                ['bg' => 'bg-danger text-white', 'title' => 'Peserta Tidak Lolos', 'count' => $jumlah_tidak_lolos ?? 0, 'icon' => 'fa-thumbs-down'],
-            ];
-        @endphp
-
-            @foreach ($cards as $index => $card)
-            <div 
-                class="card {{ $card['bg'] }} text-center shadow-sm p-2" 
-                style="width: 90px; aspect-ratio: 1 / 1; flex: 0 0 auto; margin-right: {{ $index < count($cards) - 1 ? '8px' : '0' }};">
-                <div class="card-body p-1 d-flex flex-column justify-content-center align-items-center">
-                    <div class="fs-7 mb-1" style="font-size: 0.75rem;">{{ $card['title'] }}</div>
-                    <div class="fs-6 fw-bold" style="font-size: 1rem;">{{ $card['count'] }}</div>
-                    <i class="fa {{ $card['icon'] }}" style="font-size: 1rem; margin-top: 2px;"></i>
+                    @foreach ($cards as $index => $card)
+                    <div 
+                        class="card {{ $card['bg'] }} text-center shadow-sm p-2" 
+                        style="width: 90px; aspect-ratio: 1 / 1; flex: 0 0 auto; margin-right: {{ $index < count($cards) - 1 ? '8px' : '0' }};">
+                        <div class="card-body p-1 d-flex flex-column justify-content-center align-items-center">
+                            <div class="fs-7 mb-1" style="font-size: 0.75rem;">{{ $card['title'] }}</div>
+                            <div class="fs-6 fw-bold" style="font-size: 1rem;">{{ $card['count'] }}</div>
+                            <i class="fa {{ $card['icon'] }}" style="font-size: 1rem; margin-top: 2px;"></i>
+                        </div>
+                    </div>
+                    @endforeach
                 </div>
             </div>
-            @endforeach
-        </div>
-    </div>
 
-<!-- Charts Section -->
-<div class="mt-5 container">
-    <div class="row">
-        <div class="col-md-6 mb-4">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title mb-0">Statistik Pendaftar Per Bulan {{ \Carbon\Carbon::now()->year }}</h5>
+        <!-- Charts Section -->
+        <div class="mt-5 container">
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">Statistik Pendaftar Per Bulan {{ \Carbon\Carbon::now()->year }}</h5>
+                        </div>
+                        <div class="card-body">
+                            <div style="height: 300px; position: relative;">
+                                <canvas id="lineChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <div style="height: 300px; position: relative;">
-                        <canvas id="lineChart"></canvas>
+                <div class="col-md-6 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">Persentase Peserta Lolos vs Tidak Lolos</h5>
+                        </div>
+                        <div class="card-body">
+                            <div style="height: 300px; position: relative;">
+                                <canvas id="pieChart"></canvas>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-6 mb-4">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title mb-0">Persentase Peserta Lolos vs Tidak Lolos</h5>
-                </div>
-                <div class="card-body">
-                    <div style="height: 300px; position: relative;">
-                        <canvas id="pieChart"></canvas>
+    @endif
+
+    @if($role === 'mahasiswa')Add commentMore actions
+        <div class="mt-5">
+            <h4 class="mb-3 font-weight-bold text-primary">📢 Informasi Terkini</h4>
+
+            @forelse($informasi as $index => $item)
+                <div class="card border-left-info shadow-sm mb-3 animate__animated animate__fadeInLeft" 
+                    style="animation-delay: {{ $index * 0.2 }}s; animation-duration: 0.8s;">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h5 class="card-title mb-0 judul-animasi">
+                                <i class="fas fa-bullhorn text-white mr-2"></i>{{ $item->judul }}
+                            </h5>
+                        </div>
+                        <p class="card-text text-dark mb-0" style="font-size: 1.25rem;">{{ $item->isi }}</p>
                     </div>
                 </div>
-            </div>
+            @empty
+                <div class="alert alert-info shadow-sm mt-3 animate__animated animate__fadeInLeft">
+                    <i class="fas fa-info-circle mr-2"></i>Tidak ada informasi terbaru saat ini.Add commentMore actions
+                </div>
+            @endforelse
         </div>
-    </div>
-</div>
-@endif
+    @endif
 
 @endsection
 
