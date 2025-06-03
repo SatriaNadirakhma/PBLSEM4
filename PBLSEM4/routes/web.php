@@ -200,8 +200,10 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/{id}/update_ajax', [UserController::class, 'update_ajax']);
         Route::get('/{id}/delete_ajax', [UserController::class, 'confirm_ajax']);
         Route::delete('/{id}/delete_ajax', [UserController::class, 'delete_ajax']);
-
-        
+        Route::get('import', [UserController::class, 'import']);
+        Route::post('import_ajax', [UserController::class, 'import_ajax']);
+        Route::get('/export_excel', [UserController::class, 'export_excel']);
+        Route::get('/export_pdf', [UserController::class, 'export_pdf']);
     });
 
     // ROUTE VERIFIKASI
@@ -335,7 +337,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/', [KirimEmailController::class, 'index'])->name('kirimemail.index');
         Route::post('/list', [KirimEmailController::class, 'list'])->name('kirimemail.list');
         Route::get('{id}/form', [KirimEmailController::class, 'form'])->name('kirimemail.form');
-        Route::post('/kirim', [KirimEmailController::class, 'kirim'])->name('kirimemail.kirim');
+        Route::post('/kirim-email', [KirimEmailController::class, 'kirim'])->name('kirimemail.kirim');
     });
 
 });
