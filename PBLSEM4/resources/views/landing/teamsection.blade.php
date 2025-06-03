@@ -95,7 +95,8 @@
             </div>
           </div><!-- End Team Member -->
 
-          <div class="col-md-6 col-lg-3" data-aos="zoom-in" data-aos-delay="400">
+<div class="col-lg-3" data-aos="zoom-in" data-aos-delay="500">
+
             <div class="team-card">
               <div class="team-image">
                 <img src="assets/img/person/person-f-3.webp" class="img-fluid" alt="">

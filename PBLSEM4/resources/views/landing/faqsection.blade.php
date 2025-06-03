@@ -1,89 +1,19 @@
-<!-- Faq Section -->
-    <section id="faq" class="faq section">
+<!-- TOEIC Overview Section -->
+<section id="faq" class="py-7 text-white position-relative" style="background: url('{{ asset('img/book_background.png') }}') center center / cover no-repeat;">
+  <div class="position-absolute top-0 start-0 w-100 h-100" style="background-color: rgba(0, 0, 0, 0.55); z-index: 1;"></div>
 
-      <div class="container" data-aos="fade-up" data-aos-delay="100">
-
-        <div class="row gy-5">
-          <div class="col-lg-6" data-aos="zoom-out" data-aos-delay="200">
-            <div class="faq-contact-card">
-              <div class="card-icon">
-                <i class="bi bi-question-circle"></i>
-              </div>
-              <div class="card-content">
-                <h3>Still Have Questions?</h3>
-                <p>Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec velit neque, auctor sit amet aliquam vel, ullamcorper sit amet ligula. Vestibulum ac diam sit amet quam vehicula elementum.</p>
-                <div class="contact-options">
-                  <a href="#" class="contact-option">
-                    <i class="bi bi-envelope"></i>
-                    <span>Email Support</span>
-                  </a>
-                  <a href="#" class="contact-option">
-                    <i class="bi bi-chat-dots"></i>
-                    <span>Live Chat</span>
-                  </a>
-                  <a href="#" class="contact-option">
-                    <i class="bi bi-telephone"></i>
-                    <span>Call Us</span>
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="300">
-            <div class="faq-accordion">
-              <div class="faq-item faq-active">
-                <div class="faq-header">
-                  <h3>Vivamus suscipit tortor eget felis porttitor volutpat?</h3>
-                  <i class="bi bi-chevron-down faq-toggle"></i>
-                </div>
-                <div class="faq-content">
-                  <p>
-                    Nulla quis lorem ut libero malesuada feugiat. Vestibulum ac diam sit amet quam vehicula elementum sed sit amet dui. Curabitur aliquet quam id dui posuere blandit. Nulla porttitor accumsan tincidunt.
-                  </p>
-                </div>
-              </div><!-- End FAQ Item-->
-
-              <div class="faq-item" data-aos="zoom-in" data-aos-delay="200">
-                <div class="faq-header">
-                  <h3>Curabitur aliquet quam id dui posuere blandit?</h3>
-                  <i class="bi bi-chevron-down faq-toggle"></i>
-                </div>
-                <div class="faq-content">
-                  <p>
-                    Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec velit neque, auctor sit amet aliquam vel, ullamcorper sit amet ligula. Proin eget tortor risus. Mauris blandit aliquet elit, eget tincidunt nibh pulvinar.
-                  </p>
-                </div>
-              </div><!-- End FAQ Item-->
-
-              <div class="faq-item">
-                <div class="faq-header">
-                  <h3>Sed porttitor lectus nibh ullamcorper sit amet?</h3>
-                  <i class="bi bi-chevron-down faq-toggle"></i>
-                </div>
-                <div class="faq-content">
-                  <p>
-                    Curabitur non nulla sit amet nisl tempus convallis quis ac lectus. Praesent sapien massa, convallis a pellentesque nec, egestas non nisi. Donec sollicitudin molestie malesuada. Vestibulum ac diam sit amet quam vehicula elementum.
-                  </p>
-                </div>
-              </div><!-- End FAQ Item-->
-
-              <div class="faq-item">
-                <div class="faq-header">
-                  <h3>Nulla quis lorem ut libero malesuada feugiat?</h3>
-                  <i class="bi bi-chevron-down faq-toggle"></i>
-                </div>
-                <div class="faq-content">
-                  <p>
-                    Donec sollicitudin molestie malesuada. Quisque velit nisi, pretium ut lacinia in, elementum id enim. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec velit neque, auctor sit amet aliquam vel.
-                  </p>
-                </div>
-              </div><!-- End FAQ Item-->
-            </div>
-          </div>
-        </div>
-
+  <div class="container position-relative" style="z-index: 2;">
+    <div class="row justify-content-start align-items-center min-vh-50 py-5">
+      <div class="col-lg-8 col-md-10">
+        <h2 class="fw-bold display-5 mb-4">Garis Besar Tentang TOEIC</h2>
+        <p class="fs-5 mb-4">
+          TOEIC (Test of English for International Communication) adalah tes standar global yang mengukur kemampuan
+          bahasa Inggris dalam konteks profesional dan bisnis.
+        </p>
+        <a href="#tentang-toeic" class="btn btn-light fw-semibold rounded-pill px-4 py-2">
+          Lebih Lanjut Tentang TOEIC
+        </a>
       </div>
-
-    </section>
-<!-- /Faq Section -->
+    </div>
+  </div>
+</section>

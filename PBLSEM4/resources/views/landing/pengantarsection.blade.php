@@ -58,7 +58,7 @@
 <body>
 
 <!-- Call To Action 2 Section -->
-<section id="call-to-action-2" class="py-5">
+<section id="Fitur" id="call-to-action-2" class="py-5">
   <div class="container" data-aos="fade-up" data-aos-delay="100">
 
     <div class="text-center mb-5">
