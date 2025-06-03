@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
+  use Barryvdh\DomPDF\Facade\Pdf;
 
 use Illuminate\Http\Request;
 
@@ -575,6 +576,20 @@ class UserController extends Controller
             return redirect()->back()->with('error', 'Gagal mengupload foto: ' . $e->getMessage());
         }
     }
+
+
+    public function export_pdf()
+    {
+        $users = UserModel::select('email', 'username', 'profile', 'role', 'admin_id', 'mahasiswa_id', 'dosen_id', 'tendik_id')
+            ->orderBy('user_id')
+            ->get();
+
+        $pdf = Pdf::loadView('user.export_pdf', compact('users'))
+            ->setPaper('A4', 'landscape');
+
+        return $pdf->download('Data_User_' . date('Y-m-d_H-i-s') . '.pdf');
+    }
+
 
 
 
