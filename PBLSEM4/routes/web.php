@@ -49,6 +49,11 @@ Route::post('/register', [AuthController::class, 'postRegister']);
 // Grup rute yang butuh autentikasi
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('home');
+    // --- Tambahkan Route ini untuk Server-Sent Events (SSE) ---
+    // Tidak ada middleware otorisasi tambahan di sini.
+    // Otorisasi akan ditangani di dalam method chartDataStream().
+    Route::get('/dashboard/chart-stream', [DashboardController::class, 'chartDataStream'])
+        ->name('dashboard.chart.stream');
 
     Route::get('/profile', [UserController::class, 'profile'])->name('profile');
     Route::post('/profile/update-photo', [UserController::class, 'updatePhoto'])->name('profile.updatePhoto');
