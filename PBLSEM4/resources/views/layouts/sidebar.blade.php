@@ -218,6 +218,7 @@
             @endif
             @endauth
 
+
             @auth
                 @if(Auth::user()->role == 'admin')
                     <li class="nav-item mt-1">
@@ -260,6 +261,17 @@
                         </a>
                     </li>
                 @endif
+            @endauth
+
+            @auth
+            @if(Auth::user()->role == 'mahasiswa')
+            <li class="nav-item mt-1">
+                <a href="{{ url('/riwayatPeserta') }}" class="nav-link {{ ($activeMenu == 'riwayatPeserta') ? 'active' : '' }}">
+                    <i class="nav-icon fas fa-file-excel"></i>
+                    <p>Riwayat Pendaftaran</p>
+                </a>
+            </li>
+            @endif
             @endauth
 
             @auth
