@@ -102,7 +102,7 @@ class DashboardController extends Controller
             'jumlah_tidak_lolos',
             'user',
             'dataPendaftarPerBulan',
-              'informasi'
+            'informasi'
 
         ));
     }
