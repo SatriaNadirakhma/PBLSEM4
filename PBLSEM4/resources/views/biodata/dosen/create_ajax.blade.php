@@ -49,8 +49,17 @@
                     <small id="error-jenis_kelamin" class="error-text text-danger"></small>
                 </div>
                 <div class="form-group">
-                    <label>Jurusan ID</label>
-                    <input type="number" name="jurusan_id" id="jurusan_id" class="form-control" required>
+                    <label>Jurusan</label>
+                   <select name="jurusan" id="jurusan" class="form-control" required>
+                        <option value="">Pilih</option>
+                        <option value="AN">Administrasi Niaga</option>
+                        <option value="Akuntansi">Akuntansi</option>
+                        <option value="Kimia">Teknik Kimia</option>
+                        <option value="Sipil">Teknik Sipil</option>
+                        <option value="Mesin">Teknik Mesin</option>
+                        <option value="TI">Teknologi Informasi</option>
+                        <option value="Elektro">Teknik Elektro</option>
+                    </select>
                     <small id="error-jurusan_id" class="error-text text-danger"></small>
                 </div>
             </div>
