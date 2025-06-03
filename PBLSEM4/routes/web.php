@@ -24,6 +24,7 @@ use App\Http\Controllers\VerifikasiPendaftaranController;
 use App\Http\Controllers\DataDiriController;
 use App\Http\Controllers\KirimPesanController;
 use App\Http\Controllers\HasilPesertaController;
+use App\Http\Controllers\RiwayatPesertaController;
 use App\Http\Controllers\KirimEmailController;
 use Illuminate\Http\Request;
 
@@ -250,8 +251,13 @@ Route::middleware(['auth'])->group(function () {
 
     });
 
-    
+    //Rute Riwayat Peserta
+    Route::prefix('riwayatPeserta')->group(function () {
+        Route::get('/', [RiwayatPesertaController::class, 'index'])->name('riwayatPeserta.index');
+        Route::get('/{id}', [RiwayatPesertaController::class, 'show'])->name('riwayatPeserta.show');
 
+    });
+    
     // Rute detail pendaftaran  
     Route::prefix('detail_pendaftaran')->group(function () {
         Route::get('/', [DetailPendaftaranController::class, 'index']);
