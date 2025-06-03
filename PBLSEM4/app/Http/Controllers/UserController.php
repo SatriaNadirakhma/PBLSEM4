@@ -13,6 +13,9 @@ use Illuminate\Support\Facades\Validator;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 
 use Illuminate\Http\Request;
 
@@ -436,6 +439,77 @@ class UserController extends Controller
             'status' => false,
             'message' => 'Akses tidak diizinkan'
         ]);
+    }
+
+    public function export_excel()
+    {
+        $users = UserModel::select('email', 'username', 'profile', 'role', 'admin_id', 'mahasiswa_id', 'dosen_id', 'tendik_id')
+            ->orderBy('user_id')
+            ->get();
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        // Header kolom
+        $sheet->setCellValue('A1', 'No');
+        $sheet->setCellValue('B1', 'Email');
+        $sheet->setCellValue('C1', 'Username');
+        $sheet->setCellValue('D1', 'Profile');
+        $sheet->setCellValue('E1', 'Role');
+        $sheet->setCellValue('F1', 'Admin ID');
+        $sheet->setCellValue('G1', 'Mahasiswa ID');
+        $sheet->setCellValue('H1', 'Dosen ID');
+        $sheet->setCellValue('I1', 'Tendik ID');
+
+        $sheet->getStyle('A1:I1')->getFont()->setBold(true);
+
+        // Isi data
+        $no = 1;
+        $row = 2;
+        foreach ($users as $user) {
+            $sheet->setCellValue('A' . $row, $no++);
+            $sheet->setCellValue('B' . $row, $user->email);
+            $sheet->setCellValue('C' . $row, $user->username);
+
+            // Tambahkan gambar profil
+            if ($user->profile && file_exists(public_path('storage/' . $user->profile))) {
+                $drawing = new Drawing();
+                $drawing->setPath(public_path('storage/' . $user->profile));
+                $drawing->setHeight(40); // Atur tinggi gambar
+                $drawing->setCoordinates('D' . $row);
+                $drawing->setOffsetX(5);
+                $drawing->setOffsetY(5);
+                $drawing->setWorksheet($sheet);
+                $sheet->getRowDimension($row)->setRowHeight(45); // Sesuaikan tinggi baris
+            } else {
+                $sheet->setCellValue('D' . $row, 'No Image');
+            }
+
+            $sheet->setCellValue('E' . $row, $user->role);
+            $sheet->setCellValue('F' . $row, $user->admin_id);
+            $sheet->setCellValue('G' . $row, $user->mahasiswa_id);
+            $sheet->setCellValue('H' . $row, $user->dosen_id);
+            $sheet->setCellValue('I' . $row, $user->tendik_id);
+
+            $row++;
+        }
+
+        // Auto-size kolom (kecuali D karena gambar)
+        foreach (['A', 'B', 'C', 'E', 'F', 'G', 'H', 'I'] as $col) {
+            $sheet->getColumnDimension($col)->setAutoSize(true);
+        }
+
+        $sheet->setTitle('Data User');
+
+        $filename = 'Data_User_' . date('Y-m-d_H-i-s') . '.xlsx';
+
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="' . $filename . '"');
+        header('Cache-Control: max-age=0');
+
+        $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
+        $writer->save('php://output');
+        exit;
     }
 
     public function profile() 
