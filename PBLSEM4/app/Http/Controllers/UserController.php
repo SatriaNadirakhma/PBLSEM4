@@ -10,6 +10,7 @@ use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 
@@ -353,6 +354,88 @@ class UserController extends Controller
                 'message' => 'Gagal menghapus user: ' . $e->getMessage()
             ]);
         }
+    }
+
+    // Menampilkan form import tendik
+    public function import()
+    {
+        return view('user.import');
+    }
+
+    // Import data tendik dari file Excel via AJAX
+    public function import_ajax(Request $request)
+    {
+        if ($request->ajax() || $request->wantsJson()) {
+            $validator = Validator::make($request->all(), [
+                'file_user' => ['required', 'file', 'mimes:xlsx', 'max:1024']
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Validasi gagal',
+                    'errors' => $validator->errors()
+                ]);
+            }
+
+            try {
+                $file = $request->file('file_user');
+                $reader = IOFactory::createReader('Xlsx');
+                $reader->setReadDataOnly(true);
+                $spreadsheet = $reader->load($file->getRealPath());
+                $sheet = $spreadsheet->getActiveSheet();
+                $rows = $sheet->toArray(null, false, true, true);
+
+                $insertData = [];
+
+                foreach ($rows as $index => $row) {
+                    if ($index === 1) continue; // lewati header
+
+                    // Pastikan email dan username minimal terisi
+                    if (!isset($row['A'], $row['B'], $row['C'])) continue;
+
+                    $insertData[] = [
+                        'email'       => $row['A'], // misalnya kolom A = email
+                        'username'    => $row['B'], // kolom B = username
+                        'password'    => Hash::make($row['C']), // kolom C = password
+                        'profile'     => $row['D'] ?? null,     // kolom D = profile (opsional)
+                        'role'        => $row['E'] ?? 'mahasiswa', // kolom E = role (default mahasiswa)
+                        'admin_id'    => $row['F'] ?? null,
+                        'mahasiswa_id'=> $row['G'] ?? null,
+                        'dosen_id'    => $row['H'] ?? null,
+                        'tendik_id'   => $row['I'] ?? null,
+                        'created_at'  => now(),
+                        'updated_at'  => now(),
+                    ];
+                }
+
+                if (count($insertData) > 0) {
+                    UserModel::insertOrIgnore($insertData);
+                    return response()->json([
+                        'status' => true,
+                        'message' => 'Data user berhasil diimport',
+                        'jumlah' => count($insertData)
+                    ]);
+                }
+
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Tidak ada data valid yang ditemukan'
+                ]);
+
+            } catch (\Exception $e) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Terjadi error saat membaca file',
+                    'error' => $e->getMessage()
+                ]);
+            }
+        }
+
+        return response()->json([
+            'status' => false,
+            'message' => 'Akses tidak diizinkan'
+        ]);
     }
 
     public function profile() 

@@ -1,9 +1,9 @@
-<form action="{{ url('/jurusan/import_ajax') }}" method="POST" id="form-import-jurusan" enctype="multipart/form-data">
+<form action="{{ url('/user/import_ajax') }}" method="POST" id="form-import-user" enctype="multipart/form-data">
     @csrf
-    <div id="modal-import-jurusan" class="modal-dialog modal-lg" role="document">
+    <div id="modal-import-user" class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Import Data Jurusan</h5>
+                <h5 class="modal-title">Import Data User</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -11,15 +11,15 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label>Download Template</label>
-                    <a href="{{ asset('template_jurusan.xlsx') }}" class="btn btn-info btn-sm" download>
+                    <a href="{{ asset('template_user.xlsx') }}" class="btn btn-info btn-sm" download>
                         <i class="fa fa-file-excel"></i> Download
                     </a>
                     <small id="error-template" class="error-text form-text text-danger"></small>
                 </div>
                 <div class="form-group">
                     <label>Pilih File</label>
-                    <input type="file" name="file_jurusan" id="file_jurusan" class="form-control" required>
-                    <small id="error-file_jurusan" class="error-text form-text text-danger"></small>
+                    <input type="file" name="file_user" id="file_user" class="form-control" required>
+                    <small id="error-file_user" class="error-text form-text text-danger"></small>
                 </div>
             </div>
             <div class="modal-footer">
@@ -32,9 +32,9 @@
 
 <script>
 $(document).ready(function() {
-    $("#form-import-jurusan").validate({
+    $("#form-import-user").validate({
         rules: {
-            file_jurusan: {
+            file_user: {
                 required: true,
                 extension: "xlsx"
             },
@@ -50,13 +50,13 @@ $(document).ready(function() {
                 contentType: false,
                 success: function(response) {
                     if(response.status) {
-                        $('#modal-import-jurusan').modal('hide');
+                        $('#modal-import-user').modal('hide');
                         Swal.fire({
                             icon: 'success',
                             title: 'Berhasil',
                             text: response.message
                         });
-                        tableJurusan.ajax.reload(); // pastikan DataTable kamu bernama tableJurusan
+                        tableuser.ajax.reload(); // pastikan DataTable kamu bernama tableuser
                     } else {
                         $('.error-text').text('');
                         $.each(response.msgField, function(prefix, val) {
