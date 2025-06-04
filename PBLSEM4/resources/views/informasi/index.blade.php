@@ -1,5 +1,19 @@
 @extends('layouts.template')
 
+@push('css')
+    <style>
+    /* Pastikan semua dialog dan popover TinyMCE muncul di atas Bootstrap modal */
+    .tox.tox-silver-sink {
+        z-index: 2000 !important;
+        position: absolute !important;
+        pointer-events: auto !important;
+    }
+    .tox .tox-dialog {
+        pointer-events: auto !important;
+    }
+    </style>
+@endpush
+
 @section('content')
     <div class="card card-outline card-primary shadow-sm">
         <div class="card-header">
@@ -75,19 +89,22 @@
             $('#myModal').load(url, function () {
                 $('#myModal').modal('show');
 
-                // >>> INI ADALAH BAGIAN KRUSIAL UNTUK INISIALISASI TINYMCE <<<
-                // Inisialisasi TinyMCE setelah konten modal berhasil dimuat
-                tinymce.init({
-                    selector: '#isi', // TinyMCE akan diterapkan pada textarea dengan ID 'isi'
+                // Pastikan TinyMCE didestroy dulu jika sudah ada instance,
+                // sebelum diinisialisasi ulang
+                if (tinymce.get('isi')) {
+                    tinymce.get('isi').destroy();
+                }
+
+               tinymce.init({
+                    selector: '#isi',
                     plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
-                    toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bulllist indent outdent | emoticons charmap | removeformat',
-                    height: 300, // Anda bisa sesuaikan tinggi editor
-                    menubar: false, // Menghilangkan menu bar
-                    api_key: 'YOUR_API_KEY', // Pastikan API Key di sini juga
-                    // Tambahkan setup ini jika ada masalah rendering awal
+                    toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
+                    height: 300,
+                    menubar: false,
+                    modal: false,
+                    api_key: 'eu6v750ytcjw7d6oof3b013nk02tbwqkumu8zv5s7n9nsu5b',
                     setup: function (editor) {
                         editor.on('init', function () {
-                            // Ini akan memastikan editor terlihat benar setelah inisialisasi
                             editor.execCommand('mceRepaint');
                         });
                     }
@@ -136,5 +153,6 @@
                 $(this).html('');
             });
         });
+        $.fn.modal.Constructor.prototype._enforceFocus = function() {};
     </script>
 @endpush
