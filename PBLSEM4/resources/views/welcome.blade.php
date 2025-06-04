@@ -53,6 +53,206 @@
         }
     }
 
+    /* DASHBOARD PESERTA */
+    /* Main container styling */
+    .info-section {
+        background: linear-gradient(135deg, #f8f9ff 0%, #e8f2ff 100%);
+        border-radius: 20px;
+        padding: 2rem;
+        margin-top: 2rem;
+        box-shadow: 0 10px 30px rgba(0, 123, 255, 0.1);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .info-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #007bff, #0056b3, #007bff);
+        background-size: 200% 100%;
+        animation: gradient-shift 3s ease infinite;
+    }
+
+     /* Header styling */
+    .section-header {
+        text-align: center;
+        margin-bottom: 2.5rem;
+        animation: fadeInUp 0.8s ease-out;
+    }
+
+    .section-title {
+        font-size: 2.2rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #007bff, #0056b3);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 0.5rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .section-subtitle {
+        color: #6c757d;
+        font-size: 1.1rem;
+        font-weight: 400;
+    }
+
+    /* Card styling */
+    .info-card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 8px 25px rgba(0, 123, 255, 0.08);
+        border: none;
+        margin-bottom: 1.5rem;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .info-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 5px;
+        height: 100%;
+        background: linear-gradient(180deg, #007bff, #0056b3);
+    }
+
+    .info-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 35px rgba(0, 123, 255, 0.15);
+    }
+
+    .card-body-custom {
+        padding: 2rem;
+        position: relative;
+        z-index: 2;
+    }
+
+    /* Title styling */
+    .info-title {
+        background: linear-gradient(135deg, #007bff, #0056b3);
+        color: white;
+        padding: 12px 20px;
+        border-radius: 50px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-size: 1rem;
+        display: inline-flex;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .info-title::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+        transition: left 0.5s ease;
+    }
+
+    .info-card:hover .info-title::before {
+        left: 100%;
+    }
+
+    .info-title i {
+        margin-right: 8px;
+        font-size: 1.1rem;
+    }
+
+    /* Content styling */
+    .info-content {
+        color: #495057;
+        font-size: 1.15rem;
+        line-height: 1.6;
+        margin: 0;
+        font-weight: 400;
+    }
+
+    /* Empty state styling */
+    .empty-state {
+        text-align: center;
+        background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+        border: none;
+        border-radius: 16px;
+        padding: 3rem 2rem;
+        box-shadow: 0 8px 25px rgba(255, 193, 7, 0.1);
+        animation: pulse 2s infinite;
+    }
+
+    .empty-state i {
+        font-size: 3rem;
+        color: #856404;
+        margin-bottom: 1rem;
+        display: block;
+    }
+
+    .empty-state-text {
+        color: #856404;
+        font-size: 1.2rem;
+        font-weight: 500;
+        margin: 0;
+    }
+
+    /* Animation classes */
+    .animate-card {
+        animation: slideInLeft 0.8s ease-out backwards;
+    }
+
+    /* Responsive design */
+    @media (max-width: 768px) {
+        .section-title {
+            font-size: 1.8rem;
+        }
+        
+        .info-section {
+            padding: 1.5rem;
+            margin-top: 1rem;
+        }
+        
+        .card-body-custom {
+            padding: 1.5rem;
+        }
+        
+        .info-title {
+            font-size: 0.9rem;
+            padding: 10px 16px;
+        }
+        
+        .info-content {
+            font-size: 1rem;
+        }
+    }
+
+    /* Additional enhancements */
+    .icon-bounce {
+        animation: bounce 2s infinite;
+    }
+
+    .welcome-section {
+        animation: slideInLeft 0.8s ease-out 0.2s backwards;
+    }
+    .bg-gradient-primary {
+        background: linear-gradient(135deg, #007bff, #0056b3);
+    }
+
     /* Dashboard Card Styling */
     .dashboard-card {
         background: white;
@@ -576,7 +776,36 @@
         .chart-body {  
             padding: 1rem;  
         }  
-    }  
+    }
+    
+    /* Animation keyframes */
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes slideInLeft {
+        from {
+            opacity: 0;
+            transform: translateX(-30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    @keyframes gradient-shift {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
 @endpush
@@ -589,7 +818,7 @@
                 <div class="dashboard-icon">
                     <i class="fas fa-tachometer-alt"></i>
                 </div>
-                <h3 class="dashboard-title">Dashboard Admin</h3>
+                <h3 class="dashboard-title">Dashboard</h3>
             </div>
             <div class="header-decoration"></div>
         </div>
