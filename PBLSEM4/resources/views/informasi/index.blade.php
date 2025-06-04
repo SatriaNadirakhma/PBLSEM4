@@ -60,14 +60,38 @@
         </div>
     </div>
 
+    {{-- Placeholder untuk modal yang dimuat via AJAX --}}
     <div id="myModal" class="modal fade animate shake" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" data-width="75%" aria-hidden="true"></div>
 @endsection
 
 @push('js')
+    {{-- Pastikan TinyMCE CDN dimuat sekali di sini --}}
+    {{-- Ganti YOUR_API_KEY dengan API Key TinyMCE Anda yang sebenarnya --}}
+    <script src="https://cdn.tiny.cloud/1/eu6v750ytcjw7d6oof3b013nk02tbwqkumu8zv5s7n9nsu5b/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+
     <script>
+        // Fungsi untuk memuat konten modal dan menginisialisasi TinyMCE
         function modalAction(url = '') {
             $('#myModal').load(url, function () {
                 $('#myModal').modal('show');
+
+                // >>> INI ADALAH BAGIAN KRUSIAL UNTUK INISIALISASI TINYMCE <<<
+                // Inisialisasi TinyMCE setelah konten modal berhasil dimuat
+                tinymce.init({
+                    selector: '#isi', // TinyMCE akan diterapkan pada textarea dengan ID 'isi'
+                    plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
+                    toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bulllist indent outdent | emoticons charmap | removeformat',
+                    height: 300, // Anda bisa sesuaikan tinggi editor
+                    menubar: false, // Menghilangkan menu bar
+                    api_key: 'YOUR_API_KEY', // Pastikan API Key di sini juga
+                    // Tambahkan setup ini jika ada masalah rendering awal
+                    setup: function (editor) {
+                        editor.on('init', function () {
+                            // Ini akan memastikan editor terlihat benar setelah inisialisasi
+                            editor.execCommand('mceRepaint');
+                        });
+                    }
+                });
             });
         }
 
@@ -83,16 +107,33 @@
                         d._token = '{{ csrf_token() }}';
                     }
                 },
-                columns: [
+                 columns: [
                     { data: "DT_RowIndex", className: "text-center", orderable: false, searchable: false },
                     { data: "judul", className: "text-nowrap" },
-                    { data: "isi", className: "text-wrap" },
+                    { 
+                        data: "isi", 
+                        className: "text-wrap",
+                        render: function(data, type, row) {
+                            return data; // Mengembalikan data mentah (HTML)
+                        }
+                    },
                     { data: "aksi", className: "text-center text-nowrap", orderable: false, searchable: false }
                 ]
             });
 
             $('#searchInput').on('keyup', function () {
                 dataInformasi.ajax.reload();
+            });
+
+            // Event listener saat modal ditutup, untuk menghancurkan instance TinyMCE
+            // Ini penting karena konten modal dimuat secara dinamis
+            $('#myModal').on('hidden.bs.modal', function () {
+                // Hapus instance TinyMCE dari elemen '#isi'
+                if (tinymce.get('isi')) {
+                    tinymce.get('isi').destroy();
+                }
+                // Opsional: kosongkan konten modal untuk mencegah duplikasi ID jika modal dibuka lagi
+                $(this).html('');
             });
         });
     </script>

@@ -1014,7 +1014,7 @@
                                 <i class="fas fa-info-circle"></i>
                                 {{ $item->judul }}
                             </div>
-                            <p class="info-content">{{ $item->isi }}</p>
+                            <p class="info-content">{!! $item->isi !!}</p>
                         </div>
                     </div>
                 @empty

@@ -60,7 +60,7 @@ class InformasiController extends Controller
                         </button>';
                 return $btn;
             })
-            ->rawColumns(['aksi']) // Memberitahu bahwa kolom aksi adalah HTML
+            ->rawColumns(['aksi', 'isi']) // Memberitahu bahwa kolom aksi dan isi adalah HTML
             ->make(true);
     }
 
@@ -77,7 +77,7 @@ class InformasiController extends Controller
         if ($request->ajax() || $request->wantsJson()) {
             $rules = [
                 'judul' => 'required|string|max:255',
-                'isi' => 'required|string|max:1000',
+                'isi' => 'required|string|max:5000',
                 'create_at' => now(),
                 'updated_at' => now(),
             ];
@@ -170,8 +170,8 @@ class InformasiController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'judul' => 'required|min:3|max:20',
-            'isi' => 'required|min:3|max:100',
+            'judul' => 'required|min:3|max:255',
+            'isi' => 'required|min:3|max:5000',
             'updated_at' => now(),
         ]);
 
