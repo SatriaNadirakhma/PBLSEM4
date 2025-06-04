@@ -997,7 +997,7 @@
                 </div>
             @endif
 
-        @if($role === 'mahasiswa')
+        @if(in_array($role, ['mahasiswa', 'dosen', 'tendik']))
             <div class="info-section">
                 <div class="section-header" style="text-align: center;">
                     <h2 class="section-title" style="display: inline-block;">

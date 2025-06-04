@@ -84,7 +84,7 @@ class DashboardController extends Controller
 
         $informasi = collect(); // Default kosong
 
-        if ($user && $user->role === 'mahasiswa') {
+        if ($user && in_array($user->role, ['mahasiswa', 'dosen', 'tendik'])) {
             $informasi = InformasiModel::latest()->get(); // ambil semua informasi, urutkan terbaru dulu
         }
 
