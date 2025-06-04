@@ -226,67 +226,120 @@ class MahasiswaController extends Controller
     }
 
 
-public function import()
-{
-    return view('biodata.mahasiswa.import'); // Ganti view-nya ke mahasiswa
-}
+    public function import()
+    {
+        return view('biodata.mahasiswa.import'); // Ganti view-nya ke mahasiswa
+    }
 
-public function import_ajax(Request $request)
-{
-    if ($request->ajax()) {
-        $rules = [
-            'file_mahasiswa' => ['required', 'mimes:xlsx', 'max:1024']
-        ];
+    public function import_ajax(Request $request)
+    {
+        if ($request->ajax()) {
+            $rules = [
+                'file_mahasiswa' => 'required|mimes:xlsx,xls|max:2048'
+            ];
 
-        $validator = Validator::make($request->all(), $rules);
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Validasi Gagal',
-                'msgField' => $validator->errors()
-            ]);
-        }
+            $validator = Validator::make($request->all(), $rules);
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Validasi Gagal',
+                    'msgField' => $validator->errors()
+                ]);
+            }
 
-        $file = $request->file('file_mahasiswa');
-        $reader = IOFactory::createReader('Xlsx');
-        $reader->setReadDataOnly(true);
-        $spreadsheet = $reader->load($file->getRealPath());
-        $sheet = $spreadsheet->getActiveSheet();
-        $data = $sheet->toArray(null, false, true, true);
+            try {
+                $file = $request->file('file_mahasiswa');
 
-        $insert = [];
-        foreach ($data as $rowNumber => $row) {
-            if ($rowNumber > 1) {
-                $insert[] = [
-                    'nim' => $row['A'],
-                    'nik' => $row['B'],
-                    'nama_mahasiswa' => $row['C'],
-                    'no_telp' => $row['D'],
-                    'alamat_asal' => $row['E'],
-                    'alamat_sekarang' => $row['F'],
-                    'jenis_kelamin' => $row['G'],
-                    'jurusan_id' => $row['H'],
-                    'created_at' => now(),
-                ];
+                // Deteksi tipe file secara otomatis
+                $reader = IOFactory::createReaderForFile($file->getRealPath());
+                $reader->setReadDataOnly(true);
+                $spreadsheet = $reader->load($file->getRealPath());
+                $sheet = $spreadsheet->getActiveSheet();
+                $data = $sheet->toArray(null, false, true, true);
+
+                $insert = [];
+                $errors = [];
+
+                foreach ($data as $rowNumber => $row) {
+                    if ($rowNumber > 1) { // Lewati baris header (baris 1)
+
+                        // Abaikan baris kosong total
+                        if (collect($row)->filter(fn($val) => trim($val) !== '')->isEmpty()) {
+                            continue;
+                        }
+
+                        // Ambil dan bersihkan nilai
+                        $nim  = trim($row['A'] ?? '');
+                        $nik  = trim($row['B'] ?? '');
+                        $nama = trim($row['C'] ?? '');
+
+                        if ($nim === '' || $nik === '' || $nama === '') {
+                            $errors[] = "Baris {$rowNumber}: NIM, NIK, dan Nama tidak boleh kosong";
+                            continue;
+                        }
+
+                        $insert[] = [
+                            'nim' => $nim,
+                            'nik' => $nik,
+                            'mahasiswa_nama' => $nama,
+                            'angkatan' => trim($row['D'] ?? ''),
+                            'no_telp' => trim($row['E'] ?? ''),
+                            'alamat_asal' => trim($row['F'] ?? ''),
+                            'alamat_sekarang' => trim($row['G'] ?? ''),
+                            'jenis_kelamin' => trim($row['H'] ?? ''),
+                            'status' => trim($row['I'] ?? ''),
+                            'keterangan' => trim($row['J'] ?? ''),
+                            'prodi_id' => trim($row['K'] ?? ''),
+                            'created_at' => now(),
+                            'updated_at' => now()
+                        ];
+                    }
+                }
+
+                if (!empty($errors)) {
+                    return response()->json([
+                        'status' => false,
+                        'message' => 'Ada data yang tidak valid: ' . implode(', ', $errors)
+                    ]);
+                }
+
+                if (count($insert) > 0) {
+                    try {
+                        MahasiswaModel::insert($insert);
+                        return response()->json([
+                            'status' => true,
+                            'message' => 'Data mahasiswa berhasil diimport'
+                        ]);
+                    } catch (\Illuminate\Database\QueryException $e) {
+                        // Jika terjadi duplikasi, gunakan insertOrIgnore
+                        MahasiswaModel::insertOrIgnore($insert);
+                        return response()->json([
+                            'status' => true,
+                            'message' => 'Data mahasiswa berhasil diimport (beberapa data duplikat dilewati)'
+                        ]);
+                    }
+                }
+
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Tidak ada data valid yang dapat diimport'
+                ]);
+            } catch (\PhpOffice\PhpSpreadsheet\Reader\Exception $e) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Error membaca file Excel: ' . $e->getMessage()
+                ]);
+            } catch (\Exception $e) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Terjadi kesalahan: ' . $e->getMessage()
+                ]);
             }
         }
 
-        if (count($insert) > 0) {
-            MahasiswaModel::insertOrIgnore($insert);
-            return response()->json([
-                'status' => true,
-                'message' => 'Data mahasiswa berhasil diimport'
-            ]);
-        }
-
-        return response()->json([
-            'status' => false,
-            'message' => 'Tidak ada data yang diimport'
-        ]);
+        return redirect('/');
     }
 
-    return redirect('/');
-}
 
 
     public function export_excel()

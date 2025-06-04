@@ -21,7 +21,9 @@
 
                     <div class="form-group">
                         <label>Pilih File Excel</label>
-                        <input type="file" name="file_mahasiswa" id="file_mahasiswa" class="form-control" accept=".xlsx" required>
+                        <input type="file" name="file_mahasiswa" id="file_mahasiswa" class="form-control"
+       accept=".xlsx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" required>
+
                         <small id="error-file_mahasiswa" class="error-text form-text text-danger"></small>
                     </div>
                 </div>
