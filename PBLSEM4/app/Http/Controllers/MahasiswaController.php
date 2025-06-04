@@ -404,10 +404,10 @@ class MahasiswaController extends Controller
 
     public function export_pdf()
     {
-        $mahasiswa = MahasiswaModel::with('prodi')->orderBy('mahasiswa_nama')->get();
+        $mahasiswa = MahasiswaModel::with('prodi')->orderBy('mahasiswa_id')->get();
 
         $pdf = Pdf::loadView('biodata.mahasiswa.export_pdf', ['mahasiswa' => $mahasiswa]);
-        $pdf->setPaper('a4', 'portrait');
+        $pdf->setPaper('a4', 'landscape');
         $pdf->setOption("isRemoteEnabled", true);
         $pdf->render();
 
