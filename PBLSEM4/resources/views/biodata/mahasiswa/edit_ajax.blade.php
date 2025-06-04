@@ -75,12 +75,15 @@
                 </div>
                 <div class="form-group">
                     <label>Status</label>
-                    <input value="{{ $mahasiswa->status }}" type="text" name="status" id="status" class="form-control">
+                    <select name="status" id="status" class="form-control">
+                        <option value="Aktif" {{ $mahasiswa->status == 'Aktif' ? 'selected' : '' }}>Aktif</option>
+                        <option value="Lulus" {{ $mahasiswa->status == 'Lulus' ? 'selected' : '' }}>Lulus</option>
+                    </select>
                     <small id="error-status" class="error-text form-text text-danger"></small>
                 </div>
                 <div class="form-group">
                     <label>Keterangan</label>
-                    <input value="{{ $mahasiswa->keterangan }}" type="text" name="keterangan" id="keterangan" class="form-control">
+                    <input value="{{ $mahasiswa->keterangan }}" type="text" name="keterangan" id="keterangan" class="form-control" readonly>
                     <small id="error-keterangan" class="error-text form-text text-danger"></small>
                 </div>
                 <div class="form-group">
