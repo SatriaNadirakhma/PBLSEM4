@@ -9,7 +9,7 @@
                 <button onclick="modalAction('{{ route('biodata.mahasiswa.import') }}')" class="btn btn-sm shadow-sm rounded-pill" style="background-color: #6f42c1; color: white;">
                     <i class="fa fa-upload me-1"></i> Import Excel
                 </button>
-                <a href="{{ url('/mahasiswa/export_excel') }}" class="btn btn-sm shadow-sm rounded-pill" style="background-color: #004085; color: white;">
+                <a href="{{ route('biodata.mahasiswa.export_excel') }}" class="btn btn-sm shadow-sm rounded-pill" style="background-color: #004085; color: white;">
                     <i class="fa fa-file-excel me-1"></i> Export Excel
                 </a>
                 <a href="{{ url('/mahasiswa/export_pdf') }}" class="btn btn-sm shadow-sm rounded-pill" style="background-color: #20c997; color: black;">

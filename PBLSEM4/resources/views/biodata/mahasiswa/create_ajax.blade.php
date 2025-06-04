@@ -39,6 +39,18 @@
                     <input type="text" name="no_telp" id="no_telp" class="form-control">
                     <small id="error-no_telp" class="error-text text-danger"></small>
                 </div>
+
+                <div class="form-group">
+                    <label>Alamat Asal</label>
+                    <textarea name="alamat_asal" id="alamat_asal" class="form-control" rows="3"></textarea>
+                    <small id="error-alamat_asal" class="error-text text-danger"></small>
+                </div>
+
+                <div class="form-group">
+                    <label>Alamat Sekarang</label>
+                    <textarea name="alamat_sekarang" id="alamat_sekarang" class="form-control" rows="3"></textarea>
+                    <small id="error-alamat_sekarang" class="error-text text-danger"></small>
+                </div>
                 
                 <div class="form-group">
                     <label>Jenis Kelamin</label>
@@ -101,6 +113,8 @@ $(document).ready(function() {
             mahasiswa_nama: { required: true, minlength: 3, maxlength: 100 },
             angkatan: { required: true, digits: true, minlength: 4, maxlength: 4 },
             no_telp: { required: false, digits: true, minlength: 10, maxlength: 15 },
+            alamat_asal: { required: true, maxlength: 255 },
+            alamat_sekarang: { required: true, maxlength: 255 },
             jenis_kelamin: { required: true },
             status: { required: true },
             keterangan: { required: true },

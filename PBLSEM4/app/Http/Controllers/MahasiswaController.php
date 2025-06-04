@@ -341,14 +341,13 @@ class MahasiswaController extends Controller
     }
 
 
-
     public function export_excel()
     {
         $mahasiswa = MahasiswaModel::select(
             'nim', 'nik', 'mahasiswa_nama', 'angkatan', 'no_telp',
             'alamat_asal', 'alamat_sekarang', 'jenis_kelamin',
             'status', 'keterangan')
-            ->orderBy('mahasiswa_nama')
+            ->orderBy('mahasiswa_id')
             ->get();
 
         $spreadsheet = new Spreadsheet();
@@ -365,8 +364,9 @@ class MahasiswaController extends Controller
         $sheet->setCellValue('I1', 'Jenis Kelamin');
         $sheet->setCellValue('J1', 'Status');
         $sheet->setCellValue('K1', 'Keterangan');
+        $sheet->setCellValue('L1', 'Prodi');
 
-        $sheet->getStyle('A1:K1')->getFont()->setBold(true);
+        $sheet->getStyle('A1:L1')->getFont()->setBold(true);
 
         $no = 1;
         $baris = 2;
@@ -382,10 +382,11 @@ class MahasiswaController extends Controller
             $sheet->setCellValue('I' . $baris, $value->jenis_kelamin);
             $sheet->setCellValue('J' . $baris, $value->status);
             $sheet->setCellValue('K' . $baris, $value->keterangan);
+            $sheet->setCellValue('K' . $baris, $value->prodi->prodi_nama ?? '-');
             $baris++;
         }
 
-        foreach (range('A', 'K') as $col) {
+        foreach (range('A', 'L') as $col) {
             $sheet->getColumnDimension($col)->setAutoSize(true);
         }
 
