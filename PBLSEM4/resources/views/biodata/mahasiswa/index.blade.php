@@ -15,7 +15,7 @@
                 <a href="{{ url('/mahasiswa/export_pdf') }}" class="btn btn-sm shadow-sm rounded-pill" style="background-color: #20c997; color: black;">
                     <i class="fa fa-file-pdf me-1"></i> Export PDF
                 </a>
-                <button onclick="modalAction('{{ url('/mahasiswa/create_ajax') }}')" class="btn btn-sm shadow-sm rounded-pill" style="background-color: #d63384; color: white;">
+                <button onclick="modalAction('{{ route('biodata.mahasiswa.create_ajax') }}')" class="btn btn-sm shadow-sm rounded-pill" style="background-color: #d63384; color: white;">
                     <i class="fa fa-plus-circle me-1"></i> Tambah
                 </button>
             </div>

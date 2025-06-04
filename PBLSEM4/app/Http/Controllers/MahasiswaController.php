@@ -75,24 +75,28 @@ class MahasiswaController extends Controller
     public function create_ajax()
     {
         $prodi = ProdiModel::all();
-        return view('biodata.mahasiswa.create_ajax', compact('prodi'));
+        
+        // Sesuai dengan ENUM di migration
+        $jenisKelaminEnum = ['Laki-laki', 'Perempuan'];
+        $statusEnum = ['aktif', 'alumni'];
+        $keteranganEnum = ['gratis', 'berbayar'];
+        
+        return view('biodata.mahasiswa.create_ajax', compact('prodi', 'jenisKelaminEnum', 'statusEnum', 'keteranganEnum'));
     }
 
     public function store_ajax(Request $request)
     {
         if ($request->ajax()|| $request->wantsJson()) {
             $rules = [
-                'nim' => 'required|string|max:20|unique:mahasiswa,nim',
-                'nik' => 'required|string|max:20',
+                'nim' => 'required|string|max:10|unique:mahasiswa,nim',
+                'nik' => 'required|string|max:16|unique:mahasiswa,nik',
                 'mahasiswa_nama' => 'required|string|max:100',
-                'angkatan' => 'required|integer',
-                'no_telp' => 'nullable|string',
-                'alamat_asal' => 'nullable|string',
-                'alamat_sekarang' => 'nullable|string',
-                'jenis_kelamin' => 'required|string',
-                'status' => 'required|string',
-                'keterangan' => 'nullable|string',
-                'prodi_id' => 'required|integer',
+                'angkatan' => 'required|string|max:4',
+                'no_telp' => 'nullable|string|max:15',
+                'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
+                'status' => 'required|in:aktif,alumni',
+                'keterangan' => 'required|in:gratis,berbayar',
+                'prodi_id' => 'required|integer|exists:prodi,prodi_id',
             ];
 
             $validator = Validator::make($request->all(), $rules);

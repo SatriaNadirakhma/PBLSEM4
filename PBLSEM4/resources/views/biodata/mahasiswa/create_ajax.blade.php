@@ -1,4 +1,4 @@
-<form action="{{ url('/biodata/mahasiswa/store_ajax') }}" method="POST" id="form-tambah-mahasiswa">
+<form action="{{ route('biodata.mahasiswa.store_ajax') }}" method="POST" id="form-tambah-mahasiswa">
     @csrf
     <div id="modal-master" class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -14,69 +14,68 @@
                     <input type="text" name="nim" id="nim" class="form-control" required>
                     <small id="error-nim" class="error-text text-danger"></small>
                 </div>
+
                 <div class="form-group">
                     <label>NIK</label>
                     <input type="text" name="nik" id="nik" class="form-control" required>
                     <small id="error-nik" class="error-text text-danger"></small>
                 </div>
+                
+                
                 <div class="form-group">
                     <label>Nama Mahasiswa</label>
                     <input type="text" name="mahasiswa_nama" id="mahasiswa_nama" class="form-control" required>
                     <small id="error-mahasiswa_nama" class="error-text text-danger"></small>
                 </div>
+                
                 <div class="form-group">
                     <label>Angkatan</label>
-                    <input type="text" name="angkatan" id="angkatan" class="form-control">
+                    <input type="text" name="angkatan" id="angkatan" class="form-control" required>
                     <small id="error-angkatan" class="error-text text-danger"></small>
                 </div>
+                
                 <div class="form-group">
                     <label>No Telp</label>
                     <input type="text" name="no_telp" id="no_telp" class="form-control">
                     <small id="error-no_telp" class="error-text text-danger"></small>
                 </div>
-                <div class="form-group">
-                    <label>Alamat Asal</label>
-                    <input type="text" name="alamat_asal" id="alamat_asal" class="form-control">
-                    <small id="error-alamat_asal" class="error-text text-danger"></small>
-                </div>
-                <div class="form-group">
-                    <label>Alamat Sekarang</label>
-                    <input type="text" name="alamat_sekarang" id="alamat_sekarang" class="form-control">
-                    <small id="error-alamat_sekarang" class="error-text text-danger"></small>
-                </div>
+                
                 <div class="form-group">
                     <label>Jenis Kelamin</label>
                     <select name="jenis_kelamin" id="jenis_kelamin" class="form-control" required>
                         <option value="">- Pilih Jenis Kelamin -</option>
-                        @foreach($mahasiswa as $m)
-                            <option value="{{ $m->jenis_kelamin }}">{{ $m->jenis_kelamin }}</option>
+                        @foreach($jenisKelaminEnum as $jk)
+                            <option value="{{ $jk }}">{{ $jk }}</option>
                         @endforeach
                     </select>
                     <small id="error-jenis_kelamin" class="error-text text-danger"></small>
                 </div>
+
                 <div class="form-group">
                     <label>Status</label>
                     <select name="status" id="status" class="form-control" required>
                         <option value="">- Pilih Status -</option>
-                        @foreach($mahasiswa as $m)
-                            <option value="{{ $m->status }}">{{ $m->status }}</option>
+                        @foreach($statusEnum as $status)
+                            <option value="{{ $status }}">{{ ucfirst($status) }}</option>
                         @endforeach
                     </select>
                     <small id="error-status" class="error-text text-danger"></small>
                 </div>
+
                 <div class="form-group">
                     <label>Keterangan</label>
                     <select name="keterangan" id="keterangan" class="form-control" required>
                         <option value="">- Pilih Keterangan -</option>
-                        @foreach($mahasiswa as $m)
-                            <option value="{{ $m->keterangan }}">{{ $m->keterangan }}</option>
+                        @foreach($keteranganEnum as $ket)
+                            <option value="{{ $ket }}">{{ ucfirst($ket) }}</option>
                         @endforeach
                     </select>
                     <small id="error-keterangan" class="error-text text-danger"></small>
                 </div>
+                
                 <div class="form-group">
-                    <label>Prodi</label>
-                    <select name="prodi" id="prodi" class="form-control" required>
+                    <label>Program Studi</label>
+                    <select name="prodi_id" id="prodi_id" class="form-control" required>
                         <option value="">- Pilih Program Studi -</option>
                         @foreach($prodi as $p)
                             <option value="{{ $p->prodi_id }}">{{ $p->prodi_nama }}</option>
@@ -97,13 +96,11 @@
 $(document).ready(function() {
     $("#form-tambah-mahasiswa").validate({
         rules: {
-            nim: { required: true, minlength: 3, maxlength: 20 },
-            nik: { required: true, minlength: 3, maxlength: 20 },
+            nim: { required: true, minlength: 10, maxlength: 10 },
+            nik: { required: true, minlength: 16, maxlength: 16 },
             mahasiswa_nama: { required: true, minlength: 3, maxlength: 100 },
             angkatan: { required: true, digits: true, minlength: 4, maxlength: 4 },
             no_telp: { required: false, digits: true, minlength: 10, maxlength: 15 },
-            alamat_asal: { required: false, minlength: 5, maxlength: 255 },
-            alamat_sekarang: { required: false, minlength: 5, maxlength: 255 },
             jenis_kelamin: { required: true },
             status: { required: true },
             keterangan: { required: true },
@@ -117,7 +114,7 @@ $(document).ready(function() {
                 dataType: 'json',
                 success: function(response) {
                     if (response.status) {
-                        $('#modal-master').modal('hide');
+                        $('#myModal').modal('hide');
                         Swal.fire({
                             icon: 'success',
                             title: 'Berhasil',
@@ -143,7 +140,8 @@ $(document).ready(function() {
                         });
                     }
                 },
-                error: function() {
+                error: function(xhr, status, error) {
+                    console.log('Error:', xhr.responseText);
                     Swal.fire({
                         icon: 'error',
                         title: 'Terjadi Kesalahan',
