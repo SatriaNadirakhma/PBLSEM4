@@ -157,7 +157,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/export_pdf', [TendikController::class, 'export_pdf'])->name('export_pdf');
     });
 
-    Route::prefix('biodata/mahasiswa')->name('biodata.mahasiswa.')->middleware(['auth', 'role:admin,mahasiswa'])->group(function () {
+Route::prefix('biodata/mahasiswa')->name('biodata.mahasiswa.')->middleware(['auth', 'role:admin,mahasiswa'])->group(function () {
     Route::get('/', [MahasiswaController::class, 'index'])->name('index');
     Route::get('/list', [MahasiswaController::class, 'list'])->name('list');
     Route::get('{id}/show_ajax', [MahasiswaController::class, 'show_ajax'])->name('show_ajax');

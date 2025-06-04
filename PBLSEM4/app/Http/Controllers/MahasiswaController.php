@@ -75,24 +75,28 @@ class MahasiswaController extends Controller
     public function create_ajax()
     {
         $prodi = ProdiModel::all();
-        return view('biodata.mahasiswa.create_ajax', compact('prodi'));
+        
+        // Sesuai dengan ENUM di migration
+        $jenisKelaminEnum = ['Laki-laki', 'Perempuan'];
+        $statusEnum = ['aktif', 'alumni'];
+        $keteranganEnum = ['gratis', 'berbayar'];
+        
+        return view('biodata.mahasiswa.create_ajax', compact('prodi', 'jenisKelaminEnum', 'statusEnum', 'keteranganEnum'));
     }
 
     public function store_ajax(Request $request)
     {
         if ($request->ajax()|| $request->wantsJson()) {
             $rules = [
-                'nim' => 'required|string|max:20|unique:mahasiswa,nim',
-                'nik' => 'required|string|max:20',
+                'nim' => 'required|string|max:10|unique:mahasiswa,nim',
+                'nik' => 'required|string|max:16|unique:mahasiswa,nik',
                 'mahasiswa_nama' => 'required|string|max:100',
-                'angkatan' => 'required|integer',
-                'no_telp' => 'nullable|string',
-                'alamat_asal' => 'nullable|string',
-                'alamat_sekarang' => 'nullable|string',
-                'jenis_kelamin' => 'required|string',
-                'status' => 'required|string',
-                'keterangan' => 'nullable|string',
-                'prodi_id' => 'required|integer',
+                'angkatan' => 'required|string|max:4',
+                'no_telp' => 'nullable|string|max:15',
+                'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
+                'status' => 'required|in:aktif,alumni',
+                'keterangan' => 'required|in:gratis,berbayar',
+                'prodi_id' => 'required|integer|exists:prodi,prodi_id',
             ];
 
             $validator = Validator::make($request->all(), $rules);
@@ -222,67 +226,119 @@ class MahasiswaController extends Controller
     }
 
 
-public function import()
-{
-    return view('biodata.mahasiswa.import'); // Ganti view-nya ke mahasiswa
-}
+    public function import()
+    {
+        return view('biodata.mahasiswa.import'); // Ganti view-nya ke mahasiswa
+    }
 
-public function import_ajax(Request $request)
-{
-    if ($request->ajax()) {
-        $rules = [
-            'file_mahasiswa' => ['required', 'mimes:xlsx', 'max:1024']
-        ];
+    public function import_ajax(Request $request)
+    {
+        if ($request->ajax()) {
+            $rules = [
+                'file_mahasiswa' => 'required|mimes:xlsx,xls|max:2048'
+            ];
 
-        $validator = Validator::make($request->all(), $rules);
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Validasi Gagal',
-                'msgField' => $validator->errors()
-            ]);
-        }
+            $validator = Validator::make($request->all(), $rules);
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Validasi Gagal',
+                    'msgField' => $validator->errors()
+                ]);
+            }
 
-        $file = $request->file('file_mahasiswa');
-        $reader = IOFactory::createReader('Xlsx');
-        $reader->setReadDataOnly(true);
-        $spreadsheet = $reader->load($file->getRealPath());
-        $sheet = $spreadsheet->getActiveSheet();
-        $data = $sheet->toArray(null, false, true, true);
+            try {
+                $file = $request->file('file_mahasiswa');
 
-        $insert = [];
-        foreach ($data as $rowNumber => $row) {
-            if ($rowNumber > 1) {
-                $insert[] = [
-                    'nim' => $row['A'],
-                    'nik' => $row['B'],
-                    'nama_mahasiswa' => $row['C'],
-                    'no_telp' => $row['D'],
-                    'alamat_asal' => $row['E'],
-                    'alamat_sekarang' => $row['F'],
-                    'jenis_kelamin' => $row['G'],
-                    'jurusan_id' => $row['H'],
-                    'created_at' => now(),
-                ];
+                // Deteksi tipe file secara otomatis
+                $reader = IOFactory::createReaderForFile($file->getRealPath());
+                $reader->setReadDataOnly(true);
+                $spreadsheet = $reader->load($file->getRealPath());
+                $sheet = $spreadsheet->getActiveSheet();
+                $data = $sheet->toArray(null, false, true, true);
+
+                $insert = [];
+                $errors = [];
+
+                foreach ($data as $rowNumber => $row) {
+                    if ($rowNumber > 1) { // Lewati baris header (baris 1)
+
+                        // Abaikan baris kosong total
+                        if (collect($row)->filter(fn($val) => trim($val) !== '')->isEmpty()) {
+                            continue;
+                        }
+
+                        // Ambil dan bersihkan nilai
+                        $nim  = trim($row['A'] ?? '');
+                        $nik  = trim($row['B'] ?? '');
+                        $nama = trim($row['C'] ?? '');
+
+                        if ($nim === '' || $nik === '' || $nama === '') {
+                            $errors[] = "Baris {$rowNumber}: NIM, NIK, dan Nama tidak boleh kosong";
+                            continue;
+                        }
+
+                        $insert[] = [
+                            'nim' => $nim,
+                            'nik' => $nik,
+                            'mahasiswa_nama' => $nama,
+                            'angkatan' => trim($row['D'] ?? ''),
+                            'no_telp' => trim($row['E'] ?? ''),
+                            'alamat_asal' => trim($row['F'] ?? ''),
+                            'alamat_sekarang' => trim($row['G'] ?? ''),
+                            'jenis_kelamin' => trim($row['H'] ?? ''),
+                            'status' => trim($row['I'] ?? ''),
+                            'keterangan' => trim($row['J'] ?? ''),
+                            'prodi_id' => trim($row['K'] ?? ''),
+                            'created_at' => now(),
+                            'updated_at' => now()
+                        ];
+                    }
+                }
+
+                if (!empty($errors)) {
+                    return response()->json([
+                        'status' => false,
+                        'message' => 'Ada data yang tidak valid: ' . implode(', ', $errors)
+                    ]);
+                }
+
+                if (count($insert) > 0) {
+                    try {
+                        MahasiswaModel::insert($insert);
+                        return response()->json([
+                            'status' => true,
+                            'message' => 'Data mahasiswa berhasil diimport'
+                        ]);
+                    } catch (\Illuminate\Database\QueryException $e) {
+                        // Jika terjadi duplikasi, gunakan insertOrIgnore
+                        MahasiswaModel::insertOrIgnore($insert);
+                        return response()->json([
+                            'status' => true,
+                            'message' => 'Data mahasiswa berhasil diimport (beberapa data duplikat dilewati)'
+                        ]);
+                    }
+                }
+
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Tidak ada data valid yang dapat diimport'
+                ]);
+            } catch (\PhpOffice\PhpSpreadsheet\Reader\Exception $e) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Error membaca file Excel: ' . $e->getMessage()
+                ]);
+            } catch (\Exception $e) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Terjadi kesalahan: ' . $e->getMessage()
+                ]);
             }
         }
 
-        if (count($insert) > 0) {
-            MahasiswaModel::insertOrIgnore($insert);
-            return response()->json([
-                'status' => true,
-                'message' => 'Data mahasiswa berhasil diimport'
-            ]);
-        }
-
-        return response()->json([
-            'status' => false,
-            'message' => 'Tidak ada data yang diimport'
-        ]);
+        return redirect('/');
     }
-
-    return redirect('/');
-}
 
 
     public function export_excel()
@@ -291,7 +347,7 @@ public function import_ajax(Request $request)
             'nim', 'nik', 'mahasiswa_nama', 'angkatan', 'no_telp',
             'alamat_asal', 'alamat_sekarang', 'jenis_kelamin',
             'status', 'keterangan')
-            ->orderBy('mahasiswa_nama')
+            ->orderBy('mahasiswa_id')
             ->get();
 
         $spreadsheet = new Spreadsheet();
@@ -308,8 +364,9 @@ public function import_ajax(Request $request)
         $sheet->setCellValue('I1', 'Jenis Kelamin');
         $sheet->setCellValue('J1', 'Status');
         $sheet->setCellValue('K1', 'Keterangan');
+        $sheet->setCellValue('L1', 'Prodi');
 
-        $sheet->getStyle('A1:K1')->getFont()->setBold(true);
+        $sheet->getStyle('A1:L1')->getFont()->setBold(true);
 
         $no = 1;
         $baris = 2;
@@ -325,10 +382,11 @@ public function import_ajax(Request $request)
             $sheet->setCellValue('I' . $baris, $value->jenis_kelamin);
             $sheet->setCellValue('J' . $baris, $value->status);
             $sheet->setCellValue('K' . $baris, $value->keterangan);
+            $sheet->setCellValue('K' . $baris, $value->prodi->prodi_nama ?? '-');
             $baris++;
         }
 
-        foreach (range('A', 'K') as $col) {
+        foreach (range('A', 'L') as $col) {
             $sheet->getColumnDimension($col)->setAutoSize(true);
         }
 
@@ -346,10 +404,10 @@ public function import_ajax(Request $request)
 
     public function export_pdf()
     {
-        $mahasiswa = MahasiswaModel::with('prodi')->orderBy('mahasiswa_nama')->get();
+        $mahasiswa = MahasiswaModel::with('prodi')->orderBy('mahasiswa_id')->get();
 
         $pdf = Pdf::loadView('biodata.mahasiswa.export_pdf', ['mahasiswa' => $mahasiswa]);
-        $pdf->setPaper('a4', 'portrait');
+        $pdf->setPaper('a4', 'landscape');
         $pdf->setOption("isRemoteEnabled", true);
         $pdf->render();
 
