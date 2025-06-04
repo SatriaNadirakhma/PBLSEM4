@@ -95,83 +95,92 @@
 
     <h3 class="text-center">LAPORAN DATA PENDAFTARAN</h3>
 
-    <table class="border-all">
-        <thead>
+    @foreach($pendaftaran as $p)
+        <table class="border-all" style="margin-bottom: 20px;">
             <tr>
-                <th class="text-center">No</th>
-                <th>Nama Mahasiswa</th>
-                <th>NIM</th>
-                <th>NIK</th>
-                <th>No Telp</th>
-                <th>Alamat Asal</th>
-                <th>Alamat Sekarang</th>
-                <th>Program Studi</th>
-                <th>Jurusan</th>
-                <th>Kampus</th>
-                <th>Scan KTP</th>
-                <th>Scan KTM</th>
-                <th>Pas Foto</th>
-                <th>Jadwal</th>
+                <th width="30%">Nama Mahasiswa</th>
+                <td>{{ $p->mahasiswa->mahasiswa_nama }}</td>
             </tr>
-        </thead>
-        <tbody>
-            @foreach($pendaftaran as $p)
-                <tr>
-                    <td class="text-center">{{ $loop->iteration }}</td>
-                    <td>{{ $p->mahasiswa->mahasiswa_nama }}</td>
-                    <td>{{ $p->mahasiswa->nim }}</td>
-                    <td>{{ $p->mahasiswa->nik }}</td>
-                    <td>{{ $p->mahasiswa->no_telp }}</td>
-                    <td>{{ $p->mahasiswa->alamat_asal }}</td>
-                    <td>{{ $p->mahasiswa->alamat_sekarang }}</td>
-                    <td>{{ $p->mahasiswa->prodi->prodi_nama }}</td>
-                    <td>{{ $p->mahasiswa->prodi->jurusan->jurusan_nama }}</td>
-                    <td>{{ $p->mahasiswa->prodi->jurusan->kampus->kampus_nama }}</td>
-
-                    {{-- Scan KTP --}}
+            <tr>
+                <th>NIM</th>
+                <td>{{ $p->mahasiswa->nim }}</td>
+            </tr>
+            <tr>
+                <th>NIK</th>
+                <td>{{ $p->mahasiswa->nik }}</td>
+            </tr>
+            <tr>
+                <th>No Telp</th>
+                <td>{{ $p->mahasiswa->no_telp }}</td>
+            </tr>
+            <tr>
+                <th>Alamat Asal</th>
+                <td>{{ $p->mahasiswa->alamat_asal }}</td>
+            </tr>
+            <tr>
+                <th>Alamat Sekarang</th>
+                <td>{{ $p->mahasiswa->alamat_sekarang }}</td>
+            </tr>
+            <tr>
+                <th>Program Studi</th>
+                <td>{{ $p->mahasiswa->prodi->prodi_nama }}</td>
+            </tr>
+            <tr>
+                <th>Jurusan</th>
+                <td>{{ $p->mahasiswa->prodi->jurusan->jurusan_nama }}</td>
+            </tr>
+            <tr>
+                <th>Kampus</th>
+                <td>{{ $p->mahasiswa->prodi->jurusan->kampus->kampus_nama }}</td>
+            </tr>
+            <tr>
+                <th>Scan KTP</th>
+                <td class="text-center">
                     @php
-                        $ktpPath = public_path('storage/pendaftaran/scan_ktp/' . $p->scan_ktp);
-                        $ktpBase64 = file_exists($ktpPath) ? 'data:image/jpeg;base64,' . base64_encode(file_get_contents($ktpPath)) : null;
+                        $ktpPath = public_path('storage/' . $p->scan_ktp);
+                        $ktpBase64 = file_exists($ktpPath) ? 'data:image/jpeg;base64,' . base64_encode(file_get_contents($ktpPath)) : '';
                     @endphp
-                    <td>
-                        @if($ktpBase64)
-                            <img src="{{ $ktpBase64 }}" width="100">
-                        @else
-                            -
-                        @endif
-                    </td>
-
-                    {{-- Scan KTM --}}
+                    @if($ktpBase64)
+                        <img src="{{ $ktpBase64 }}" class="image">
+                    @else
+                        Tidak Ada
+                    @endif
+                </td>
+            </tr>
+            <tr>
+                <th>Scan KTM</th>
+                <td class="text-center">
                     @php
-                        $ktmPath = public_path('storage/pendaftaran/scan_ktm/' . $p->scan_ktm);
-                        $ktmBase64 = file_exists($ktmPath) ? 'data:image/jpeg;base64,' . base64_encode(file_get_contents($ktmPath)) : null;
+                        $ktmPath = public_path('storage/' . $p->scan_ktm);
+                        $ktmBase64 = file_exists($ktmPath) ? 'data:image/jpeg;base64,' . base64_encode(file_get_contents($ktmPath)) : '';
                     @endphp
-                    <td>
-                        @if($ktmBase64)
-                            <img src="{{ $ktmBase64 }}" width="100">
-                        @else
-                            -
-                        @endif
-                    </td>
-
-                    {{-- Pas Foto --}}
+                    @if($ktmBase64)
+                        <img src="{{ $ktmBase64 }}" class="image">
+                    @else
+                        Tidak Ada
+                    @endif
+                </td>
+            </tr>
+            <tr>
+                <th>Pas Foto</th>
+                <td class="text-center">
                     @php
-                        $fotoPath = public_path('storage/pendaftaran/pas_foto/' . $p->pas_foto);
-                        $fotoBase64 = file_exists($fotoPath) ? 'data:image/jpeg;base64,' . base64_encode(file_get_contents($fotoPath)) : null;
+                        $pas_fotoPath = public_path('storage/' . $p->pas_foto);
+                        $pas_fotoBase64 = file_exists($pas_fotoPath) ? 'data:image/jpeg;base64,' . base64_encode(file_get_contents($pas_fotoPath)) : '';
                     @endphp
-                    <td>
-                        @if($fotoBase64)
-                            <img src="{{ $fotoBase64 }}" width="100">
-                        @else
-                            -
-                        @endif
-                    </td>
-                    
+                    @if($pas_fotoBase64)
+                        <img src="{{ $pas_fotoBase64 }}" class="image">
+                    @else
+                        Tidak Ada
+                    @endif
+                </td>
+            </tr>
+            <tr>
+                <th>Jadwal</th>
+                <td>{{ $p->jadwal->tanggal_pelaksanaan . ' - ' . $p->jadwal->jam_mulai }}</td>
+            </tr>
+        </table>
+    @endforeach
 
-                    <td>{{ $p->jadwal->tanggal_pelaksanaan . ' - ' . $p->jadwal->jam_mulai }}</td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
 </body>
 </html>
