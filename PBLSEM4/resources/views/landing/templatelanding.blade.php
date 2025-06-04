@@ -53,6 +53,8 @@
     @include('landing.cobasection')
 
   @include('landing.teamsection')
+
+    @include('landing.overviewsection')
   
   @include('landing.footerlanding')
 

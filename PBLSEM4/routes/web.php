@@ -26,6 +26,7 @@ use App\Http\Controllers\KirimPesanController;
 use App\Http\Controllers\HasilPesertaController;
 use App\Http\Controllers\RiwayatPesertaController;
 use App\Http\Controllers\KirimEmailController;
+use App\Http\Controllers\AboutPageController;
 use Illuminate\Http\Request;
 
 /*
@@ -36,7 +37,14 @@ use Illuminate\Http\Request;
 
 Route::pattern('id', '[0-9]+');
 
-Route::get('/', [LandingPageController::class, 'index'])->name('templatepage');
+// Route ke landing utama
+Route::get('/', [LandingPageController::class, 'index'])->name('landingpage');
+
+// Route ke halaman about
+Route::get('/about', function () {
+    return view('about.bodysection');
+})->name('aboutpage');
+
 
 // Login & Register
 Route::get('login', [AuthController::class, 'login'])->name('login');
