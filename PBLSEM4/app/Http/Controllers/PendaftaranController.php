@@ -130,8 +130,8 @@ protected function handleTendik()
     }
 
     $request->validate([
-        'scan_ktp' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
-        'scan_ktm' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
+        'scan_ktp' => 'required|file|mimes:jpg,jpeg,png|max:2048',
+        'scan_ktm' => 'required|file|mimes:jpg,jpeg,png|max:2048',
         'pas_foto' => 'required|image|mimes:jpg,jpeg,png|max:2048',
         'mahasiswa_id' => 'required|exists:mahasiswa,mahasiswa_id',
         'jadwal_id' => 'required|exists:jadwal,jadwal_id',
