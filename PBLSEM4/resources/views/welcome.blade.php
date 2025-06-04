@@ -214,343 +214,369 @@
         box-shadow: 0 6px 16px rgba(0, 123, 255, 0.3);
     }
 
-    /* Admin Statistics Section */
-    .admin-stats-section {
-        margin-top: 2rem;
-        animation: fadeInUp 0.8s ease-out 0.4s backwards;
-    }
+   /* Admin Statistics Section */  
 
-    .section-header {
-        text-align: center;
-        margin-bottom: 2rem;
-    }
+    .admin-stats-section {  
+        margin-top: 2rem;  
+        animation: fadeInUp 0.8s ease-out 0.4s backwards;  
+    }  
 
-    .section-title {
-        font-size: 2rem;
-        font-weight: 700;
-        background: linear-gradient(135deg, #007bff, #0056b3);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        margin-bottom: 0.5rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.5rem;
-    }
+    .section-header {  
+        text-align: center;  
+        margin-bottom: 2rem;  
+    }  
 
-    .section-subtitle {
-        color: #6c757d;
-        font-size: 1.1rem;
-        font-weight: 400;
-    }
+    .section-title {  
+        font-size: 1.7rem;  
+        font-weight: 700;  
+        background: linear-gradient(135deg, #007bff, #0056b3);  
+        -webkit-background-clip: text;  
+        -webkit-text-fill-color: transparent;  
+        background-clip: text;  
+        margin-bottom: 0.2rem;  
+        display: flex;  
+        align-items: center;  
+        justify-content: center;  
+        gap: 0.5rem;  
+    }  
 
-    /* Modern Statistics Cards */
-    .stats-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 1.5rem;
-        margin-bottom: 3rem;
-    }
+    .section-subtitle {  
+        color: #6c757d;  
+        font-size: 1rem;  
+        font-weight: 300;  
+    }  
 
-    .stat-card {
-        background: white;
-        border-radius: 16px;
-        padding: 1.5rem;
-        box-shadow: 0 8px 25px rgba(0, 123, 255, 0.08);
-        border: none;
-        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        position: relative;
-        overflow: hidden;
-        animation: slideInLeft 0.6s ease-out backwards;
-    }
+    /* Modern Statistics Cards - userStats */  
+    .stats-grid {  
+        display: grid;  
+        /* Mengurangi minmax agar kartu bisa lebih kecil */
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); 
+        gap: 1rem; /* Mengurangi gap antar kartu */
+        margin-bottom: 3rem;  
+    }  
 
-    .stat-card:nth-child(1) { animation-delay: 0.1s; }
-    .stat-card:nth-child(2) { animation-delay: 0.2s; }
-    .stat-card:nth-child(3) { animation-delay: 0.3s; }
-    .stat-card:nth-child(4) { animation-delay: 0.4s; }
-    .stat-card:nth-child(5) { animation-delay: 0.5s; }
-    .stat-card:nth-child(6) { animation-delay: 0.6s; }
+    .stat-card {  
+        background: white;  
+        border-radius: 16px;  
+        padding: 1rem; /* Mengurangi padding secara signifikan */
+        box-shadow: 0 8px 25px rgba(0, 123, 255, 0.08);  
+        border: none;  
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);  
+        position: relative;  
+        overflow: hidden;  
+        animation: slideInLeft 0.6s ease-out backwards;  
+    }  
 
-    .stat-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 5px;
-        height: 100%;
-        transition: width 0.3s ease;
-    }
+    .stat-card:nth-child(1) { animation-delay: 0.1s; }  
+    .stat-card:nth-child(2) { animation-delay: 0.2s; }  
+    .stat-card:nth-child(3) { animation-delay: 0.3s; }  
+    .stat-card:nth-child(4) { animation-delay: 0.4s; }  
+    .stat-card:nth-child(5) { animation-delay: 0.5s; }  
+    .stat-card:nth-child(6) { animation-delay: 0.6s; }  
 
-    .stat-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 15px 35px rgba(0, 123, 255, 0.15);
-    }
+    .stat-card::before {  
+        content: '';  
+        position: absolute;  
+        top: 0;  
+        left: 0;  
+        width: 5px;  
+        height: 100%;  
+        transition: width 0.3s ease;  
+    }  
 
-    .stat-card:hover::before {
-        width: 100%;
-        opacity: 0.1;
-    }
+    .stat-card:hover {  
+        transform: translateY(-5px);  
+        box-shadow: 0 15px 35px rgba(0, 123, 255, 0.15);  
+    }  
 
-    .stat-card.primary::before { background: linear-gradient(180deg, #007bff, #0056b3); }
-    .stat-card.dark::before { background: linear-gradient(180deg, #343a40, #23272b); }
-    .stat-card.success::before { background: linear-gradient(180deg, #28a745, #1e7e34); }
-    .stat-card.info::before { background: linear-gradient(180deg, #17a2b8, #117a8b); }
-    .stat-card.warning::before { background: linear-gradient(180deg, #ffc107, #e0a800); }
+    .stat-card:hover::before {  
+        width: 100%;  
+        opacity: 0.1;  
+    }  
+
+    .stat-card.primary::before { background: linear-gradient(180deg, #007bff, #0056b3); }  
+    .stat-card.dark::before { background: linear-gradient(180deg, #343a40, #23272b); }  
+    .stat-card.success::before { background: linear-gradient(180deg, #28a745, #1e7e34); }  
+    .stat-card.info::before { background: linear-gradient(180deg, #17a2b8, #117a8b); }  
+    .stat-card.warning::before { background: linear-gradient(180deg, #ffc107, #e0a800); }  
     .stat-card.secondary::before { background: linear-gradient(180deg, #6c757d, #5a6268); }
+    .stat-card.danger::before { background: linear-gradient(180deg, #dc3545, #bd2130); }  
 
-    .stat-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 1rem;
-    }
+    .stat-header {  
+        display: flex;  
+        align-items: center;  
+        justify-content: space-between;  
+        margin-bottom: 0.5rem; /* Mengurangi margin-bottom */
+    }  
 
-    .stat-icon {
-        width: 50px;
-        height: 50px;
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        font-size: 1.25rem;
-        transition: transform 0.3s ease;
-    }
+    .stat-icon {  
+        width: 40px; /* Mengurangi ukuran ikon */
+        height: 40px; /* Mengurangi ukuran ikon */
+        border-radius: 10px; /* Menyesuaikan border-radius */
+        display: flex;  
+        align-items: center;  
+        justify-content: center;  
+        color: white;  
+        font-size: 1rem; /* Mengurangi ukuran font ikon */
+        transition: transform 0.3s ease;  
+    }  
 
-    .stat-card:hover .stat-icon {
-        transform: scale(1.1);
-    }
+    .stat-card:hover .stat-icon {  
+        transform: scale(1.1);  
+    }  
 
-    .stat-icon.primary { background: linear-gradient(135deg, #007bff, #0056b3); }
-    .stat-icon.dark { background: linear-gradient(135deg, #343a40, #23272b); }
-    .stat-icon.success { background: linear-gradient(135deg, #28a745, #1e7e34); }
-    .stat-icon.info { background: linear-gradient(135deg, #17a2b8, #117a8b); }
-    .stat-icon.warning { background: linear-gradient(135deg, #ffc107, #e0a800); color: #212529; }
+    .stat-icon.primary { background: linear-gradient(135deg, #007bff, #0056b3); }  
+    .stat-icon.dark { background: linear-gradient(135deg, #343a40, #23272b); }  
+    .stat-icon.success { background: linear-gradient(135deg, #28a745, #1e7e34); }  
+    .stat-icon.info { background: linear-gradient(135deg, #17a2b8, #117a8b); }  
+    .stat-icon.warning { background: linear-gradient(135deg, #ffc107, #e0a800); color: #212529; }  
     .stat-icon.secondary { background: linear-gradient(135deg, #6c757d, #5a6268); }
+    .stat-icon.danger { background: linear-gradient(135deg, #dc3545, #bd2130); }
 
-    .stat-title {
-        font-size: 0.9rem;
-        font-weight: 600;
-        color: #6c757d;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        margin-bottom: 0.5rem;
-    }
+    .stat-title {  
+        font-size: 0.8rem; /* Mengurangi ukuran font title */
+        font-weight: 600;  
+        color: #6c757d;  
+        text-transform: uppercase;  
+        letter-spacing: 0.5px;  
+        margin-bottom: 0.3rem; /* Mengurangi margin-bottom */
+    }  
 
-    .stat-value {
-        font-size: 2rem;
-        font-weight: 700;
-        color: #2c3e50;
-        margin: 0;
-    }
+    .stat-value {  
+        font-size: 1.6rem; /* Mengurangi ukuran font value */
+        font-weight: 700;  
+        color: #2c3e50;  
+        margin: 0;  
+    }  
 
-    /* Status Cards Section */
-    .status-section {
-        margin-top: 3rem;
-        animation: fadeInUp 0.8s ease-out 0.6s backwards;
-    }
+    /* Status Cards Section - statusStat */  
+    .status-section {  
+        margin-top: 2rem; /* Sedikit mengurangi margin top */
+        animation: fadeInUp 0.8s ease-out 0.6s backwards;  
+    }  
 
-    .status-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-        gap: 1.2rem;
-        margin-bottom: 3rem;
-    }
+    .status-grid {  
+        display: grid;  
+        /* Mengurangi minmax agar kartu bisa lebih kecil */
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); 
+        gap: 0.8rem; /* Mengurangi gap antar kartu status */
+        margin-bottom: 3rem;  
+    }  
 
-    .status-card {
-        background: white;
-        border-radius: 14px;
-        padding: 1.25rem;
-        box-shadow: 0 6px 20px rgba(0, 123, 255, 0.06);
-        transition: all 0.3s ease;
-        position: relative;
-        overflow: hidden;
-        animation: slideInLeft 0.6s ease-out backwards;
-    }
+    .status-card {  
+        background: white;  
+        border-radius: 12px; /* Sedikit mengurangi border-radius */
+        padding: 0.8rem; /* Mengurangi padding secara signifikan */
+        box-shadow: 0 6px 20px rgba(0, 123, 255, 0.06);  
+        transition: all 0.3s ease;  
+        position: relative;  
+        overflow: hidden;  
+        animation: slideInLeft 0.6s ease-out backwards;  
+    }  
 
-    .status-card:nth-child(1) { animation-delay: 0.7s; }
-    .status-card:nth-child(2) { animation-delay: 0.8s; }
-    .status-card:nth-child(3) { animation-delay: 0.9s; }
-    .status-card:nth-child(4) { animation-delay: 1.0s; }
-    .status-card:nth-child(5) { animation-delay: 1.1s; }
+    .status-card:nth-child(1) { animation-delay: 0.7s; }  
+    .status-card:nth-child(2) { animation-delay: 0.8s; }  
+    .status-card:nth-child(3) { animation-delay: 0.9s; }  
+    .status-card:nth-child(4) { animation-delay: 1.0s; }  
+    .status-card:nth-child(5) { animation-delay: 1.1s; }  
 
-    .status-card:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 10px 25px rgba(0, 123, 255, 0.12);
-    }
+    .status-card:hover {  
+        transform: translateY(-3px);  
+        box-shadow: 0 10px 25px rgba(0, 123, 255, 0.12);  
+    }  
 
-    /* Charts Section */
-    .charts-section {
-        margin-top: 3rem;
-        animation: fadeInUp 0.8s ease-out 0.8s backwards;
-    }
+    /* Charts Section */  
+    .charts-section {  
+        margin-top: 3rem;  
+        animation: fadeInUp 0.8s ease-out 0.8s backwards;  
+    }  
 
-    .chart-card {
-        background: white;
-        border-radius: 16px;
-        box-shadow: 0 8px 25px rgba(0, 123, 255, 0.08);
-        overflow: hidden;
-        margin-bottom: 2rem;
-        transition: all 0.3s ease;
-    }
+    .chart-card {  
+        background: white;  
+        border-radius: 16px;  
+        box-shadow: 0 8px 25px rgba(0, 123, 255, 0.08);  
+        overflow: hidden;  
+        margin-bottom: 2rem;  
+        transition: all 0.3s ease;  
+    }  
 
-    .chart-card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 12px 30px rgba(0, 123, 255, 0.12);
-    }
+    .chart-card:hover {  
+        transform: translateY(-2px);  
+        box-shadow: 0 12px 30px rgba(0, 123, 255, 0.12);  
+    }  
 
-    .chart-header {
-        background: linear-gradient(135deg, #f8f9ff 0%, #e8f2ff 100%);
-        padding: 1.5rem;
-        border-bottom: 1px solid #e9ecef;
-    }
+    .chart-header {  
+        background: linear-gradient(135deg, #f8f9ff 0%, #e8f2ff 100%);  
+        padding: 1.5rem;  
+        border-bottom: 1px solid #e9ecef;  
+    }  
 
-    .chart-title {
-        font-size: 1.2rem;
-        font-weight: 600;
-        color: #2c3e50;
-        margin: 0;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-    }
+    .chart-title {  
+        font-size: 1.2rem;  
+        font-weight: 600;  
+        color: #2c3e50;  
+        margin: 0;  
+        display: flex;  
+        align-items: center;  
+        gap: 0.5rem;  
+    }  
 
-    .chart-body {
-        padding: 2rem;
-    }
+    .chart-body {  
+        padding: 2rem;  
+    }  
 
-    /* Quick Actions Section */
-    .quick-actions {
-        margin-top: 3rem;
-        animation: fadeInUp 0.8s ease-out 1s backwards;
-    }
+    /* Quick Actions Section */  
+    .quick-actions {  
+        margin-top: 3rem;  
+        animation: fadeInUp 0.8s ease-out 1s backwards;  
+    }  
 
-    .actions-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 1.5rem;
-    }
+    .actions-grid {  
+        display: grid;  
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));  
+        gap: 1.5rem;  
+    }  
 
-    .action-card {
-        background: white;
-        border-radius: 14px;
-        padding: 1.5rem;
-        text-align: center;
-        box-shadow: 0 6px 20px rgba(0, 123, 255, 0.06);
-        transition: all 0.3s ease;
-        text-decoration: none;
-        color: inherit;
-        border: 2px solid transparent;
-        position: relative;
-        overflow: hidden;
-    }
+    .action-card {  
+        background: white;  
+        border-radius: 14px;  
+        padding: 1.5rem;  
+        text-align: center;  
+        box-shadow: 0 6px 20px rgba(0, 123, 255, 0.06);  
+        transition: all 0.3s ease;  
+        text-decoration: none;  
+        color: inherit;  
+        border: 2px solid transparent;  
+        position: relative;  
+        overflow: hidden;  
+    }  
 
-    .action-card::before {
-        content: '';
-        position: absolute;
-        top: -50%;
-        left: -50%;
-        width: 200%;
-        height: 200%;
-        background: linear-gradient(45deg, transparent, rgba(0, 123, 255, 0.05), transparent);
-        transform: rotate(-45deg);
-        transition: all 0.5s ease;
-        opacity: 0;
-    }
+    .action-card::before {  
+        content: '';  
+        position: absolute;  
+        top: -50%;  
+        left: -50%;  
+        width: 200%;  
+        height: 200%;  
+        background: linear-gradient(45deg, transparent, rgba(0, 123, 255, 0.05), transparent);  
+        transform: rotate(-45deg);  
+        transition: all 0.5s ease;  
+        opacity: 0;  
+    }  
 
-    .action-card:hover::before {
-        opacity: 1;
-        transform: rotate(-45deg) translate(50%, 50%);
-    }
+    .action-card:hover::before {  
+        opacity: 1;  
+        transform: rotate(-45deg) translate(50%, 50%);  
+    }  
 
-    .action-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 12px 30px rgba(0, 123, 255, 0.15);
-        border-color: #007bff;
-        text-decoration: none;
-        color: inherit;
-    }
+    .action-card:hover {  
+        transform: translateY(-5px);  
+        box-shadow: 0 12px 30px rgba(0, 123, 255, 0.15);  
+        border-color: #007bff;  
+        text-decoration: none;  
+        color: inherit;  
+    }  
 
-    .action-icon {
-        width: 60px;
-        height: 60px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, #007bff, #0056b3);
-        color: white;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 0 auto 1rem;
-        font-size: 1.5rem;
-        transition: transform 0.3s ease;
-        position: relative;
-        z-index: 2;
-    }
+    .action-icon {  
+        width: 60px;  
+        height: 60px;  
+        border-radius: 50%;  
+        background: linear-gradient(135deg, #007bff, #0056b3);  
+        color: white;  
+        display: flex;  
+        align-items: center;  
+        justify-content: center;  
+        margin: 0 auto 1rem;  
+        font-size: 1.5rem;  
+        transition: transform 0.3s ease;  
+        position: relative;  
+        z-index: 2;  
+    }  
 
-    .action-card:hover .action-icon {
-        transform: scale(1.1);
-    }
+    .action-card:hover .action-icon {  
+        transform: scale(1.1);  
+    }  
 
-    .action-title {
-        font-size: 1rem;
-        font-weight: 600;
-        color: #2c3e50;
-        margin: 0;
-        position: relative;
-        z-index: 2;
-    }
+    .action-title {  
+        font-size: 1rem;  
+        font-weight: 600;  
+        color: #2c3e50;  
+        margin: 0;  
+        position: relative;  
+        z-index: 2;  
+    }  
 
-    /* Responsive Design */
-    @media (max-width: 768px) {
-        .dashboard-header {
-            padding: 1.5rem;
-        }
+    /* Responsive Design */  
+    @media (max-width: 768px) {  
+        .dashboard-header {  
+            padding: 1.5rem;  
+        }  
         
-        .dashboard-title {
-            font-size: 1.5rem;
-        }
+        .dashboard-title {  
+            font-size: 1.5rem;  
+        }  
         
-        .dashboard-body {
-            padding: 1.5rem;
-        }
+        .dashboard-body {  
+            padding: 1.5rem;  
+        }  
         
-        .profile-welcome {
-            flex-direction: column;
-            text-align: center;
-            padding: 1.5rem 1rem;
-        }
+        .profile-welcome {  
+            flex-direction: column;  
+            text-align: center;  
+            padding: 1.5rem 1rem;  
+        }  
         
-        .profile-avatar {
-            margin-right: 0;
-            margin-bottom: 1rem;
-        }
+        .profile-avatar {  
+            margin-right: 0;  
+            margin-bottom: 1rem;  
+        }  
         
-        .welcome-greeting {
-            font-size: 1.3rem;
+        .welcome-greeting {  
+            font-size: 1.3rem;  
+        }  
+
+        .section-title {  
+            font-size: 1rem;  
+        }  
+
+        .stats-grid {  
+            /* Mengurangi minmax lebih lanjut untuk mobile */
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); 
+            gap: 0.8rem; /* Mengurangi gap untuk mobile */
+        }  
+
+        .stat-card {  
+            padding: 0.8rem; /* Mengurangi padding untuk mobile */
+        }  
+
+        .stat-value {  
+            font-size: 1.3rem; /* Mengurangi font-size untuk mobile */
+        }  
+
+        .stat-title {
+            font-size: 0.7rem; /* Mengurangi font-size title untuk mobile */
         }
 
-        .section-title {
-            font-size: 1.6rem;
+        .stat-icon {
+            width: 35px; /* Mengurangi ukuran ikon untuk mobile */
+            height: 35px; /* Mengurangi ukuran ikon untuk mobile */
+            font-size: 0.9rem; /* Mengurangi font-size ikon untuk mobile */
         }
 
-        .stats-grid {
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 1rem;
+        .status-grid {
+            /* Mengurangi minmax lebih lanjut untuk mobile */
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); 
+            gap: 0.6rem; /* Mengurangi gap untuk mobile */
         }
 
-        .stat-card {
-            padding: 1rem;
+        .status-card {
+            padding: 0.6rem; /* Mengurangi padding untuk mobile */
         }
 
-        .stat-value {
-            font-size: 1.5rem;
-        }
-
-        .chart-body {
-            padding: 1rem;
-        }
-    }
+        .chart-body {  
+            padding: 1rem;  
+        }  
+    }  
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
 @endpush
@@ -619,10 +645,10 @@
                 <!-- Admin Statistics Section -->
                 <div class="admin-stats-section">
                     <div class="section-header">
-                        <h2 class="section-title">
+                        <h3 class="section-title">
                             <i class="fas fa-users"></i>
                             Statistik Pengguna
-                        </h2>
+                        </h3>
                         <p class="section-subtitle">Ringkasan data pengguna sistem</p>
                     </div>
 
