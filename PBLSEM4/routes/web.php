@@ -26,6 +26,7 @@ use App\Http\Controllers\KirimPesanController;
 use App\Http\Controllers\HasilPesertaController;
 use App\Http\Controllers\RiwayatPesertaController;
 use App\Http\Controllers\KirimEmailController;
+use App\Http\Controllers\PasswordResetController;
 use Illuminate\Http\Request;
 
 /*
@@ -43,8 +44,11 @@ Route::get('login', [AuthController::class, 'login'])->name('login');
 Route::post('login', [AuthController::class, 'postlogin']);
 Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
-Route::get('/register', [AuthController::class, 'register'])->name('register');
-Route::post('/register', [AuthController::class, 'postRegister']);
+
+Route::get('/password/reset', [PasswordResetController::class, 'showLinkRequestForm'])->name('password.request');
+Route::post('/password/email', [PasswordResetController::class, 'sendResetLinkEmail'])->name('password.email');
+Route::get('/password/reset/{token}', [PasswordResetController::class, 'showResetForm'])->name('password.reset');
+Route::post('/password/reset', [PasswordResetController::class, 'reset'])->name('password.update');
 
 // Grup rute yang butuh autentikasi
 Route::middleware(['auth'])->group(function () {
