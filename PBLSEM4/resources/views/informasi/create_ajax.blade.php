@@ -36,6 +36,12 @@ $(document).ready(function() {
             isi: { required: true, minlength: 5 }
         },
         submitHandler: function(form) {
+            // Penting: Ini memaksa TinyMCE untuk menulis kontennya ke textarea asli
+            // sebelum form diserialisasi dan dikirim via AJAX.
+            if (tinymce.get('isi')) { // Pastikan TinyMCE sudah diinisialisasi
+                tinymce.triggerSave();
+            }
+
             $.ajax({
                 url: form.action,
                 type: form.method,
@@ -67,5 +73,8 @@ $(document).ready(function() {
             return false;
         }
     });
+
+    // Hapus event listener hidden.bs.modal dari sini, karena sudah dipindahkan ke index.blade.php
+    // $('#modal-master').on('hidden.bs.modal', function () { ... });
 });
 </script>

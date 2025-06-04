@@ -29,7 +29,7 @@
                 </tr>
                 <tr>
                     <th>Isi</th>
-                    <td>{!! nl2br(e($informasi->isi)) !!}</td>
+                    <td>{!! $informasi->isi !!}</td>
                 </tr>
             </table>
         </div>

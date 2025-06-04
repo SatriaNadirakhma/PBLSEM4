@@ -997,7 +997,7 @@
                 </div>
             @endif
 
-        @if($role === 'mahasiswa')
+        @if(in_array($role, ['mahasiswa', 'dosen', 'tendik']))
             <div class="info-section">
                 <div class="section-header" style="text-align: center;">
                     <h2 class="section-title" style="display: inline-block;">
@@ -1014,7 +1014,7 @@
                                 <i class="fas fa-info-circle"></i>
                                 {{ $item->judul }}
                             </div>
-                            <p class="info-content">{{ $item->isi }}</p>
+                            <p class="info-content">{!! $item->isi !!}</p>
                         </div>
                     </div>
                 @empty

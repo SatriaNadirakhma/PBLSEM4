@@ -59,6 +59,11 @@
             max-width: 150px;
             max-height: 150px;
         }
+        .separator {
+            border: none;
+            border-top: 3px solid #060505; /* Warna dan ketebalan garis */
+            margin: 30px 0; /* Jarak atas dan bawah garis */
+        }
     </style>
 </head>
 <body>
@@ -133,53 +138,70 @@
                 <th>Kampus</th>
                 <td>{{ $p->mahasiswa->prodi->jurusan->kampus->kampus_nama }}</td>
             </tr>
-            <tr>
+           <tr>
                 <th>Scan KTP</th>
-                <td class="text-center">
+                <td class="text-left">
                     @php
-                        $ktpPath = public_path('storage/' . $p->scan_ktp);
-                        $ktpBase64 = file_exists($ktpPath) ? 'data:image/jpeg;base64,' . base64_encode(file_get_contents($ktpPath)) : '';
+                        $ktpBase64 = '';
+                        if (!empty($p->scan_ktp)) {
+                            $ktpPath = public_path('storage/' . $p->scan_ktp);
+                            if (file_exists($ktpPath)) {
+                                $ktpBase64 = 'data:image/jpeg;base64,' . base64_encode(file_get_contents($ktpPath));
+                            }
+                        }
                     @endphp
                     @if($ktpBase64)
                         <img src="{{ $ktpBase64 }}" class="image">
                     @else
-                        Tidak Ada
+                        -
                     @endif
                 </td>
             </tr>
-            <tr>
+           <tr>
                 <th>Scan KTM</th>
-                <td class="text-center">
+                <td class="text-left">
                     @php
-                        $ktmPath = public_path('storage/' . $p->scan_ktm);
-                        $ktmBase64 = file_exists($ktmPath) ? 'data:image/jpeg;base64,' . base64_encode(file_get_contents($ktmPath)) : '';
+                        $ktmBase64 = '';
+                        if (!empty($p->scan_ktm)) {
+                            $ktmPath = public_path('storage/' . $p->scan_ktm);
+                            if (file_exists($ktmPath)) {
+                                $ktmBase64 = 'data:image/jpeg;base64,' . base64_encode(file_get_contents($ktmPath));
+                            }
+                        }
                     @endphp
                     @if($ktmBase64)
                         <img src="{{ $ktmBase64 }}" class="image">
                     @else
-                        Tidak Ada
+                        -
                     @endif
                 </td>
             </tr>
-            <tr>
+           <tr>
                 <th>Pas Foto</th>
-                <td class="text-center">
+                <td class="text-left">
                     @php
-                        $pas_fotoPath = public_path('storage/' . $p->pas_foto);
-                        $pas_fotoBase64 = file_exists($pas_fotoPath) ? 'data:image/jpeg;base64,' . base64_encode(file_get_contents($pas_fotoPath)) : '';
+                        $pas_fotoBase64 = '';
+                        if (!empty($p->pas_foto)) {
+                            $pas_fotoPath = public_path('storage/' . $p->pas_foto);
+                            if (file_exists($pas_fotoPath)) {
+                                $pas_fotoBase64 = 'data:image/jpeg;base64,' . base64_encode(file_get_contents($pas_fotoPath));
+                            }
+                        }
                     @endphp
                     @if($pas_fotoBase64)
                         <img src="{{ $pas_fotoBase64 }}" class="image">
                     @else
-                        Tidak Ada
+                        -
                     @endif
                 </td>
             </tr>
-            <tr>
                 <th>Jadwal</th>
                 <td>{{ $p->jadwal->tanggal_pelaksanaan . ' - ' . $p->jadwal->jam_mulai }}</td>
             </tr>
         </table>
+        @if (!$loop->last)
+            <hr class="separator">
+        @endif
     @endforeach
 
 </body>

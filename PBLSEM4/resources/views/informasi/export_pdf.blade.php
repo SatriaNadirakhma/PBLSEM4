@@ -96,7 +96,7 @@
             <tr>
                 <td class="text-center">{{ $loop->iteration }}</td>
                 <td>{{ $info->judul }}</td>
-                <td>{{ $info->isi }}</td>
+                <td>{!! $info->isi !!}</td>
             </tr>
             @endforeach
         </tbody>
