@@ -1,3 +1,39 @@
+<style>
+  .swal2-popup.tiny-swal {
+    width: 350px ;
+    max-width: 250px ;
+    padding: 0.5rem 0.8rem ;
+    font-size: 0.75rem;
+    min-height: unset ;
+    box-sizing: border-box;
+  }
+
+  .swal2-title {
+    font-size: 0.95rem ;
+    margin: 0 0 0.5rem ;
+    line-height: 1.2;
+  }
+
+  .swal2-icon {
+    width: 3em ;
+    height: 3em ;
+    margin: 0 auto 0.4rem ;
+  }
+
+  .swal2-icon .swal2-icon-content {
+    font-size: 1.4em ;
+  }
+
+  .swal2-actions {
+    justify-content: center ;
+    gap: 0.5rem;
+  }
+
+  .swal2-actions button {
+    padding: 0.5rem 0.9rem ;
+    font-size: 0.8rem;
+  }
+</style>
 <nav class="main-header navbar navbar-expand navbar-white navbar-light">
   <!-- Left navbar links -->
   <ul class="navbar-nav">
@@ -169,15 +205,32 @@
           </form>
         </li>
 
-        <!-- Logout confirmation modal -->
+        <!-- Logout confirmation -->
         <script>
           function confirmLogout(event) {
-          event.preventDefault();
-            if (confirm("Apakah Anda yakin ingin logout?")) {
-              document.getElementById("logout-form").submit();
-            }
+            event.preventDefault();
+
+            Swal.fire({
+              title: 'Yakin logout?',
+              icon: 'warning',
+              position: 'top-end',
+              showCancelButton: true,
+              confirmButtonText: 'Ya',
+              cancelButtonText: 'Batal',
+              showCloseButton: true,
+              customClass: {
+                popup: 'tiny-swal'
+              }
+            }).then((result) => {
+              if (result.isConfirmed) {
+                document.getElementById("logout-form").submit();
+              }
+            });
+
           }
         </script>
+
+       
 
 
       </ul>
