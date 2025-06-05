@@ -27,6 +27,7 @@ use App\Http\Controllers\HasilPesertaController;
 use App\Http\Controllers\RiwayatPesertaController;
 use App\Http\Controllers\KirimEmailController;
 use App\Http\Controllers\AboutPageController;
+use App\Http\Controllers\PasswordResetController;
 use Illuminate\Http\Request;
 
 /*
@@ -51,12 +52,20 @@ Route::get('login', [AuthController::class, 'login'])->name('login');
 Route::post('login', [AuthController::class, 'postlogin']);
 Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
-Route::get('/register', [AuthController::class, 'register'])->name('register');
-Route::post('/register', [AuthController::class, 'postRegister']);
+
+Route::get('/password/reset', [PasswordResetController::class, 'showLinkRequestForm'])->name('password.request');
+Route::post('/password/email', [PasswordResetController::class, 'sendResetLinkEmail'])->name('password.email');
+Route::get('/password/reset/{token}', [PasswordResetController::class, 'showResetForm'])->name('password.reset');
+Route::post('/password/reset', [PasswordResetController::class, 'reset'])->name('password.update');
 
 // Grup rute yang butuh autentikasi
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('home');
+    // --- Tambahkan Route ini untuk Server-Sent Events (SSE) ---
+    // Tidak ada middleware otorisasi tambahan di sini.
+    // Otorisasi akan ditangani di dalam method chartDataStream().
+    Route::get('/dashboard/chart-stream', [DashboardController::class, 'chartDataStream'])
+        ->name('dashboard.chart.stream');
 
     Route::get('/profile', [UserController::class, 'profile'])->name('profile');
     Route::post('/profile/update-photo', [UserController::class, 'updatePhoto'])->name('profile.updatePhoto');
@@ -156,7 +165,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/export_pdf', [TendikController::class, 'export_pdf'])->name('export_pdf');
     });
 
-    Route::prefix('biodata/mahasiswa')->name('biodata.mahasiswa.')->middleware(['auth', 'role:admin,mahasiswa'])->group(function () {
+Route::prefix('biodata/mahasiswa')->name('biodata.mahasiswa.')->middleware(['auth', 'role:admin,mahasiswa'])->group(function () {
     Route::get('/', [MahasiswaController::class, 'index'])->name('index');
     Route::get('/list', [MahasiswaController::class, 'list'])->name('list');
     Route::get('{id}/show_ajax', [MahasiswaController::class, 'show_ajax'])->name('show_ajax');
@@ -203,8 +212,10 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/{id}/update_ajax', [UserController::class, 'update_ajax']);
         Route::get('/{id}/delete_ajax', [UserController::class, 'confirm_ajax']);
         Route::delete('/{id}/delete_ajax', [UserController::class, 'delete_ajax']);
-
-        
+        Route::get('import', [UserController::class, 'import']);
+        Route::post('import_ajax', [UserController::class, 'import_ajax']);
+        Route::get('/export_excel', [UserController::class, 'export_excel']);
+        Route::get('/export_pdf', [UserController::class, 'export_pdf']);
     });
 
     // ROUTE VERIFIKASI
@@ -338,7 +349,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/', [KirimEmailController::class, 'index'])->name('kirimemail.index');
         Route::post('/list', [KirimEmailController::class, 'list'])->name('kirimemail.list');
         Route::get('{id}/form', [KirimEmailController::class, 'form'])->name('kirimemail.form');
-        Route::post('/kirim', [KirimEmailController::class, 'kirim'])->name('kirimemail.kirim');
+        Route::post('/kirim-email', [KirimEmailController::class, 'kirim'])->name('kirimemail.kirim');
     });
 
 });

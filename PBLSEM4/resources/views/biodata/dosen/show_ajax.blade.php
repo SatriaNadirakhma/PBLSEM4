@@ -57,7 +57,7 @@
                 </tr>
                 <tr>
                     <th>Jurusan</th>
-                    <td>{{ $dosen->jurusan->jurusan_id ?? '-' }}</td>
+                    <td>{{ $dosen->jurusan->jurusan_nama ?? '-' }}</td>
                 </tr>
             </table>
         </div>

@@ -284,6 +284,17 @@
                     </li>
                 @endif
             @endauth
+            
+            @auth
+                @if(in_array(Auth::user()->role, ['mahasiswa', 'dosen', 'tendik']))
+                    <li class="nav-item mt-1">
+                        <a href="{{ asset('/panduan.pdf') }}" class="nav-link {{ ($activeMenu === 'Panduan') ? 'active' : '' }}" target="_blank">
+                            <i class="nav-icon fas fa-lightbulb"></i>
+                            <p>Panduan</p>
+                        </a>
+                    </li>
+                @endif
+            @endauth
 
             <div class="text-center">
                 <div class="border border-secondary text-white px-3 py-1 rounded-pill d-inline-flex align-items-center gap-2 small">

@@ -106,7 +106,7 @@
             @foreach($dosen as $item)
             <tr>
                 <td class="text-center">{{ $loop->iteration }}</td>
-                <td>{{ $item->nip }}</td>
+                <td>{{ $item->nidn }}</td>
                 <td>{{ $item->nik }}</td>
                 <td>{{ $item->dosen_nama }}</td>
                 <td>{{ $item->no_telp }}</td>

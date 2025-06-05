@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login | Sipinta</title>
+    <title>Reset Password | Sipinta</title>
     <link rel="icon" href="{{ asset('img/logo.png') }}" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('adminlte/plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
@@ -17,7 +17,7 @@
         .left {
             flex: 1;
             background: url('{{ asset('img/gedung_polinema1.jpg') }}') no-repeat center center;
-            background-size: cover; /* isi penuh, tanpa space hitam */
+            background-size: cover;
             display: flex;
             align-items: flex-end;
             justify-content: left;
@@ -28,10 +28,10 @@
         }
 
         .right { flex: 1; background: white; display: flex; justify-content: center; align-items: center; padding: 2rem; }
-        .login-box {
+        .reset-box {
             width: 100%;
             max-width: 400px;
-            margin-top: -30px; /* ini menggeser semua isi ke atas sedikit */
+            margin-top: -30px;
             text-align: center;
         }
 
@@ -48,16 +48,30 @@
         }
         
         .logo-container img{
-        height: 30px;
+            height: 30px;
         }
 
-        .login-box img {
+        .reset-box img {
             height: 60px;
             margin-bottom: 1.5rem;
             display: block;
             margin-left: auto;
             margin-right: auto;
-            margin-top: -30px; /* supaya naik sedikit */
+            margin-top: -30px;
+        }
+
+        .reset-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .reset-description {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 2rem;
+            line-height: 1.4;
         }
 
         .form-group { margin-bottom: 1rem; }
@@ -65,11 +79,12 @@
             display: block;
             font-weight: 600;
             margin-bottom: 0.5rem;
-            text-align: left; /* tambahkan ini */
+            text-align: left;
         }
 
         .form-group input { width: 100%; padding: 0.75rem; border-radius: 6px; border: 1px solid #ccc; }
         .form-button { width: 100%; background: #0d6efd; color: white; padding: 0.75rem; font-weight: 600; border: none; border-radius: 6px; cursor: pointer; margin-top: 1rem; }
+        .form-button:hover { background: #0b5ed7; }
         .form-links { text-align: center; margin-top: 1rem; }
         .form-links a { color: #0d6efd; text-decoration: none; font-size: 0.9rem; margin: 0 5px; }
         .footer { position: absolute; bottom: 1rem; font-size: 0.75rem; color: #999; }
@@ -78,34 +93,32 @@
 <body>
 
     <div class="left">
-            <div class="logo-container">
-                <img src="{{ asset('img/logowhite.png') }}" alt="Logo SIPINTA">
-            </div>
+        <div class="logo-container">
+            <img src="{{ asset('img/logowhite.png') }}" alt="Logo SIPINTA">
+        </div>
         <h2>English Starts Now.<br>With TOEIC, Future Become Must!</h2>
-            
-    </div>
-        
     </div>
 
     <div class="right">
-        <div class="login-box">
+        <div class="reset-box">
             <img src="{{ asset('img/logo_sipinta.png') }}" alt="tcToeic Logo">
-            <form id="loginForm">
+            
+            <h3 class="reset-title">Reset Password</h3>
+            <p class="reset-description">
+                Masukkan email yang terhubung dengan akun Anda. Kami akan mengirimkan link untuk mereset password.
+            </p>
+            
+            <form id="resetForm">
                 <div class="form-group">
-                    <label for="username">Username</label>
-                    <input type="text" id="username" name="username" placeholder="Ketik Nama Pengguna" required>
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" placeholder="Masukkan alamat email Anda" required>
                 </div>
 
-                <div class="form-group">
-                    <label for="password">Kata Sandi</label>
-                    <input type="password" id="password" name="password" placeholder="Ketik Kata Sandi" required>
-                </div>
-
-                <button type="submit" class="form-button">Masuk!</button>
+                <button type="submit" class="form-button">Kirim Link Reset</button>
 
                 <div class="form-links">
-                    <a href="/password/reset">Lupa Password?</a> | 
-                    <a href="/">Kembali ke Halaman Awal</a>
+                    <a href="/login">Kembali ke Login</a> | 
+                    <a href="/">Halaman Awal</a>
                 </div>
             </form>
             <div class="footer">
@@ -122,51 +135,59 @@
     <script src="{{ asset('adminlte/dist/js/adminlte.min.js') }}"></script>
 
     <script>
-        $('#loginForm').on('submit', function(e) {
+        $('#resetForm').on('submit', function(e) {
             e.preventDefault();
 
+            // Disable button to prevent double submission
+            $('#resetForm button').prop('disabled', true).text('Mengirim...');
+
             $.ajax({
-                url: "{{ route('login') }}",
+                url: "{{ route('password.email') }}",
                 method: "POST",
                 data: {
-                    username: $('#username').val(),
-                    password: $('#password').val(),
+                    email: $('#email').val(),
                     _token: $('meta[name="csrf-token"]').attr('content')
                 },
                 success: function(response) {
                     if (response.status) {
                         Swal.fire({
                             icon: 'success',
-                            title: 'Berhasil!',
-                            text: response.message || 'Login berhasil!',
-                            showConfirmButton: false,
-                            timer: 1500,
+                            title: 'Email Terkirim!',
+                            text: response.message || 'Link reset password telah dikirim ke email Anda.',
+                            showConfirmButton: true,
                             heightAuto: false
                         }).then(() => {
-                            window.location.href = response.redirect;
+                            $('#email').val('');
                         });
-
                     } else {
                         Swal.fire({
                             icon: 'error',
-                            title: 'Login Gagal',
-                            text: response.message || 'Username atau password salah.',
+                            title: 'Gagal Mengirim',
+                            text: response.message || 'Email tidak ditemukan atau terjadi kesalahan.',
                             heightAuto: false
                         });
                     }
-
                 },
                 error: function(xhr) {
+                    let errorMessage = 'Terjadi kesalahan. Silakan coba lagi.';
+                    if (xhr.responseJSON && xhr.responseJSON.message) {
+                        errorMessage = xhr.responseJSON.message;
+                    }
+                    
                     Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Terjadi kesalahan. Silakan coba lagi.'
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: errorMessage,
+                        heightAuto: false
                     });
+                },
+                complete: function() {
+                    // Re-enable button
+                    $('#resetForm button').prop('disabled', false).text('Kirim Link Reset');
                 }
-
             });
         });
     </script>
 
 </body>
-</html>  
+</html>

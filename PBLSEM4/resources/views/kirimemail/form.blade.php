@@ -1,7 +1,5 @@
 <form id="formKirimEmail" action="{{ route('kirimemail.kirim') }}" method="POST">
     @csrf
-
-    {{-- Kirimkan pendaftaran_id sebagai hidden field --}}
     <input type="hidden" name="pendaftaran_id" value="{{ $data->pendaftaran_id }}">
 
     <div class="modal-dialog">
@@ -14,29 +12,27 @@
             </div>
 
             <div class="modal-body">
-                {{-- Nama Mahasiswa (readonly) --}}
+
                 <div class="mb-3">
                     <label class="form-label">Nama Mahasiswa</label>
                     <input
                         type="text"
                         class="form-control"
-                        value="{{ $data->mahasiswa->mahasiswa_nama }}"
+                        value="{{ $data->mahasiswa->mahasiswa_nama ?? '-' }}"
                         readonly
                     >
                 </div>
 
-                {{-- Alamat Email (readonly) --}}
                 <div class="mb-3">
                     <label class="form-label">Alamat Email</label>
                     <input
-                        type="text"
+                        type="email"
+                        name="email"
                         class="form-control"
-                        value="{{ $data->mahasiswa->email }}"
-                        readonly
+                        value="{{ $data->mahasiswa->user->email ?? '-' }}"
                     >
                 </div>
 
-                {{-- Subject Email --}}
                 <div class="mb-3">
                     <label class="form-label">Subject</label>
                     <input
@@ -48,7 +44,6 @@
                     >
                 </div>
 
-                {{-- Isi Email (textarea) --}}
                 <div class="mb-3">
                     <label class="form-label">Isi Email</label>
                     @php
@@ -88,6 +83,7 @@
 $('#formKirimEmail').on('submit', function(e) {
     e.preventDefault();
     const form = $(this);
+    // console.log(res);
 
     Swal.fire({
         title: 'Kirim Email?',

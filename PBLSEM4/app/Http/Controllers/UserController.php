@@ -10,8 +10,13 @@ use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
+  use Barryvdh\DomPDF\Facade\Pdf;
 
 use Illuminate\Http\Request;
 
@@ -266,6 +271,58 @@ class UserController extends Controller
         return view('user.edit_ajax', compact('user', 'roles', 'availableUsers'));
     }
 
+    public function update_ajax(Request $request, $user_id)
+{
+    $user = UserModel::find($user_id);
+
+    if (!$user) {
+        return response()->json([
+            'status' => false,
+            'message' => 'User tidak ditemukan',
+        ]);
+    }
+
+    // Validasi input
+    $validator = Validator::make($request->all(), [
+        'username' => 'required|min:3|unique:user,username,' . $user_id . ',user_id',
+        'email' => 'required|email|unique:user,email,' . $user_id . ',user_id',
+        'password' => 'nullable|min:5',
+        'profile' => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json([
+            'status' => false,
+            'message' => 'Validasi gagal',
+            'msgField' => $validator->errors()
+        ]);
+    }
+
+    // Update data user
+    $user->username = $request->username;
+    $user->email = $request->email;
+
+    if ($request->filled('password')) {
+        $user->password = bcrypt($request->password);
+    }
+
+    // Handle foto profil
+    if ($request->hasFile('profile')) {
+        $file = $request->file('profile');
+        $filename = time() . '_' . $file->getClientOriginalName();
+        $file->move(public_path('uploads/profile'), $filename);
+        $user->profile = $filename;
+    }
+
+    $user->save();
+
+    return response()->json([
+        'status' => true,
+        'message' => 'Data user berhasil diperbarui.'
+    ]);
+}
+
+
     public function confirm_ajax($user_id)
     {
         $user = UserModel::with(['admin', 'mahasiswa', 'dosen', 'tendik'])->find($user_id);
@@ -301,6 +358,159 @@ class UserController extends Controller
                 'message' => 'Gagal menghapus user: ' . $e->getMessage()
             ]);
         }
+    }
+
+    // Menampilkan form import tendik
+    public function import()
+    {
+        return view('user.import');
+    }
+
+    // Import data tendik dari file Excel via AJAX
+    public function import_ajax(Request $request)
+    {
+        if ($request->ajax() || $request->wantsJson()) {
+            $validator = Validator::make($request->all(), [
+                'file_user' => ['required', 'file', 'mimes:xlsx', 'max:1024']
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Validasi gagal',
+                    'errors' => $validator->errors()
+                ]);
+            }
+
+            try {
+                $file = $request->file('file_user');
+                $reader = IOFactory::createReader('Xlsx');
+                $reader->setReadDataOnly(true);
+                $spreadsheet = $reader->load($file->getRealPath());
+                $sheet = $spreadsheet->getActiveSheet();
+                $rows = $sheet->toArray(null, false, true, true);
+
+                $insertData = [];
+
+                foreach ($rows as $index => $row) {
+                    if ($index === 1) continue; // lewati header
+
+                    // Pastikan email dan username minimal terisi
+                    if (!isset($row['A'], $row['B'], $row['C'])) continue;
+
+                    $insertData[] = [
+                        'email'       => $row['A'], // misalnya kolom A = email
+                        'username'    => $row['B'], // kolom B = username
+                        'password'    => Hash::make($row['C']), // kolom C = password
+                        'profile'     => $row['D'] ?? null,     // kolom D = profile (opsional)
+                        'role'        => $row['E'] ?? 'mahasiswa', // kolom E = role (default mahasiswa)
+                        'admin_id'    => $row['F'] ?? null,
+                        'mahasiswa_id'=> $row['G'] ?? null,
+                        'dosen_id'    => $row['H'] ?? null,
+                        'tendik_id'   => $row['I'] ?? null,
+                        'created_at'  => now(),
+                        'updated_at'  => now(),
+                    ];
+                }
+
+                if (count($insertData) > 0) {
+                    UserModel::insertOrIgnore($insertData);
+                    return response()->json([
+                        'status' => true,
+                        'message' => 'Data user berhasil diimport',
+                        'jumlah' => count($insertData)
+                    ]);
+                }
+
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Tidak ada data valid yang ditemukan'
+                ]);
+
+            } catch (\Exception $e) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Terjadi error saat membaca file',
+                    'error' => $e->getMessage()
+                ]);
+            }
+        }
+
+        return response()->json([
+            'status' => false,
+            'message' => 'Akses tidak diizinkan'
+        ]);
+    }
+
+    public function export_excel()
+    {
+        $users = UserModel::select('email', 'username', 'profile', 'role', 'admin_id', 'mahasiswa_id', 'dosen_id', 'tendik_id')
+            ->orderBy('user_id')
+            ->get();
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        // Header kolom
+        $sheet->setCellValue('A1', 'No');
+        $sheet->setCellValue('B1', 'Email');
+        $sheet->setCellValue('C1', 'Username');
+        $sheet->setCellValue('D1', 'Profile');
+        $sheet->setCellValue('E1', 'Role');
+        $sheet->setCellValue('F1', 'Admin ID');
+        $sheet->setCellValue('G1', 'Mahasiswa ID');
+        $sheet->setCellValue('H1', 'Dosen ID');
+        $sheet->setCellValue('I1', 'Tendik ID');
+
+        $sheet->getStyle('A1:I1')->getFont()->setBold(true);
+
+        // Isi data
+        $no = 1;
+        $row = 2;
+        foreach ($users as $user) {
+            $sheet->setCellValue('A' . $row, $no++);
+            $sheet->setCellValue('B' . $row, $user->email);
+            $sheet->setCellValue('C' . $row, $user->username);
+
+            // Tambahkan gambar profil
+            if ($user->profile && file_exists(public_path('storage/' . $user->profile))) {
+                $drawing = new Drawing();
+                $drawing->setPath(public_path('storage/' . $user->profile));
+                $drawing->setHeight(40); // Atur tinggi gambar
+                $drawing->setCoordinates('D' . $row);
+                $drawing->setOffsetX(5);
+                $drawing->setOffsetY(5);
+                $drawing->setWorksheet($sheet);
+                $sheet->getRowDimension($row)->setRowHeight(45); // Sesuaikan tinggi baris
+            } else {
+                $sheet->setCellValue('D' . $row, 'No Image');
+            }
+
+            $sheet->setCellValue('E' . $row, $user->role);
+            $sheet->setCellValue('F' . $row, $user->admin_id);
+            $sheet->setCellValue('G' . $row, $user->mahasiswa_id);
+            $sheet->setCellValue('H' . $row, $user->dosen_id);
+            $sheet->setCellValue('I' . $row, $user->tendik_id);
+
+            $row++;
+        }
+
+        // Auto-size kolom (kecuali D karena gambar)
+        foreach (['A', 'B', 'C', 'E', 'F', 'G', 'H', 'I'] as $col) {
+            $sheet->getColumnDimension($col)->setAutoSize(true);
+        }
+
+        $sheet->setTitle('Data User');
+
+        $filename = 'Data_User_' . date('Y-m-d_H-i-s') . '.xlsx';
+
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="' . $filename . '"');
+        header('Cache-Control: max-age=0');
+
+        $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
+        $writer->save('php://output');
+        exit;
     }
 
     public function profile() 
@@ -366,6 +576,20 @@ class UserController extends Controller
             return redirect()->back()->with('error', 'Gagal mengupload foto: ' . $e->getMessage());
         }
     }
+
+
+    public function export_pdf()
+    {
+        $users = UserModel::select('email', 'username', 'profile', 'role', 'admin_id', 'mahasiswa_id', 'dosen_id', 'tendik_id')
+            ->orderBy('user_id')
+            ->get();
+
+        $pdf = Pdf::loadView('user.export_pdf', compact('users'))
+            ->setPaper('A4', 'landscape');
+
+        return $pdf->download('Data_User_' . date('Y-m-d_H-i-s') . '.pdf');
+    }
+
 
 
 

@@ -84,9 +84,9 @@ class KirimEmailController extends Controller
         ]);
 
         // 2) Ambil data pendaftaran beserta relasi mahasiswa
-        $pendaftaran = PendaftaranModel::with('mahasiswa')->findOrFail($request->pendaftaran_id);
+        $pendaftaran = PendaftaranModel::with('mahasiswa.user')->findOrFail($request->pendaftaran_id);
 
-        $emailTujuan   = $pendaftaran->mahasiswa->email ?? null;
+        $emailTujuan   = $pendaftaran->mahasiswa->user->email ?? '-';
         $namaMahasiswa = $pendaftaran->mahasiswa->mahasiswa_nama ?? '-';
         $nimMahasiswa  = $pendaftaran->mahasiswa->nim ?? '-';
 
@@ -105,29 +105,17 @@ class KirimEmailController extends Controller
         ];
 
         try {
-            // 4) Kirim email via Laravel Mailable. Kita pakai subject sesuai input user.
             Mail::to($emailTujuan)
                 ->send((new InformasiMahasiswaMail($dataMail))
-                        ->subject($request->subject)
-                );
+                ->subject($request->subject)
+        );
 
-            // 5) Cek apakah ada kegagalan
-            if (Mail::failures()) {
-                Log::error('Gagal mengirim email ke: ' . $emailTujuan);
-                return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Gagal mengirim email. Silakan coba lagi.'
-                ], 500);
-            }
-
-            // 6) Berhasil
-            return response()->json([
-                'status'  => 'success',
-                'message' => 'Email berhasil dikirim ke ' . $emailTujuan,
-            ]);
+        return response()->json([
+            'status'  => 'success',
+            'message' => 'Email berhasil dikirim ke ' . $emailTujuan,
+        ]);
 
         } catch (\Exception $e) {
-            // Tangani error (misal SMTP down, credential salah, dll.)
             Log::error('Exception Mail: ' . $e->getMessage());
             return response()->json([
                 'status'  => 'error',

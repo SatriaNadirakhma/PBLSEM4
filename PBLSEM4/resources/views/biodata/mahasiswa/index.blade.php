@@ -6,16 +6,16 @@
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
             <h3 class="card-title mb-2 mb-md-0">{{ $breadcrumb->title ?? 'Data Mahasiswa' }}</h3>
             <div class="btn-toolbar flex-wrap gap-2" role="toolbar">
-                <button onclick="modalAction('{{ url('/mahasiswa/import') }}')" class="btn btn-sm shadow-sm rounded-pill" style="background-color: #6f42c1; color: white;">
+                <button onclick="modalAction('{{ route('biodata.mahasiswa.import') }}')" class="btn btn-sm shadow-sm rounded-pill" style="background-color: #6f42c1; color: white;">
                     <i class="fa fa-upload me-1"></i> Import Excel
                 </button>
-                <a href="{{ url('/mahasiswa/export_excel') }}" class="btn btn-sm shadow-sm rounded-pill" style="background-color: #004085; color: white;">
+                <a href="{{ route('biodata.mahasiswa.export_excel') }}" class="btn btn-sm shadow-sm rounded-pill" style="background-color: #004085; color: white;">
                     <i class="fa fa-file-excel me-1"></i> Export Excel
                 </a>
-                <a href="{{ url('/mahasiswa/export_pdf') }}" class="btn btn-sm shadow-sm rounded-pill" style="background-color: #20c997; color: black;">
+                <a href="{{ route('biodata.mahasiswa.export_pdf') }}" class="btn btn-sm shadow-sm rounded-pill" style="background-color: #20c997; color: black;">
                     <i class="fa fa-file-pdf me-1"></i> Export PDF
                 </a>
-                <button onclick="modalAction('{{ url('/mahasiswa/create_ajax') }}')" class="btn btn-sm shadow-sm rounded-pill" style="background-color: #d63384; color: white;">
+                <button onclick="modalAction('{{ route('biodata.mahasiswa.create_ajax') }}')" class="btn btn-sm shadow-sm rounded-pill" style="background-color: #d63384; color: white;">
                     <i class="fa fa-plus-circle me-1"></i> Tambah
                 </button>
             </div>

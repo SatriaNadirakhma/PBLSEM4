@@ -30,9 +30,9 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label>NIP</label>
-                    <input value="{{ $dosen->nip }}" type="text" name="nip" id="nip" class="form-control" required>
-                    <small id="error-nip" class="error-text form-text text-danger"></small>
+                    <label>NIDN</label>
+                    <input value="{{ $dosen->nidn }}" type="text" name="nidn" id="nidn" class="form-control" required>
+                    <small id="error-nidn" class="error-text form-text text-danger"></small>
                 </div>
                 <div class="form-group">
                     <label>NIK</label>
@@ -93,9 +93,9 @@
     $(document).ready(function () {
         $("#form-edit").validate({
             rules: {
-                nip: {
+                nidn: {
                     required: true,
-                    minlength: 2,
+                    minlength: 10,
                     maxlength: 20
                 },
                 nik: {
