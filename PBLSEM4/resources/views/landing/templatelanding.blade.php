@@ -46,6 +46,8 @@
 
   @include('landing.pengantarsection')
 
+      @include('landing.overviewsection')
+
   @include('landing.faqsection')
 
   @include('landing.benefitsection')
@@ -53,8 +55,6 @@
     @include('landing.cobasection')
 
   @include('landing.teamsection')
-
-    @include('landing.overviewsection')
   
   @include('landing.footerlanding')
 
