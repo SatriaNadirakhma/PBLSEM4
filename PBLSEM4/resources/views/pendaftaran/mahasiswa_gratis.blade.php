@@ -68,14 +68,17 @@
                 <div class="form-group mb-2">
                     <label class="mb-1">Scan KTP <span class="text-danger">*</span></label>
                     <input type="file" class="form-control form-control-sm" name="scan_ktp" accept="image/*,application/pdf" required>
+                    <small class="form-text text-muted">Format yang diizinkan: JPG, JPEG, dan PNG</small>
                 </div>
                 <div class="form-group mb-2">
                     <label class="mb-1">Scan KTM <span class="text-danger">*</span></label>
                     <input type="file" class="form-control form-control-sm" name="scan_ktm" accept="image/*,application/pdf" required>
+                    <small class="form-text text-muted">Format yang diizinkan: JPG, JPEG, dan PNG</small>
                 </div>
                 <div class="form-group mb-2">
                     <label class="mb-1">Pas Foto <span class="text-danger">*</span></label>
                     <input type="file" class="form-control form-control-sm" name="pas_foto" accept="image/*" required>
+                    <small class="form-text text-muted">Format yang diizinkan: JPG, JPEG, dan PNG</small>
                 </div>
             </div>
         </div>
