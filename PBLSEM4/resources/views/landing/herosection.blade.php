@@ -8,12 +8,7 @@
         <div class="row align-items-center mb-5">
           <div class="col-lg-6 mb-4 mb-lg-0">
             <div class="badge-wrapper mb-3">
-              <div class="d-inline-flex align-items-center rounded-pill border border-accent-light">
-                <div class="icon-circle me-2">
-                  <i class="bi bi-bell"></i>
-                </div>
-                <span class="badge-text me-3">Innovative Solutions</span>
-              </div>
+      
             </div>
 
             <h1 class="hero-title mb-4">Solusi Pendaftaran TOEIC Untuk Mahasiswa Polinema</h1>

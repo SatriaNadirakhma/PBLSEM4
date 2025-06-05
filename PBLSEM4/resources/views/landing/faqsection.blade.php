@@ -10,9 +10,9 @@
         <div class="accordion accordion-flush" id="faqAccordion">
 
           <!-- Item 1 -->
-          <div class="accordion-item bg-transparent border-0 mb-3 rounded-3 shadow-sm" style="background-color: rgba(255,255,255,0.1);">
+          <div class="accordion-item bg-transparent border-0 mb-3 rounded-3 shadow-sm">
             <h2 class="accordion-header" id="faqHeadingOne">
-              <button class="accordion-button collapsed text-white bg-transparent rounded-top-3" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapseOne" aria-expanded="false" aria-controls="faqCollapseOne" style="font-size: 1.1rem;">
+              <button class="accordion-button collapsed text-dark bg-white bg-opacity-75 rounded-top-3" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapseOne" aria-expanded="false" aria-controls="faqCollapseOne" style="font-size: 1.1rem;">
                 Apa itu TOEIC?
               </button>
             </h2>
@@ -24,9 +24,9 @@
           </div>
 
           <!-- Item 2 -->
-          <div class="accordion-item bg-transparent border-0 mb-3 rounded-3 shadow-sm" style="background-color: rgba(255,255,255,0.1);">
+          <div class="accordion-item bg-transparent border-0 mb-3 rounded-3 shadow-sm">
             <h2 class="accordion-header" id="faqHeadingTwo">
-              <button class="accordion-button collapsed text-white bg-transparent rounded-top-3" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapseTwo" aria-expanded="false" aria-controls="faqCollapseTwo" style="font-size: 1.1rem;">
+              <button class="accordion-button collapsed text-dark bg-white bg-opacity-75 rounded-top-3" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapseTwo" aria-expanded="false" aria-controls="faqCollapseTwo" style="font-size: 1.1rem;">
                 Apa saja persyaratan mengikuti TOEIC secara gratis?
               </button>
             </h2>
@@ -38,9 +38,9 @@
           </div>
 
           <!-- Item 3 -->
-          <div class="accordion-item bg-transparent border-0 mb-3 rounded-3 shadow-sm" style="background-color: rgba(255,255,255,0.1);">
+          <div class="accordion-item bg-transparent border-0 mb-3 rounded-3 shadow-sm">
             <h2 class="accordion-header" id="faqHeadingThree">
-              <button class="accordion-button collapsed text-white bg-transparent rounded-top-3" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapseThree" aria-expanded="false" aria-controls="faqCollapseThree" style="font-size: 1.1rem;">
+              <button class="accordion-button collapsed text-dark bg-white bg-opacity-75 rounded-top-3" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapseThree" aria-expanded="false" aria-controls="faqCollapseThree" style="font-size: 1.1rem;">
                 Siapa yang bisa saya hubungi jika ada kendala?
               </button>
             </h2>

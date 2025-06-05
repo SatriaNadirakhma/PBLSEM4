@@ -47,7 +47,7 @@
           </p>
         </div>
         <div class="text-center">
-          <img src="img/ilustrasi.jpg" alt="Sipinta Illustration" class="w-full max-w-md mx-auto rounded-xl" />
+          <img src="img/ilustrasiAbout.png" alt="Sipinta Illustration" class="w-full max-w-md mx-auto rounded-xl" />
         </div>
       </div>
 
