@@ -87,22 +87,20 @@
         <thead>
             <tr>
                 <th class="text-center">No</th>
+                <th>Nama Peserta</th>
                 <th>Nilai Listening</th>
                 <th>Nilai Reading</th>
                 <th>Status Lulus</th>
-                <th>Catatan</th>
-                <th>User ID</th>
             </tr>
         </thead>
         <tbody>
             @foreach($hasil_ujian as $h)
             <tr>
                 <td class="text-center">{{ $loop->iteration }}</td>
+                <td>{{ $h->user ? $h->user->nama_lengkap : '-' }}</td>
                 <td>{{ $h->nilai_listening }}</td>
                 <td>{{ $h->nilai_reading }}</td>
                 <td>{{ $h->status_lulus }}</td>
-                <td>{{ $h->catatan }}</td>
-                <td>{{ $h->user_id }}</td>
             </tr>
             @endforeach
         </tbody>

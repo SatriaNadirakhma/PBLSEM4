@@ -40,10 +40,6 @@
                     <td>{{ $hasil_ujian->status_lulus }}</td>
                 </tr>
                 <tr>
-                    <th>Catatan</th>
-                    <td>{{ $hasil_ujian->catatan }}</td>
-                </tr>
-                <tr>
                     <th>User ID</th>
                     <td>{{ $hasil_ujian->user_id }}</td>
                 </tr>

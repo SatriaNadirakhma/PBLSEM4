@@ -11,7 +11,8 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label>Download Template</label>
-                    <a href="{{ asset('template_hasil_ujian.xlsx') }}" class="btn btn-info btn-sm" download>
+                    {{-- <a href="{{ asset('download_template.xlsx') }}" class="btn btn-info btn-sm" download> --}}
+                    <a href="{{ route('hasil_ujian.download_template') }}" class="btn btn-info btn-sm" >
                         <i class="fa fa-file-excel"></i> Download
                     </a>
                     <small id="error-template" class="error-text form-text text-danger"></small>

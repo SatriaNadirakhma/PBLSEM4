@@ -12,26 +12,43 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
+                            <label>Pilih Role <span class="text-danger">*</span></label>
+                            <select id="role" class="form-control" required>
+                                <option value="">-- Pilih Role --</option>
+                                <option value="mahasiswa">Mahasiswa</option>
+                                <option value="dosen">Dosen</option>
+                                <option value="tendik">Tendik</option>
+                            </select>
+                            <small id="error-role" class="error-text text-danger"></small>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
                             <label>Peserta <span class="text-danger">*</span></label>
-                            <select name="user_id" id="user_id" class="form-control select2" required>
-                                <option value="">-- Pilih Peserta --</option>
+                            <select name="user_id" id="user_id" class="form-control select2" required >
+                                <option value="">-- Pilih Role Terlebih Dahulu --</option>
                                 @foreach($users as $user)
-                                    <option value="{{ $user->id }}" data-role="{{ $user->role }}">
-                                        @if($user->mahasiswa)
+                                    @if($user->role == 'mahasiswa' && $user->mahasiswa)
+                                        <option value="{{ $user->id }}" data-role="mahasiswa">
                                             {{ $user->mahasiswa->mahasiswa_nama }} ({{ $user->mahasiswa->mahasiswa_nim }} - Mahasiswa)
-                                        @elseif($user->dosen)
+                                        </option>
+                                    @elseif($user->role == 'dosen' && $user->dosen)
+                                        <option value="{{ $user->id }}" data-role="dosen">
                                             {{ $user->dosen->dosen_nama }} ({{ $user->dosen->dosen_nidn }} - Dosen)
-                                        @elseif($user->tendik)
+                                        </option>
+                                    @elseif($user->role == 'tendik' && $user->tendik)
+                                        <option value="{{ $user->id }}" data-role="tendik">
                                             {{ $user->tendik->tendik_nama }} ({{ $user->tendik->tendik_nip }} - Tendik)
-                                        @else
-                                            {{ $user->nama ?? $user->username }} ({{ ucfirst($user->role) }}) 
-                                        @endif
-                                    </option>
+                                        </option>
+                                    @endif
                                 @endforeach
                             </select>
                             <small id="error-user_id" class="error-text text-danger"></small>
                         </div>
                     </div>
+                </div>
+
+                <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
                             <label>Jadwal Ujian <span class="text-danger">*</span></label>
@@ -80,7 +97,7 @@
                         <div class="form-group">
                             <label>Total Nilai</label>
                             <input type="number" id="nilai_total" class="form-control" readonly 
-                                   placeholder="Otomatis terhitung">
+                                placeholder="Otomatis terhitung" data-max="990">
                             <small class="form-text text-muted">Total otomatis = Listening + Reading</small>
                         </div>
                     </div>
@@ -88,7 +105,7 @@
                         <div class="form-group">
                             <label>Status Kelulusan</label>
                             <input type="text" id="status_preview" class="form-control" readonly 
-                                   placeholder="Otomatis berdasarkan total nilai">
+                                placeholder="Otomatis berdasarkan total nilai">
                             <small class="form-text text-muted">Lulus jika total ≥ 600</small>
                         </div>
                     </div>
@@ -115,18 +132,90 @@
 
 <script>
 $(document).ready(function() {
-    // Initialize Select2 untuk dropdown peserta
+    // Inisialisasi Select2
     $('#user_id').select2({
         dropdownParent: $('#modal-master'),
-        placeholder: "Cari nama peserta...",
+        placeholder: "Pilih nama peserta...",
         allowClear: true
     });
 
-    // Auto calculate total nilai dan status
+    // Role filter logic dengan AJAX untuk fetch data
+    $('#role').on('change', function() {
+        const roleSelected = $(this).val();
+        const userSelect = $('#user_id');
+        
+        if (roleSelected) {
+            // Tampilkan loading
+            userSelect.prop('disabled', true)
+                      .html('<option value="">Memuat data...</option>')
+                      .trigger('change');
+            
+            // AJAX request untuk mengambil data user berdasarkan role
+            $.ajax({
+                url: "{{ url('/get-users-by-role') }}", // Endpoint untuk mengambil user berdasarkan role
+                type: 'GET',
+                data: { role: roleSelected },
+                dataType: 'json',
+                success: function(response) {
+                    userSelect.empty().append('<option value="">-- Pilih Peserta --</option>');
+                    
+                    if (response.status && response.data.length > 0) {
+                        $.each(response.data, function(index, user) {
+                            let optionText = '';
+                            if (roleSelected === 'mahasiswa' && user.mahasiswa) {
+                                optionText = `${user.mahasiswa.mahasiswa_nama} (${user.mahasiswa.mahasiswa_nim} - Mahasiswa)`;
+                            } else if (roleSelected === 'dosen' && user.dosen) {
+                                optionText = `${user.dosen.dosen_nama} (${user.dosen.dosen_nidn} - Dosen)`;
+                            } else if (roleSelected === 'tendik' && user.tendik) {
+                                optionText = `${user.tendik.tendik_nama} (${user.tendik.tendik_nip} - Tendik)`;
+                            }
+                            
+                            if (optionText) {
+                                userSelect.append(`<option value="${user.id}">${optionText}</option>`);
+                            }
+                        });
+                        userSelect.prop('disabled', false);
+                    } else {
+                        userSelect.append('<option value="">Tidak ada data tersedia</option>');
+                    }
+                    userSelect.trigger('change');
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error fetching users:', error);
+                    userSelect.empty()
+                             .append('<option value="">Error memuat data</option>')
+                             .trigger('change');
+                    
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Gagal memuat data peserta. Silakan coba lagi.',
+                        icon: 'error',
+                        timer: 3000
+                    });
+                }
+            });
+        } else {
+            // Reset dropdown jika tidak ada role dipilih
+            userSelect.prop('disabled', true)
+                      .empty()
+                      .append('<option value="">-- Pilih Role Terlebih Dahulu --</option>')
+                      .trigger('change');
+        }
+    });
+
+    // Hitung total & status kelulusan
     function calculateTotal() {
         const listening = parseInt($('#nilai_listening').val()) || 0;
         const reading = parseInt($('#nilai_reading').val()) || 0;
-        const total = listening + reading;
+        let total = listening + reading;
+        const maxTotal = parseInt($('#nilai_total').data('max')) || 990;
+        
+        if (total > maxTotal) {
+            total = maxTotal;
+            $('#nilai_total').addClass('border border-warning');
+        } else {
+            $('#nilai_total').removeClass('border border-warning');
+        }
         
         $('#nilai_total').val(total);
         
@@ -139,10 +228,9 @@ $(document).ready(function() {
         }
     }
 
-    // Event listeners untuk auto calculate
     $('#nilai_listening, #nilai_reading').on('input change', calculateTotal);
 
-    // Form validation
+    // Validasi & AJAX submit
     $("#form-tambah-hasil_ujian").validate({
         rules: {
             user_id: { required: true },
@@ -157,18 +245,16 @@ $(document).ready(function() {
             nilai_listening: {
                 required: "Nilai listening wajib diisi",
                 number: "Masukkan angka yang valid",
-                min: "Nilai minimal 0",
-                max: "Nilai maksimal 495"
+                min: "Minimal 0",
+                max: "Maksimal 495"
             },
             nilai_reading: {
                 required: "Nilai reading wajib diisi",
                 number: "Masukkan angka yang valid",
-                min: "Nilai minimal 0",
-                max: "Nilai maksimal 495"
+                min: "Minimal 0",
+                max: "Maksimal 495"
             },
-            catatan: {
-                maxlength: "Catatan maksimal 255 karakter"
-            }
+            catatan: { maxlength: "Maksimal 255 karakter" }
         },
         errorElement: 'small',
         errorClass: 'text-danger',
@@ -176,16 +262,16 @@ $(document).ready(function() {
             error.insertAfter(element);
         },
         submitHandler: function(form) {
-            // Disable submit button
-            $(form).find('button[type="submit"]').prop('disabled', true).html('<i class="fa fa-spinner fa-spin me-1"></i> Menyimpan...');
-            
+            $(form).find('button[type="submit"]').prop('disabled', true)
+                .html('<i class="fa fa-spinner fa-spin me-1"></i> Menyimpan...');
+                
             $.ajax({
                 url: form.action,
                 type: form.method,
                 data: $(form).serialize(),
                 dataType: 'json',
                 success: function(response) {
-                    if(response.status) {
+                    if (response.status) {
                         $('#modal-master').modal('hide');
                         Swal.fire({
                             title: 'Berhasil!',
@@ -194,24 +280,18 @@ $(document).ready(function() {
                             timer: 2000,
                             showConfirmButton: false
                         });
-                        
-                        // Reload DataTable
                         if (typeof dataHasilUjian !== 'undefined') {
                             dataHasilUjian.ajax.reload(null, false);
                         } else {
                             setTimeout(() => location.reload(), 1500);
                         }
                     } else {
-                        // Clear previous errors
                         $('.error-text').text('');
-                        
-                        // Show field errors
-                        if(response.msgField) {
+                        if (response.msgField) {
                             $.each(response.msgField, function(key, val) {
                                 $('#error-' + key).text(Array.isArray(val) ? val[0] : val);
                             });
                         }
-                        
                         Swal.fire({
                             title: 'Gagal!',
                             text: response.message || 'Gagal menyimpan data',
@@ -220,7 +300,7 @@ $(document).ready(function() {
                     }
                 },
                 error: function(xhr, status, error) {
-                    console.log('Ajax Error:', xhr.responseText);
+                    console.error('Ajax Error:', xhr.responseText);
                     Swal.fire({
                         title: 'Error!',
                         text: 'Terjadi kesalahan saat mengirim data. Silakan coba lagi.',
@@ -228,55 +308,25 @@ $(document).ready(function() {
                     });
                 },
                 complete: function() {
-                    // Re-enable submit button
-                    $(form).find('button[type="submit"]').prop('disabled', false).html('<i class="fa fa-save me-1"></i> Simpan Data');
+                    $(form).find('button[type="submit"]').prop('disabled', false)
+                        .html('<i class="fa fa-save me-1"></i> Simpan Data');
                 }
             });
             return false;
         }
     });
 
-    // Reset form when modal is hidden
+    // Reset form saat modal ditutup
     $('#modal-master').on('hidden.bs.modal', function() {
-        $('#form-tambah-hasil_ujian')[0].reset();
+        const form = $('#form-tambah-hasil_ujian');
+        form[0].reset();
         $('.error-text').text('');
-        $('#user_id').val(null).trigger('change');
-        $('#nilai_total, #status_preview').val('').removeClass('text-success text-danger');
+        $('#role').val('');
+        $('#user_id').empty()
+                    .append('<option value="">-- Pilih Role Terlebih Dahulu --</option>')
+                    .prop('disabled', true)
+                    .trigger('change');
+        $('#nilai_total, #status_preview').val('').removeClass('text-success text-danger border border-warning');
     });
 });
 </script>
-
-<style>
-.form-group label {
-    font-weight: 600;
-    color: #495057;
-}
-
-.form-control:focus {
-    border-color: #007bff;
-    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
-}
-
-.select2-container--default .select2-selection--single {
-    height: 38px;
-    border: 1px solid #ced4da;
-    border-radius: 0.25rem;
-}
-
-.select2-container--default .select2-selection--single .select2-selection__rendered {
-    line-height: 36px;
-    padding-left: 12px;
-}
-
-.text-success {
-    color: #28a745 !important;
-}
-
-.text-danger {
-    color: #dc3545 !important;
-}
-
-.form-text {
-    font-size: 0.875em;
-}
-</style>
