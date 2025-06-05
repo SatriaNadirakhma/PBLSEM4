@@ -12,14 +12,13 @@ class HasilUjianModel extends Model
     public $timestamps = true;
 
     protected $fillable = [
+        'user_id',
+        'jadwal_id',
+        'nama_peserta',
         'nilai_listening',
         'nilai_reading',
         'nilai_total',
         'status_lulus',
-        'catatan',
-        'jadwal_id',
-        'user_id',
-
     ];
 
     public function jadwal()
