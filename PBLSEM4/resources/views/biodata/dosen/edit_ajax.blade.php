@@ -96,12 +96,14 @@
                 nidn: {
                     required: true,
                     minlength: 10,
-                    maxlength: 20
+                    maxlength: 20, 
+                    digits: true,
                 },
                 nik: {
                     required: true,
                     minlength: 3,
-                    maxlength: 20
+                    maxlength: 20, 
+                    digits: true,
                 },
                 dosen_nama: {
                     required: true,
@@ -113,7 +115,10 @@
                 },
                 jurusan_id: {
                     required: true
-                }
+                },
+                no_telp: { 
+                    required: false, digits: true, minlength: 10, maxlength: 15 
+                },
             },
             submitHandler: function (form) {
                 $.ajax({

@@ -75,9 +75,10 @@
 $(document).ready(function() {
     $("#form-tambah-dosen").validate({
         rules: {
-            nidn: { required: true, minlength: 3, maxlength: 20 },
-            nik: { required: true, minlength: 3, maxlength: 20 },
+            nidn: { required: true, minlength: 3, maxlength: 20, digits: true, },
+            nik: { required: true, minlength: 3, maxlength: 20, digits: true, },
             dosen_nama: { required: true, minlength: 3, maxlength: 100 },
+            no_telp: { required: false, digits: true, minlength: 10, maxlength: 15 },
             jenis_kelamin: { required: true },
             jurusan_id: { required: true }
         },

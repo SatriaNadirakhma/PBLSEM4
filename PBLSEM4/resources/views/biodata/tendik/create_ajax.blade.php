@@ -72,9 +72,10 @@
 $(document).ready(function() {
     $("#form-tambah-tendik").validate({
         rules: {
-            nip: { required: true, minlength: 3, maxlength: 20 },
-            nik: { required: true, minlength: 3, maxlength: 20 },
+            nip: { required: true, minlength: 3, maxlength: 20, digits: true,},
+            nik: { required: true, minlength: 3, maxlength: 20, digits: true,},
             tendik_nama: { required: true, minlength: 3, maxlength: 100 },
+            no_telp: { required: false, digits: true, minlength: 10, maxlength: 15 },
             jenis_kelamin: { required: true },
             kampus_id: { required: true }
         },

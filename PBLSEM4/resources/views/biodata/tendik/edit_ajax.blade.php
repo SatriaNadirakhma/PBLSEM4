@@ -96,12 +96,14 @@
                 nip: {
                     required: true,
                     minlength: 2,
-                    maxlength: 20
+                    maxlength: 20, 
+                    digits: true,
                 },
                 nik: {
                     required: true,
                     minlength: 3,
-                    maxlength: 20
+                    maxlength: 20, 
+                    digits: true,
                 },
                 tendik_nama: {
                     required: true,
@@ -114,6 +116,12 @@
                 kampus_id: {
                     required: true
                 }
+                no_telp: { 
+                    required: false, 
+                    digits: true, 
+                    minlength: 10, 
+                    maxlength: 15 
+                },
             },
             submitHandler: function (form) {
                 $.ajax({
