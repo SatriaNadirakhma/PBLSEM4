@@ -114,8 +114,14 @@
                 nim: { required: true, minlength: 2, maxlength: 20 },
                 nik: { required: true, minlength: 3, maxlength: 20 },
                 mahasiswa_nama: { required: true, minlength: 3, maxlength: 100 },
+                angkatan: { required: true, digits: true, minlength: 4, maxlength: 4, min: 2000},
                 jenis_kelamin: { required: true },
                 prodi_id: { required: true }
+            },
+                messages: {
+                angkatan: {
+                    min: "Tahun angkatan tidak valid, Tahun angkatan harus 2000 ke atas"
+                }
             },
             submitHandler: function (form) {
                 $.ajax({

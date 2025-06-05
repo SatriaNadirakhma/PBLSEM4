@@ -111,7 +111,7 @@ $(document).ready(function() {
             nim: { required: true, minlength: 10, maxlength: 10 },
             nik: { required: true, minlength: 16, maxlength: 16 },
             mahasiswa_nama: { required: true, minlength: 3, maxlength: 100 },
-            angkatan: { required: true, digits: true, minlength: 4, maxlength: 4 },
+            angkatan: { required: true, digits: true, minlength: 4, maxlength: 4, min: 2000},
             no_telp: { required: false, digits: true, minlength: 10, maxlength: 15 },
             alamat_asal: { required: true, maxlength: 255 },
             alamat_sekarang: { required: true, maxlength: 255 },
@@ -119,6 +119,11 @@ $(document).ready(function() {
             status: { required: true },
             keterangan: { required: true },
             prodi_id: { required: true }
+        },
+            messages: {
+            angkatan: {
+                min: "Tahun angkatan tidak valid, Tahun angkatan harus 2000 ke atas"
+            }
         },
         submitHandler: function(form) {
             $.ajax({
