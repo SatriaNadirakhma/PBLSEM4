@@ -96,12 +96,14 @@
                 nidn: {
                     required: true,
                     minlength: 10,
-                    maxlength: 20
+                    maxlength: 20, 
+                    digits: true,
                 },
                 nik: {
                     required: true,
                     minlength: 3,
-                    maxlength: 20
+                    maxlength: 20, 
+                    digits: true,
                 },
                 dosen_nama: {
                     required: true,

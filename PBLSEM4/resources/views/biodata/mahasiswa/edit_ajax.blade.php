@@ -111,8 +111,8 @@
     $(document).ready(function () {
         $("#form-edit").validate({
             rules: {
-                nim: { required: true, minlength: 2, maxlength: 20 },
-                nik: { required: true, minlength: 3, maxlength: 20 },
+                nim: { required: true, minlength: 2, maxlength: 20, digits: true, },
+                nik: { required: true, minlength: 3, maxlength: 20, digits: true, },
                 mahasiswa_nama: { required: true, minlength: 3, maxlength: 100 },
                 angkatan: { required: true, digits: true, minlength: 4, maxlength: 4, min: 2000},
                 no_telp: { required: false, digits: true, minlength: 10, maxlength: 15 },
