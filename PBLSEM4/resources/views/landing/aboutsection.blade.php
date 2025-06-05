@@ -52,8 +52,8 @@
         <p class="mt-3 fs-5">
           Kami membuat peramban untuk mahasiswa dalam mendaftar uji TOEIC di Civitas Akademika Politeknik Negeri Malang.
         </p>
-        <a href="#about" class="btn btn-outline-light mt-3">Tentang Kami</a>
-      </div>
+        <a href="{{ route('aboutpage') }}#body" class="btn btn-outline-light mt-3">Tentang Kami</a> 
+      </div> 
     </div>
 
     <div class="row g-4 mt-4">

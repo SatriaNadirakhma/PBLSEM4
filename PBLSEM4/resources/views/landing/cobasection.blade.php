@@ -13,7 +13,7 @@
       <div class="col-md-6 d-flex flex-column justify-content-center align-items-start px-5"
            style="background-color: #007bff;">
         <h2 class="fw-bold mb-4">Sekarang, giliran kamu<br>untuk mencoba</h2>
-        <a href="#" class="btn btn-light text-primary fw-semibold rounded-pill px-4 py-2">
+        <a href="/login" class="btn btn-light text-primary fw-semibold rounded-pill px-4 py-2">
           Masuk Sekarang!
         </a>
       </div>

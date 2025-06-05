@@ -74,7 +74,7 @@
 <div class="team-column" data-aos="zoom-in" data-aos-delay="300">
   <div class="team-card">
     <div class="team-image" style="overflow: hidden;">
-            <img src="{{ asset('img/Faiza.png') }}" class="img-fluid w-100 h-100 object-fit-cover" style="aspect-ratio: 3/4;" alt="Foto Faiza">
+            <img src="{{ asset('img/Faiza .png') }}" class="img-fluid w-100 h-100 object-fit-cover" style="aspect-ratio: 3/4;" alt="Foto Faiza">
       
     </div>
     <div class="team-content">
