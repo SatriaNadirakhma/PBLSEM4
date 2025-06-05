@@ -78,6 +78,7 @@ $(document).ready(function() {
             nidn: { required: true, minlength: 3, maxlength: 20 },
             nik: { required: true, minlength: 3, maxlength: 20 },
             dosen_nama: { required: true, minlength: 3, maxlength: 100 },
+            no_telp: { required: false, digits: true, minlength: 10, maxlength: 15 },
             jenis_kelamin: { required: true },
             jurusan_id: { required: true }
         },

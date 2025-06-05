@@ -114,6 +114,12 @@
                 kampus_id: {
                     required: true
                 }
+                no_telp: { 
+                    required: false, 
+                    digits: true, 
+                    minlength: 10, 
+                    maxlength: 15 
+                },
             },
             submitHandler: function (form) {
                 $.ajax({

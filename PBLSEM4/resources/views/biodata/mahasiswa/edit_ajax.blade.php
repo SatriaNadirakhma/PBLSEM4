@@ -115,6 +115,7 @@
                 nik: { required: true, minlength: 3, maxlength: 20 },
                 mahasiswa_nama: { required: true, minlength: 3, maxlength: 100 },
                 angkatan: { required: true, digits: true, minlength: 4, maxlength: 4, min: 2000},
+                no_telp: { required: false, digits: true, minlength: 10, maxlength: 15 },
                 jenis_kelamin: { required: true },
                 prodi_id: { required: true }
             },

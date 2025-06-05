@@ -41,7 +41,8 @@
             no_telp: {
                 required: true,
                 minlength: 3,
-                maxlength: 15
+                maxlength: 15, 
+                digits: true,
             }
         },
         submitHandler: function(form) {
