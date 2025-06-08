@@ -26,8 +26,10 @@ use App\Http\Controllers\KirimPesanController;
 use App\Http\Controllers\HasilPesertaController;
 use App\Http\Controllers\RiwayatPesertaController;
 use App\Http\Controllers\KirimEmailController;
+use App\Http\Controllers\PanduanController;
 use App\Http\Controllers\AboutPageController;
 use App\Http\Controllers\PasswordResetController;
+
 use Illuminate\Http\Request;
 
 /*
@@ -248,7 +250,16 @@ Route::prefix('biodata/mahasiswa')->name('biodata.mahasiswa.')->middleware(['aut
         Route::get('/jadwal/download-template', [JadwalController::class, 'download_template']);
 
 
-    }); 
+    });
+    
+    // Route untuk semua role melihat panduan (di dalam grup middleware 'auth')
+    Route::get('/panduan', [PanduanController::class, 'show'])->name('panduan.show');
+
+   // Route untuk admin mengelola panduan
+    Route::prefix('kelola')->middleware(['role:admin'])->group(function () {
+        Route::get('/panduan', [PanduanController::class, 'adminIndex'])->name('panduan.admin.index'); // <-- Ini sudah benar
+        Route::post('/panduan/upload', [PanduanController::class, 'upload'])->name('panduan.admin.upload');
+    });
 
     // Rute pendaftaran     
     Route::prefix('pendaftaran')->name('pendaftaran.')->group(function () {
