@@ -129,7 +129,12 @@ class HasilUjianController extends Controller
         ]);
     }
 
-
+    public function create_ajax()
+    {
+        $jadwal = JadwalModel::all();
+        return view('hasil_ujian.create_ajax', compact('jadwal'));
+    }
+    
     public function store_ajax(Request $request)
     {
         $request->validate([
@@ -170,13 +175,6 @@ class HasilUjianController extends Controller
             'status' => true,
             'message' => 'Data hasil ujian berhasil disimpan.'
         ]);
-    }
-
-
-    public function create_ajax()
-    {
-        $jadwal = JadwalModel::all();
-        return view('hasil_ujian.create_ajax', compact('jadwal'));
     }
 
 

@@ -28,15 +28,16 @@ class ProdiController extends Controller
 
         $activeMenu = 'prodi';
 
-        $jurusan = JurusanModel::all();
+        $jurusan = JurusanModel::orderBy('jurusan_nama')->get();
 
         return view('prodi.index', compact('breadcrumb', 'page', 'activeMenu', 'jurusan'));
     }
 
     public function list(Request $request)
     {
-        $prodi = ProdiModel::select('prodi_id', 'prodi_kode', 'prodi_nama', 'jurusan_id')
-            ->with('jurusan');
+        $prodi = ProdiModel::with('jurusan')
+            ->select('prodi_id', 'prodi_kode', 'prodi_nama', 'jurusan_id')
+            ->orderBy('prodi_nama');
 
        if ($request->has('search_query') && $request->search_query != '') {
         $prodi->where('prodi_nama', 'like', '%' . $request->search_query . '%');
@@ -46,6 +47,10 @@ class ProdiController extends Controller
             $prodi->whereHas('jurusan', function ($query) use ($request) {
             $query->where('jurusan_nama', 'like', '%' . $request->jurusan_nama . '%');
         });
+        }
+
+        if ($request->has('filter_jurusan') && $request->filter_jurusan != '') {
+            $prodi->where('jurusan_id', $request->filter_jurusan);
         }
 
         return DataTables::of($prodi)

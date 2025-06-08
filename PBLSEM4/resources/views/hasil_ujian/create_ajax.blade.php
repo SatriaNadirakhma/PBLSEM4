@@ -27,7 +27,7 @@
                             <label>Peserta <span class="text-danger">*</span></label>
                             <select name="user_id" id="user_id" class="form-control select2" required >
                                 <option value="">-- Pilih Role Terlebih Dahulu --</option>
-                                @foreach($users as $user)
+                                @foreach($user as $user)
                                     @if($user->role == 'mahasiswa' && $user->mahasiswa)
                                         <option value="{{ $user->id }}" data-role="mahasiswa">
                                             {{ $user->mahasiswa->mahasiswa_nama }} ({{ $user->mahasiswa->mahasiswa_nim }} - Mahasiswa)
