@@ -313,16 +313,8 @@ Route::prefix('biodata/mahasiswa')->name('biodata.mahasiswa.')->middleware(['aut
         Route::post('/import_ajax', [HasilUjianController::class, 'import_ajax'])->name('hasil_ujian.import_ajax');
         Route::get('/export_excel', [HasilUjianController::class, 'export_excel'])->name('hasil_ujian.export_excel');
         Route::get('/export_pdf', [HasilUjianController::class, 'export_pdf'])->name('hasil_ujian.export_pdf');
-        Route::get('/get-users-by-role', [HasilUjianController::class, 'getUsersByRole'])->name('get.users.by.role');
+        Route::get('/get-users-by-role', [HasilUjianController::class, 'getUsersByRole'])->name('hasil_ujian.get.users.by.role');
         Route::get('/download_template', [HasilUjianController::class, 'download_template'])->name('hasil_ujian.download');
-        Route::get('/hasil_ujian/{id}/delete_ajax', [HasilUjianController::class, 'deleteModal']);
-        Route::delete('/hasil_ujian/{id}/delete_ajax', [HasilUjianController::class, 'delete_ajax']);
-        Route::post('/hasil_ujian/list', [HasilUjianController::class, 'list']);
-        Route::get('/hasil_ujian/{id}/show_ajax', [HasilUjianController::class, 'show_ajax']);
-        Route::get('/hasil_ujian/{id}/edit_ajax', [HasilUjianController::class, 'edit_ajax']);
-        Route::get('/get-users-by-role', [UserController::class, 'getUsersByRole']);
-
-
     });
     
     // Rute Informasi
