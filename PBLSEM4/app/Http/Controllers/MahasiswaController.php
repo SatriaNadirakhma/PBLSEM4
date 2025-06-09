@@ -202,7 +202,8 @@ class MahasiswaController extends Controller
     public function confirm_ajax(string $id)
     {
         $mahasiswa = MahasiswaModel::find($id);
-        return view('biodata.mahasiswa.confirm_ajax', compact('mahasiswa'));
+        $prodi = ProdiModel::select('prodi_id', 'prodi_nama')->get();
+        return view('biodata.mahasiswa.confirm_ajax', compact('mahasiswa', 'prodi'));
     }
 
     public function delete_ajax(Request $request, $id)

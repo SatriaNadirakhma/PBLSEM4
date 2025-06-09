@@ -39,8 +39,36 @@
                             <td class="col-9">{{ $dosen->nidn }}</td>
                         </tr>
                         <tr>
+                            <th class="text-right col-3">NIK:</th>
+                            <td class="col-9">{{ $dosen->nik }}</td>
+                        </tr>
+                        <tr>
                             <th class="text-right col-3">Nama Dosen:</th>
                             <td class="col-9">{{ $dosen->dosen_nama }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-right col-3">Nomor Telepon:</th>
+                            <td class="col-9">{{ $dosen->nidn }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-right col-3">NIDN:</th>
+                            <td class="col-9">{{ $dosen->nidn }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-right col-3">Alamat Asal:</th>
+                            <td class="col-9">{{ $dosen->alamat_asal }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-right col-3">Alamat Sekarang:</th>
+                            <td class="col-9">{{ $dosen->alamat_sekarang }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-right col-3">Jenis Kelamin:</th>
+                            <td class="col-9">{{ $dosen->jenis_kelamin }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-right col-3">Asal Jurusan:</th>
+                            <td class="col-9">{{ $dosen->jurusan_nama ?? '-' }}</td>
                         </tr>
                     </table>
                 </div>

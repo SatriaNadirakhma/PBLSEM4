@@ -50,15 +50,11 @@
                 </div>
                 <div class="form-group">
                     <label>Jurusan</label>
-                   <select name="jurusan" id="jurusan" class="form-control" required>
+                    <select name="jurusan_id" id="jurusan_id" class="form-control" required>
                         <option value="">Pilih</option>
-                        <option value="AN">Administrasi Niaga</option>
-                        <option value="Akuntansi">Akuntansi</option>
-                        <option value="Kimia">Teknik Kimia</option>
-                        <option value="Sipil">Teknik Sipil</option>
-                        <option value="Mesin">Teknik Mesin</option>
-                        <option value="TI">Teknologi Informasi</option>
-                        <option value="Elektro">Teknik Elektro</option>
+                        @foreach($jurusan as $item)
+                            <option value="{{ $item->id }}">{{ $item->nama_jurusan }}</option>
+                        @endforeach
                     </select>
                     <small id="error-jurusan_id" class="error-text text-danger"></small>
                 </div>

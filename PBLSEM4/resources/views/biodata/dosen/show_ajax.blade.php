@@ -24,10 +24,6 @@
         <div class="modal-body">
             <table class="table table-bordered table-sm">
                 <tr>
-                    <th width="35%">ID Dosen</th>
-                    <td>{{ $dosen->dosen_id }}</td>
-                </tr>
-                <tr>
                     <th>NIDN</th>
                     <td>{{ $dosen->nidn }}</td>
                 </tr>
