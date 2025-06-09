@@ -53,7 +53,7 @@
                     <select name="jurusan_id" id="jurusan_id" class="form-control" required>
                         <option value="">Pilih</option>
                         @foreach($jurusan as $item)
-                            <option value="{{ $item->id }}">{{ $item->nama_jurusan }}</option>
+                            <option value="{{ $item->id }}">{{ $item->jurusan_nama }}</option>
                         @endforeach
                     </select>
                     <small id="error-jurusan_id" class="error-text text-danger"></small>
