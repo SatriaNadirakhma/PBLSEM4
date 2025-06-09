@@ -40,8 +40,34 @@
                             <td class="col-9">{{ $mahasiswa->nim }}</td>
                         </tr>
                         <tr>
+                            <th class="text-right col-3">NIK:</th>
+                            <td class="col-9">{{ $mahasiswa->nik }}</td>
+                        </tr>
+                        <tr>
                             <th class="text-right col-3">Nama Mahasiswa:</th>
                             <td class="col-9">{{ $mahasiswa->mahasiswa_nama }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-right col-3">Angkatan:</th>
+                            <td class="col-9">{{ $mahasiswa->angkatan }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-right col-3">Jenis Kelamin:</th>
+                            <td class="col-9">{{ $mahasiswa->jenis_kelamin }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-right col-3">Status:</th>
+                            <td class="col-9">{{ $mahasiswa->status }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-right col-3">Keterangan:</th>
+                            <td class="col-9">{{ $mahasiswa->keterangan }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-right col-3">Program Studi:</th>
+                            <td class="col-9">
+                                {{ optional($prodi->where('prodi_id', $mahasiswa->prodi_id)->first())->prodi_nama ?? '-' }}
+                            </td>
                         </tr>
                     </table>
                 </div>

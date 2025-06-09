@@ -26,8 +26,10 @@ use App\Http\Controllers\KirimPesanController;
 use App\Http\Controllers\HasilPesertaController;
 use App\Http\Controllers\RiwayatPesertaController;
 use App\Http\Controllers\KirimEmailController;
+use App\Http\Controllers\PanduanController;
 use App\Http\Controllers\AboutPageController;
 use App\Http\Controllers\PasswordResetController;
+
 use Illuminate\Http\Request;
 
 /*
@@ -248,7 +250,16 @@ Route::prefix('biodata/mahasiswa')->name('biodata.mahasiswa.')->middleware(['aut
         Route::get('/jadwal/download-template', [JadwalController::class, 'download_template']);
 
 
-    }); 
+    });
+    
+    // Route untuk semua role melihat panduan (di dalam grup middleware 'auth')
+    Route::get('/panduan', [PanduanController::class, 'show'])->name('panduan.show');
+
+   // Route untuk admin mengelola panduan
+    Route::prefix('kelola')->middleware(['role:admin'])->group(function () {
+        Route::get('/panduan', [PanduanController::class, 'adminIndex'])->name('panduan.admin.index'); // <-- Ini sudah benar
+        Route::post('/panduan/upload', [PanduanController::class, 'upload'])->name('panduan.admin.upload');
+    });
 
     // Rute pendaftaran     
     Route::prefix('pendaftaran')->name('pendaftaran.')->group(function () {
@@ -291,27 +302,19 @@ Route::prefix('biodata/mahasiswa')->name('biodata.mahasiswa.')->middleware(['aut
     Route::prefix('hasil_ujian')->group(function () {
         Route::get('/', [HasilUjianController::class, 'index']);
         Route::post('/list', [HasilUjianController::class, 'list'])->name('hasil_ujian.list');
-        // Route::get('/{id}/show_ajax', [HasilUjianController::class, 'show_ajax'])->name('hasil_ujian.show_ajax');
+        Route::get('/{id}/show_ajax', [HasilUjianController::class, 'show_ajax'])->name('hasil_ujian.show_ajax');
         Route::get('/create_ajax', [HasilUjianController::class, 'create_ajax'])->name('hasil_ujian.create_ajax');
         Route::post('/ajax', [HasilUjianController::class, 'store_ajax'])->name('hasil_ujian.store_ajax');
-        // Route::get('/{id}/delete_ajax', [HasilUjianController::class, 'confirm_ajax'])->name('hasil_ujian.confirm_ajax'); 
-        // Route::delete('/{id}/delete_ajax', [HasilUjianController::class, 'delete_ajax'])->name('hasil_ujian.delete_ajax');
-        // Route::get('/{id}/edit_ajax', [HasilUjianController::class, 'edit_ajax'])->name('hasil_ujian.edit_ajax');
+        Route::get('/{id}/delete_ajax', [HasilUjianController::class, 'confirm_ajax'])->name('hasil_ujian.confirm_ajax'); 
+        Route::delete('/{id}/delete_ajax', [HasilUjianController::class, 'delete_ajax'])->name('hasil_ujian.delete_ajax');
+        Route::get('/{id}/edit_ajax', [HasilUjianController::class, 'edit_ajax'])->name('hasil_ujian.edit_ajax');
         Route::put('/{id}/update_ajax', [HasilUjianController::class, 'update_ajax'])->name('hasil_ujian.update_ajax');
         Route::get('/import', [HasilUjianController::class, 'import'])->name('hasil_ujian.import');
         Route::post('/import_ajax', [HasilUjianController::class, 'import_ajax'])->name('hasil_ujian.import_ajax');
         Route::get('/export_excel', [HasilUjianController::class, 'export_excel'])->name('hasil_ujian.export_excel');
         Route::get('/export_pdf', [HasilUjianController::class, 'export_pdf'])->name('hasil_ujian.export_pdf');
-        Route::get('/get-users-by-role', [HasilUjianController::class, 'getUsersByRole'])->name('get.users.by.role');
+        Route::get('/get-users-by-role', [HasilUjianController::class, 'getUsersByRole'])->name('hasil_ujian.get.users.by.role');
         Route::get('/download_template', [HasilUjianController::class, 'download_template'])->name('hasil_ujian.download');
-        Route::get('/hasil_ujian/{id}/delete_ajax', [HasilUjianController::class, 'deleteModal']);
-        Route::delete('/hasil_ujian/{id}/delete_ajax', [HasilUjianController::class, 'delete_ajax']);
-        Route::post('/hasil_ujian/list', [HasilUjianController::class, 'list']);
-        Route::get('/hasil_ujian/{id}/show_ajax', [HasilUjianController::class, 'show_ajax']);
-        Route::get('/hasil_ujian/{id}/edit_ajax', [HasilUjianController::class, 'edit_ajax']);
-        Route::get('/get-users-by-role', [UserController::class, 'getUsersByRole']);
-
-
     });
     
     // Rute Informasi

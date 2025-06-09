@@ -82,7 +82,7 @@ class HasilUjianController extends Controller
                 return $h->user ? ucfirst($h->user->role) : '-';
             })
             ->addColumn('aksi', function ($h) {
-                $id = $h->hasil_ujian_id; // GUNAKAN KOLOM PRIMARY KEY YANG BENAR
+                $id = $h->hasil_id; // GUNAKAN KOLOM PRIMARY KEY YANG BENAR
 
                 $btn  = '<button onclick="modalAction(\'' . url('/hasil_ujian/' . $id . '/show_ajax') . '\')" 
                             class="btn btn-info btn-sm rounded-pill shadow-sm me-1 px-3 py-1" style="font-size: 0.85rem;">
@@ -129,7 +129,16 @@ class HasilUjianController extends Controller
         ]);
     }
 
-
+    public function create_ajax()
+{
+    $jadwal = JadwalModel::all();
+    $user = UserModel::with(['mahasiswa', 'dosen', 'tendik'])
+                     ->whereIn('level', ['mahasiswa', 'dosen', 'tendik'])
+                     ->get();
+    
+    return view('hasil_ujian.create_ajax', compact('jadwal', 'user'));
+}
+    
     public function store_ajax(Request $request)
     {
         $request->validate([
@@ -170,13 +179,6 @@ class HasilUjianController extends Controller
             'status' => true,
             'message' => 'Data hasil ujian berhasil disimpan.'
         ]);
-    }
-
-
-    public function create_ajax()
-    {
-        $jadwal = JadwalModel::all();
-        return view('hasil_ujian.create_ajax', compact('jadwal'));
     }
 
 

@@ -27,18 +27,18 @@
                             <label>Peserta <span class="text-danger">*</span></label>
                             <select name="user_id" id="user_id" class="form-control select2" required >
                                 <option value="">-- Pilih Role Terlebih Dahulu --</option>
-                                @foreach($users as $user)
-                                    @if($user->role == 'mahasiswa' && $user->mahasiswa)
-                                        <option value="{{ $user->id }}" data-role="mahasiswa">
-                                            {{ $user->mahasiswa->mahasiswa_nama }} ({{ $user->mahasiswa->mahasiswa_nim }} - Mahasiswa)
+                                @foreach($user as $u)
+                                    @if($u->level == 'mahasiswa' && $u->mahasiswa)
+                                        <option value="{{ $u->id }}" data-role="mahasiswa" style="display:none;">
+                                            {{ $u->nama }} ({{ $u->mahasiswa->nim ?? 'N/A' }} - Mahasiswa)
                                         </option>
-                                    @elseif($user->role == 'dosen' && $user->dosen)
-                                        <option value="{{ $user->id }}" data-role="dosen">
-                                            {{ $user->dosen->dosen_nama }} ({{ $user->dosen->dosen_nidn }} - Dosen)
+                                    @elseif($u->level == 'dosen' && $u->dosen)
+                                        <option value="{{ $u->id }}" data-role="dosen" style="display:none;">
+                                            {{ $u->nama }} ({{ $u->dosen->nidn ?? 'N/A' }} - Dosen)
                                         </option>
-                                    @elseif($user->role == 'tendik' && $user->tendik)
-                                        <option value="{{ $user->id }}" data-role="tendik">
-                                            {{ $user->tendik->tendik_nama }} ({{ $user->tendik->tendik_nip }} - Tendik)
+                                    @elseif($u->level == 'tendik' && $u->tendik)
+                                         <option value="{{ $u->id }}" data-role="tendik" style="display:none;">
+                                            {{ $u->nama }} ({{ $u->tendik->nip ?? 'N/A' }} - Tendik)
                                         </option>
                                     @endif
                                 @endforeach
@@ -47,26 +47,21 @@
                         </div>
                     </div>
                 </div>
-
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label>Jadwal Ujian <span class="text-danger">*</span></label>
-                            <select name="jadwal_id" id="jadwal_id" class="form-control" required>
-                                <option value="">-- Pilih Jadwal --</option>
-                                @foreach($jadwal as $j)
-                                    <option value="{{ $j->jadwal_id }}">
-                                        {{ \Carbon\Carbon::parse($j->tanggal_pelaksanaan)->format('d/m/Y') }} - 
-                                        {{ $j->waktu_mulai }} s/d {{ $j->waktu_selesai }}
-                                        @if($j->lokasi)
-                                            ({{ $j->lokasi }})
-                                        @endif
-                                    </option>
-                                @endforeach
-                            </select>
-                            <small id="error-jadwal_id" class="error-text text-danger"></small>
-                        </div>
-                    </div>
+                <div class="form-group">
+                    <label>Jadwal Ujian <span class="text-danger">*</span></label>
+                    <select name="jadwal_id" id="jadwal_id" class="form-control" required>
+                        <option value="">-- Pilih Jadwal --</option>
+                        @foreach($jadwal as $j)
+                            <option value="{{ $j->id }}">
+                                {{ \Carbon\Carbon::parse($j->tanggal)->format('d/m/Y') }} - 
+                                {{ $j->waktu_mulai }} s/d {{ $j->waktu_selesai }}
+                                @if($j->ruangan)
+                                    ({{ $j->ruangan }})
+                                @endif
+                            </option>
+                        @endforeach
+                    </select>
+                    <small id="error-jadwal_id" class="error-text text-danger"></small>
                 </div>
 
                 <div class="row">
