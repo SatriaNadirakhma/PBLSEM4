@@ -13,7 +13,7 @@
     </div>
 </div>
 @else
-<div id="modal-master" class="modal-dialog" role="document">
+<div id="modal-master" class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
         <div class="modal-header">
             <h5 class="modal-title">Detail Data Hasil Ujian</h5>
@@ -22,9 +22,9 @@
             </button>
         </div>
         <div class="modal-body">
-            <table class="table table-bordered table-striped table-sm">
+            <table class="table table-bordered table-sm">
                 <tr>
-                    <th width="40%">Nama Peserta</th>
+                    <th>Nama Peserta</th>
                     <td>{{ $hasil_ujian->user->nama ?? 'Tidak tersedia' }}</td>
                 </tr>
                 <tr>
