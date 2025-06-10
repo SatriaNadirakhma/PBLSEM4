@@ -21,6 +21,8 @@
 
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('adminlte/dist/css/adminlte.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('adminlte/plugins/select2/css/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('adminlte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
     @stack('css') <!-- Digunakan untuk memanggil custom css dari perintah push('css') pada masing-masing view -->
 
     <!-- Bootstrap 5 JS Bundle -->
@@ -77,6 +79,8 @@
 <!-- Bootstrap 4 -->
 <script src="{{ asset('adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 
+<script src="{{ asset('adminlte/plugins/select2/js/select2.full.min.js') }}"></script>
+
 <!-- Datatables & Plugins -->
 <script src="{{ asset('adminlte/plugins/datatables/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('adminlte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
@@ -117,6 +121,19 @@
   }
   setInterval(updateClock, 1000); // Update setiap 1 detik
   updateClock(); // Jalankan pertama kali
+</script>
+
+<script>
+$(document).ready(function() {
+    // Inisialisasi Select2
+    $('#user_id').select2({
+        dropdownParent: $('#modal-master'),
+        placeholder: "Pilih nama peserta...",
+        allowClear: true
+    });
+
+    // ... kode JavaScript Anda lainnya ...
+});
 </script>
 </body>
 </html>

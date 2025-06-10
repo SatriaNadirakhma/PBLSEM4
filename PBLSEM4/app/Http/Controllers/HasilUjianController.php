@@ -63,12 +63,18 @@ class HasilUjianController extends Controller
                     if ($user->mahasiswa) return $user->mahasiswa->mahasiswa_nama;
                     if ($user->dosen) return $user->dosen->dosen_nama;
                     if ($user->tendik) return $user->tendik->tendik_nama;
-                    return $user->nama ?? '-';
+                    // Fallback ini seharusnya sudah tidak terpicu jika relasi dan data konsisten
+                    return $user->username ?? '-'; // Menggunakan username dari UserModel
                 }
                 return '-';
             })
             ->addColumn('tanggal_pelaksanaan', function ($h) {
-                return $h->jadwal ? \Carbon\Carbon::parse($h->jadwal->tanggal_pelaksanaan)->format('d/m/Y') : '-';
+                // Menggunakan tanggal_pelaksanaan dari jadwal dan menampilkan jam_mulai serta keterangan
+                $display = $h->jadwal ? \Carbon\Carbon::parse($h->jadwal->tanggal_pelaksanaan)->format('d/m/Y') : '-';
+                if ($h->jadwal && $h->jadwal->jam_mulai) {
+                    $display .= ' - ' . $h->jadwal->jam_mulai;
+                }
+                return $display;
             })
             ->addColumn('nilai_listening', fn($h) => $h->nilai_listening ?? 0)
             ->addColumn('nilai_reading', fn($h) => $h->nilai_reading ?? 0)
@@ -82,7 +88,7 @@ class HasilUjianController extends Controller
                 return $h->user ? ucfirst($h->user->role) : '-';
             })
             ->addColumn('aksi', function ($h) {
-                $id = $h->hasil_id; // GUNAKAN KOLOM PRIMARY KEY YANG BENAR
+                $id = $h->hasil_id;
 
                 $btn  = '<button onclick="modalAction(\'' . url('/hasil_ujian/' . $id . '/show_ajax') . '\')" 
                             class="btn btn-info btn-sm rounded-pill shadow-sm me-1 px-3 py-1" style="font-size: 0.85rem;">
@@ -130,20 +136,20 @@ class HasilUjianController extends Controller
     }
 
     public function create_ajax()
-{
-    $jadwal = JadwalModel::all();
-    $user = UserModel::with(['mahasiswa', 'dosen', 'tendik'])
-                     ->whereIn('level', ['mahasiswa', 'dosen', 'tendik'])
-                     ->get();
-    
-    return view('hasil_ujian.create_ajax', compact('jadwal', 'user'));
-}
+    {
+        $jadwal = JadwalModel::all(); // Ini akan mengambil semua jadwal
+        $user = UserModel::with(['mahasiswa', 'dosen', 'tendik'])
+                         ->whereIn('role', ['mahasiswa', 'dosen', 'tendik'])
+                         ->get();
+        
+        return view('hasil_ujian.create_ajax', compact('jadwal', 'user'));
+    }
     
     public function store_ajax(Request $request)
     {
         $request->validate([
-            'user_id' => 'required|exists:users,id',
-            'jadwal_id' => 'required|exists:jadwal,jadwal_id',
+            'user_id' => 'required|exists:user,user_id', // Validasi ini sudah diperbaiki sebelumnya
+            'jadwal_id' => 'required|exists:jadwal,jadwal_id', // Ini sudah benar sesuai JadwalModel
             'nilai_listening' => 'required|numeric|min:0|max:495',
             'nilai_reading' => 'required|numeric|min:0|max:495',
             'catatan' => 'nullable|string|max:255'
@@ -168,7 +174,7 @@ class HasilUjianController extends Controller
         HasilUjianModel::create([
             'user_id' => $request->user_id,
             'jadwal_id' => $request->jadwal_id,
-            'nama_peserta' => $nama,
+
             'nilai_listening' => $listening,
             'nilai_reading' => $reading,
             'nilai_total' => $total,
@@ -180,6 +186,7 @@ class HasilUjianController extends Controller
             'message' => 'Data hasil ujian berhasil disimpan.'
         ]);
     }
+
 
 
     public function edit_ajax($id)
