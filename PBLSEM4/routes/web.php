@@ -298,6 +298,8 @@ Route::prefix('biodata/mahasiswa')->name('biodata.mahasiswa.')->middleware(['aut
         Route::get('/', [UjianController::class, 'index']);
     });
 
+    Route::get('/get-users-by-role', [HasilUjianController::class, 'getUsersByRole']);
+
     // Rute Hasil Ujian
     Route::prefix('hasil_ujian')->group(function () {
         Route::get('/', [HasilUjianController::class, 'index']);

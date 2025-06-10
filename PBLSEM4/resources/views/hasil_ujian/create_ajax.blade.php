@@ -28,17 +28,17 @@
                             <select name="user_id" id="user_id" class="form-control select2" required >
                                 <option value="">-- Pilih Role Terlebih Dahulu --</option>
                                 @foreach($user as $u)
-                                    @if($u->level == 'mahasiswa' && $u->mahasiswa)
-                                        <option value="{{ $u->id }}" data-role="mahasiswa" style="display:none;">
-                                            {{ $u->nama }} ({{ $u->mahasiswa->nim ?? 'N/A' }} - Mahasiswa)
+                                    @if($u->role == 'mahasiswa' && $u->mahasiswa)
+                                        <option value="{{ $u->user_id }}" data-role="mahasiswa" style="display:none;">
+                                            {{ $u->mahasiswa->mahasiswa_nama }} ({{ $u->mahasiswa->nim ?? 'N/A' }} - Mahasiswa)
                                         </option>
-                                    @elseif($u->level == 'dosen' && $u->dosen)
-                                        <option value="{{ $u->id }}" data-role="dosen" style="display:none;">
-                                            {{ $u->nama }} ({{ $u->dosen->nidn ?? 'N/A' }} - Dosen)
+                                    @elseif($u->role == 'dosen' && $u->dosen)
+                                        <option value="{{ $u->user_id }}" data-role="dosen" style="display:none;">
+                                            {{ $u->dosen->dosen_nama }} ({{ $u->dosen->nidn ?? 'N/A' }} - Dosen)
                                         </option>
-                                    @elseif($u->level == 'tendik' && $u->tendik)
-                                         <option value="{{ $u->id }}" data-role="tendik" style="display:none;">
-                                            {{ $u->nama }} ({{ $u->tendik->nip ?? 'N/A' }} - Tendik)
+                                    @elseif($u->role == 'tendik' && $u->tendik)
+                                         <option value="{{ $u->user_id }}" data-role="tendik" style="display:none;">
+                                            {{ $u->tendik->tendik_nama }} ({{ $u->tendik->nip ?? 'N/A' }} - Tendik)
                                         </option>
                                     @endif
                                 @endforeach
@@ -52,11 +52,11 @@
                     <select name="jadwal_id" id="jadwal_id" class="form-control" required>
                         <option value="">-- Pilih Jadwal --</option>
                         @foreach($jadwal as $j)
-                            <option value="{{ $j->id }}">
-                                {{ \Carbon\Carbon::parse($j->tanggal)->format('d/m/Y') }} - 
-                                {{ $j->waktu_mulai }} s/d {{ $j->waktu_selesai }}
-                                @if($j->ruangan)
-                                    ({{ $j->ruangan }})
+                            <option value="{{ $j->jadwal_id }}"> {{-- Menggunakan jadwal_id sebagai value --}}
+                                {{ \Carbon\Carbon::parse($j->tanggal_pelaksanaan)->format('d/m/Y') }} - {{-- Menggunakan tanggal_pelaksanaan --}}
+                                {{ $j->jam_mulai ?? '' }} {{-- Menggunakan jam_mulai --}}
+                                @if($j->keterangan)
+                                    ({{ $j->keterangan }}) {{-- Menggunakan keterangan sebagai pengganti ruangan --}}
                                 @endif
                             </option>
                         @endforeach
@@ -157,16 +157,18 @@ $(document).ready(function() {
                     if (response.status && response.data.length > 0) {
                         $.each(response.data, function(index, user) {
                             let optionText = '';
+                            // Pastikan Anda menggunakan user.user_id sebagai value
+                            // dan user.tendik.nip
                             if (roleSelected === 'mahasiswa' && user.mahasiswa) {
-                                optionText = `${user.mahasiswa.mahasiswa_nama} (${user.mahasiswa.mahasiswa_nim} - Mahasiswa)`;
+                                optionText = `${user.mahasiswa.mahasiswa_nama} (${user.mahasiswa.nim ?? 'N/A'} - Mahasiswa)`;
                             } else if (roleSelected === 'dosen' && user.dosen) {
-                                optionText = `${user.dosen.dosen_nama} (${user.dosen.dosen_nidn} - Dosen)`;
+                                optionText = `${user.dosen.dosen_nama} (${user.dosen.nidn ?? 'N/A'} - Dosen)`;
                             } else if (roleSelected === 'tendik' && user.tendik) {
-                                optionText = `${user.tendik.tendik_nama} (${user.tendik.tendik_nip} - Tendik)`;
+                                optionText = `${user.tendik.tendik_nama} (${user.tendik.nip ?? 'N/A'} - Tendik)`; // Menggunakan user.tendik.nip
                             }
                             
                             if (optionText) {
-                                userSelect.append(`<option value="${user.id}">${optionText}</option>`);
+                                userSelect.append(`<option value="${user.user_id}">${optionText}</option>`); // Menggunakan user.user_id
                             }
                         });
                         userSelect.prop('disabled', false);

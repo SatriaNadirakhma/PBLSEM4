@@ -14,7 +14,7 @@ class HasilUjianModel extends Model
     protected $fillable = [
         'user_id',
         'jadwal_id',
-        'nama_peserta',
+
         'nilai_listening',
         'nilai_reading',
         'nilai_total',
