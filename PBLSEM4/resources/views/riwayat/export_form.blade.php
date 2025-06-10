@@ -1,4 +1,4 @@
-<!-- Modal Export -->
+<!-- Modal Export dengan AJAX -->
 <div class="modal fade" id="exportModal" tabindex="-1" aria-labelledby="exportModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -26,9 +26,9 @@
                             <label for="tanggal_awal" class="form-label fw-bold">
                                 <i class="fas fa-calendar-alt me-1"></i>Tanggal Awal
                             </label>
-                            <input type="date" class="form-control" id="tanggal_awal" name="tanggal_awal">
+                            <input type="date" class="form-control" id="tanggal_awal" name="tanggal_awal" required>
                             <small class="form-text text-muted">
-                                <i class="fas fa-info-circle me-1"></i>Opsional - kosongkan jika tidak diperlukan
+                                <i class="fas fa-info-circle me-1"></i>Wajib diisi
                             </small>
                         </div>
                         
@@ -36,9 +36,9 @@
                             <label for="tanggal_akhir" class="form-label fw-bold">
                                 <i class="fas fa-calendar-alt me-1"></i>Tanggal Akhir
                             </label>
-                            <input type="date" class="form-control" id="tanggal_akhir" name="tanggal_akhir">
+                            <input type="date" class="form-control" id="tanggal_akhir" name="tanggal_akhir" required>
                             <small class="form-text text-muted">
-                                <i class="fas fa-info-circle me-1"></i>Opsional - kosongkan jika tidak diperlukan
+                                <i class="fas fa-info-circle me-1"></i>Wajib diisi
                             </small>
                         </div>
                     </div>
@@ -53,13 +53,13 @@
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" name="format_type" id="format_pdf" value="pdf" checked>
                                     <label class="form-check-label" for="format_pdf">
-                                        <i class="fas fa-file-pdf text-danger me-1"></i>PDF
+                                        <i class="fas fa-file-pdf text-danger me-1"></i>PDF (dengan gambar)
                                     </label>
                                 </div>
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" name="format_type" id="format_excel" value="excel">
                                     <label class="form-check-label" for="format_excel">
-                                        <i class="fas fa-file-excel text-success me-1"></i>Excel
+                                        <i class="fas fa-file-excel text-success me-1"></i>Excel (dengan gambar)
                                     </label>
                                 </div>
                             </div>
@@ -73,7 +73,6 @@
                         <ul class="mb-0 mt-2">
                             <li><strong>PDF:</strong> Menampilkan data lengkap dengan gambar KTP, KTM, dan Pas Foto</li>
                             <li><strong>Excel:</strong> Data dalam bentuk tabel dengan thumbnail gambar di setiap cell</li>
-                            <li>Jika tanggal tidak diisi, semua data akan diekspor</li>
                             <li>Tanggal akhir harus lebih besar atau sama dengan tanggal awal</li>
                             <li>Gambar akan dimuat otomatis jika file tersedia di server</li>
                         </ul>
@@ -102,142 +101,188 @@
     </div>
 </div>
 
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    const exportForm = document.getElementById('exportForm');
-    const tanggalAwal = document.getElementById('tanggal_awal');
-    const tanggalAkhir = document.getElementById('tanggal_akhir');
-    const formatPdf = document.getElementById('format_pdf');
-    const formatExcel = document.getElementById('format_excel');
-    const exportBtn = document.getElementById('exportBtn');
-    const exportBtnText = document.getElementById('exportBtnText');
-    const exportLoading = document.getElementById('exportLoading');
-    const statusSelect = document.getElementById('status');
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 
+<script>
+$(document).ready(function() {
+    const exportForm = $('#exportForm');
+    const tanggalAwal = $('#tanggal_awal');
+    const tanggalAkhir = $('#tanggal_akhir');
+    const formatPdf = $('#format_pdf');
+    const formatExcel = $('#format_excel');
+    const exportBtn = $('#exportBtn');
+    const exportBtnText = $('#exportBtnText');
+    const exportLoading = $('#exportLoading');
+    const statusSelect = $('#status');
+
+    // Update button text and style based on format
     function updateButtonText() {
-        if (formatPdf.checked) {
-            exportBtnText.textContent = 'Export PDF';
-            exportBtn.className = 'btn btn-danger';
-            exportBtn.innerHTML = '<i class="fas fa-file-pdf me-1"></i> ' + exportBtnText.textContent;
+        if (formatPdf.is(':checked')) {
+            exportBtnText.text('Export PDF');
+            exportBtn.removeClass('btn-success').addClass('btn-danger');
+            exportBtn.html('<i class="fas fa-file-pdf me-1"></i> Export PDF');
         } else {
-            exportBtnText.textContent = 'Export Excel';
-            exportBtn.className = 'btn btn-success';
-            exportBtn.innerHTML = '<i class="fas fa-file-excel me-1"></i> ' + exportBtnText.textContent;
+            exportBtnText.text('Export Excel');
+            exportBtn.removeClass('btn-danger').addClass('btn-success');
+            exportBtn.html('<i class="fas fa-file-excel me-1"></i> Export Excel');
         }
     }
 
     // Event listeners for format change
-    formatPdf.addEventListener('change', updateButtonText);
-    formatExcel.addEventListener('change', updateButtonText);
+    $('input[name="format_type"]').on('change', updateButtonText);
 
-    // Validasi tanggal
-    tanggalAwal.addEventListener('change', function () {
-        tanggalAkhir.min = this.value;
-        if (tanggalAkhir.value && tanggalAkhir.value < this.value) {
-            tanggalAkhir.value = this.value;
+    // Date validation
+    tanggalAwal.on('change', function() {
+        const awalValue = $(this).val();
+        tanggalAkhir.attr('min', awalValue);
+        
+        if (tanggalAkhir.val() && tanggalAkhir.val() < awalValue) {
+            tanggalAkhir.val(awalValue);
             showAlert('Tanggal akhir telah disesuaikan dengan tanggal awal', 'warning');
         }
     });
 
-    tanggalAkhir.addEventListener('change', function () {
-        if (tanggalAwal.value && this.value < tanggalAwal.value) {
+    tanggalAkhir.on('change', function() {
+        if (tanggalAwal.val() && $(this).val() < tanggalAwal.val()) {
             showAlert('Tanggal akhir harus lebih besar atau sama dengan tanggal awal', 'danger');
-            this.value = tanggalAwal.value;
+            $(this).val(tanggalAwal.val());
         }
     });
 
-    // Alert reusable
+    // Show alert function
     function showAlert(message, type = 'info') {
         const alertId = 'alert-' + type;
-        const existingAlert = document.getElementById(alertId);
-        if (existingAlert) existingAlert.remove();
-
-        const alertDiv = document.createElement('div');
-        alertDiv.id = alertId;
-        alertDiv.className = `alert alert-${type} alert-dismissible fade show mt-2`;
-        alertDiv.innerHTML = `
-            <i class="fas fa-exclamation-circle me-2"></i>${message}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        `;
-
-        const modalBody = document.querySelector('#exportModal .modal-body');
-        modalBody.insertBefore(alertDiv, modalBody.firstChild);
-
+        $('#' + alertId).remove(); // Remove existing alert
+        
+        const alertDiv = $(`
+            <div id="${alertId}" class="alert alert-${type} alert-dismissible fade show mt-2">
+                <i class="fas fa-exclamation-circle me-2"></i>${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        `);
+        
+        $('.modal-body').prepend(alertDiv);
+        
+        // Auto remove after 3 seconds
         setTimeout(() => {
-            if (alertDiv.parentNode) {
-                alertDiv.remove();
-            }
+            alertDiv.fadeOut(() => alertDiv.remove());
         }, 3000);
     }
 
-    // Handle form submission
-    exportForm.addEventListener('submit', function (e) {
+    // AJAX form submission
+    exportForm.on('submit', function(e) {
         e.preventDefault();
-
+        
         // Show loading
-        exportLoading.classList.remove('d-none');
-        exportBtn.disabled = true;
-
-        const tanggalAwalVal = tanggalAwal.value;
-        const tanggalAkhirVal = tanggalAkhir.value;
-
+        exportLoading.removeClass('d-none');
+        exportBtn.prop('disabled', true);
+        
+        // Get form data
+        const tanggalAwalVal = tanggalAwal.val();
+        const tanggalAkhirVal = tanggalAkhir.val();
+        const statusVal = statusSelect.val();
+        const format = $('input[name="format_type"]:checked').val();
+        
+        // Validation
         if (!tanggalAwalVal || !tanggalAkhirVal) {
             showAlert('Harap isi kedua tanggal terlebih dahulu.', 'warning');
-            exportLoading.classList.add('d-none');
-            exportBtn.disabled = false;
+            exportLoading.addClass('d-none');
+            exportBtn.prop('disabled', false);
             return;
         }
-
+        
         if (tanggalAkhirVal < tanggalAwalVal) {
             showAlert('Tanggal akhir harus lebih besar atau sama dengan tanggal awal', 'danger');
-            exportLoading.classList.add('d-none');
-            exportBtn.disabled = false;
+            exportLoading.addClass('d-none');
+            exportBtn.prop('disabled', false);
             return;
         }
-
-        const format = document.querySelector('input[name="format_type"]:checked').value;
-        let url = format === 'excel'
-            ? '{{ route("riwayat.export_excel") }}'
-            : '{{ route("riwayat.export_pdf") }}';
-
-        const params = new URLSearchParams();
-        if (statusSelect && statusSelect.value) {
-            params.append('status', statusSelect.value);
-        }
-        params.append('tanggal_awal', tanggalAwalVal);
-        params.append('tanggal_akhir', tanggalAkhirVal);
-
-        const downloadLink = document.createElement('a');
-        downloadLink.href = url + '?' + params.toString();
-        downloadLink.style.display = 'none';
-        document.body.appendChild(downloadLink);
-        downloadLink.click();
-        document.body.removeChild(downloadLink);
-
-        showAlert(`Export ${format.toUpperCase()} berhasil dimulai. File akan segera diunduh.`, 'success');
-
-        setTimeout(() => {
-            exportLoading.classList.add('d-none');
-            exportBtn.disabled = false;
-
-            const modalInstance = bootstrap.Modal.getInstance(document.getElementById('exportModal'));
-            if (modalInstance) modalInstance.hide();
-        }, 2000);
+        
+        // Prepare AJAX request
+        const exportUrl = format === 'excel' ? '/riwayat/export_excel' : '/riwayat/export_pdf';
+        
+        $.ajax({
+            url: exportUrl,
+            type: 'GET',
+            data: {
+                status: statusVal,
+                tanggal_awal: tanggalAwalVal,
+                tanggal_akhir: tanggalAkhirVal
+            },
+            xhrFields: {
+                responseType: 'blob' // Important for file download
+            },
+            success: function(data, status, xhr) {
+                // Create blob and download link
+                const blob = new Blob([data], { 
+                    type: format === 'excel' ? 
+                        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' : 
+                        'application/pdf' 
+                });
+                
+                const url = window.URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                
+                // Set filename
+                const filename = `riwayat_pendaftaran_${tanggalAwalVal}_${tanggalAkhirVal}.${format === 'excel' ? 'xlsx' : 'pdf'}`;
+                link.download = filename;
+                
+                // Trigger download
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                window.URL.revokeObjectURL(url);
+                
+                showAlert(`Export ${format.toUpperCase()} berhasil diunduh!`, 'success');
+                
+                // Hide modal after success
+                setTimeout(() => {
+                    $('#exportModal').modal('hide');
+                }, 1500);
+            },
+            error: function(xhr, status, error) {
+                console.error('Export error:', error);
+                let errorMessage = 'Terjadi kesalahan saat export data.';
+                
+                if (xhr.status === 404) {
+                    errorMessage = 'Route export tidak ditemukan.';
+                } else if (xhr.status === 500) {
+                    errorMessage = 'Terjadi kesalahan server saat memproses export.';
+                } else if (xhr.status === 422) {
+                    errorMessage = 'Data yang dikirim tidak valid.';
+                }
+                
+                showAlert(errorMessage, 'danger');
+            },
+            complete: function() {
+                // Hide loading and enable button
+                exportLoading.addClass('d-none');
+                exportBtn.prop('disabled', false);
+            }
+        });
     });
 
-    // Reset modal saat ditutup
-    document.getElementById('exportModal').addEventListener('hidden.bs.modal', function () {
-        exportForm.reset();
-        exportLoading.classList.add('d-none');
-        exportBtn.disabled = false;
+    // Reset modal when closed
+    $('#exportModal').on('hidden.bs.modal', function() {
+        exportForm[0].reset();
+        exportLoading.addClass('d-none');
+        exportBtn.prop('disabled', false);
         updateButtonText();
-
-        const alerts = document.querySelectorAll('#exportModal .alert-dismissible');
-        alerts.forEach(alert => alert.remove());
+        
+        // Remove all alerts
+        $('.alert-dismissible').remove();
     });
 
+    // Initialize button text
     updateButtonText();
 });
+
+// Function to open export modal (can be called from outside)
+function openExportModal() {
+    $('#exportModal').modal('show');
+}
 </script>
 
 <style>
@@ -265,9 +310,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 .alert {
     border-left: 4px solid;
-    padding: 0.75rem 1rem;
-    margin-bottom: 0.75rem;
-    font-size: 0.95rem;
 }
 
 .alert-info {
@@ -288,7 +330,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 #exportLoading {
     padding: 2rem;
-    text-align: center;
 }
 
 .spinner-border {

@@ -8,6 +8,12 @@ use App\Models\PendaftaranModel;
 use Yajra\DataTables\DataTables;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Dompdf\Options;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\Border;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
+use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 
 class RiwayatController extends Controller
 {
@@ -95,8 +101,7 @@ class RiwayatController extends Controller
         return view('riwayat.show_ajax', compact('pendaftaran'));
     }
 
-
-       public function export_pdf(Request $request)
+    public function export_pdf(Request $request)
     {
         $status = $request->status;
         $tanggalAwal = $request->tanggal_awal;
@@ -127,4 +132,121 @@ class RiwayatController extends Controller
         return $pdf->stream('Data Pendaftaran ' . date('Y-m-d H-i-s') . '.pdf');
     }
 
+    public function export_excel(Request $request)
+    {
+        $status = $request->status;
+        $tanggalAwal = $request->tanggal_awal;
+        $tanggalAkhir = $request->tanggal_akhir;
+
+        $query = PendaftaranModel::with(['mahasiswa.prodi.jurusan.kampus', 'jadwal', 'detail']);
+
+        if ($tanggalAwal && $tanggalAkhir) {
+            $query->whereBetween('tanggal_pendaftaran', [$tanggalAwal, $tanggalAkhir]);
+        } elseif ($tanggalAwal) {
+            $query->whereDate('tanggal_pendaftaran', '>=', $tanggalAwal);
+        } elseif ($tanggalAkhir) {
+            $query->whereDate('tanggal_pendaftaran', '<=', $tanggalAkhir);
+        }
+
+        if (in_array($status, ['diterima', 'ditolak'])) {
+            $query->whereHas('detail', fn($q) => $q->where('status', $status));
+        }
+
+        $pendaftaran = $query->get();
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('Data Riwayat Pendaftaran');
+
+        $sheet->setCellValue('A1', 'LAPORAN RIWAYAT PENDAFTARAN MAHASISWA');
+        $sheet->mergeCells('A1:N1');
+        $sheet->getStyle('A1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(16);
+
+        $row = 3;
+        if ($status && $status != 'semua') {
+            $sheet->setCellValue('A' . $row++, 'Status: ' . ucfirst($status));
+        }
+        if ($tanggalAwal) {
+            $sheet->setCellValue('A' . $row++, 'Tanggal Awal: ' . date('d-m-Y', strtotime($tanggalAwal)));
+        }
+        if ($tanggalAkhir) {
+            $sheet->setCellValue('A' . $row++, 'Tanggal Akhir: ' . date('d-m-Y', strtotime($tanggalAkhir)));
+        }
+        $row++;
+
+        $headers = ['A' => 'No','B' => 'NIM','C' => 'Nama Mahasiswa','D' => 'NIK','E' => 'No Telp','F' => 'Alamat Asal','G' => 'Alamat Sekarang','H' => 'Program Studi','I' => 'Jurusan','J' => 'Kampus','K' => 'Scan KTP','L' => 'Scan KTM','M' => 'Pas Foto','N' => 'Tanggal Pendaftaran'];
+        foreach ($headers as $col => $text) {
+            $sheet->setCellValue($col . $row, $text);
+        }
+        $sheet->getStyle('A'.$row.':N'.$row)->applyFromArray([
+            'font' => ['bold' => true, 'color' => ['rgb' => 'FFFFFF']],
+            'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['rgb' => '4472C4']],
+            'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER],
+            'borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN]]
+        ]);
+
+        $row++;
+        $no = 1;
+        $imageRowHeight = 60;
+        foreach ($pendaftaran as $data) {
+            $sheet->getRowDimension($row)->setRowHeight($imageRowHeight);
+            $sheet->setCellValue("A$row", $no++)
+                ->setCellValue("B$row", $data->mahasiswa->nim ?? '-')
+                ->setCellValue("C$row", $data->mahasiswa->mahasiswa_nama ?? '-')
+                ->setCellValue("D$row", $data->mahasiswa->nik ?? '-')
+                ->setCellValue("E$row", $data->mahasiswa->no_telp ?? '-')
+                ->setCellValue("F$row", $data->mahasiswa->alamat_asal ?? '-')
+                ->setCellValue("G$row", $data->mahasiswa->alamat_sekarang ?? '-')
+                ->setCellValue("H$row", $data->mahasiswa->prodi->prodi_nama ?? '-')
+                ->setCellValue("I$row", $data->mahasiswa->prodi->jurusan->jurusan_nama ?? '-')
+                ->setCellValue("J$row", $data->mahasiswa->prodi->jurusan->kampus->kampus_nama ?? '-')
+                ->setCellValue("N$row", date('d-m-Y', strtotime($data->tanggal_pendaftaran)));
+
+            $this->addImageToCell($sheet, $data->mahasiswa->scan_ktp, 'K' . $row, 'KTP');
+            $this->addImageToCell($sheet, $data->mahasiswa->scan_ktm, 'L' . $row, 'KTM');
+            $this->addImageToCell($sheet, $data->mahasiswa->pas_foto, 'M' . $row, 'Foto');
+
+            $sheet->getStyle("A$row:N$row")->applyFromArray([
+                'borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN]],
+                'alignment' => [
+                    'vertical' => Alignment::VERTICAL_CENTER,
+                    'horizontal' => Alignment::HORIZONTAL_CENTER
+                ]
+            ]);
+
+            $row++;
+        }
+
+        foreach (range('A', 'N') as $col) {
+            $sheet->getColumnDimension($col)->setAutoSize(true);
+        }
+
+        $writer = new Xlsx($spreadsheet);
+        $filename = 'Data_Pendaftaran_' . date('Ymd_His') . '.xlsx';
+
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header("Content-Disposition: attachment; filename=\"$filename\"");
+        $writer->save('php://output');
+    }
+
+    private function addImageToCell($sheet, $path, $cell, $name)
+    {
+        if ($path && file_exists(public_path('uploads/' . $path))) {
+            $drawing = new Drawing();
+            $drawing->setPath(public_path('uploads/' . $path));
+            $drawing->setHeight(60);
+            $drawing->setCoordinates($cell);
+            $drawing->setOffsetX(5);
+            $drawing->setOffsetY(5);
+            $drawing->setWorksheet($sheet);
+        } else {
+            $sheet->setCellValue($cell, 'Tidak Ada');
+        }
+    }
+
+    public function show_export_form()
+    {
+        return view('riwayat.export_form');
+    }
 }

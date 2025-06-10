@@ -273,6 +273,8 @@ Route::prefix('biodata/mahasiswa')->name('biodata.mahasiswa.')->middleware(['aut
         Route::post('/list', [RiwayatController::class, 'list'])->name('riwayat.list');
         Route::get('/{id}/show_ajax', [RiwayatController::class, 'show_ajax']);
         Route::get('export_pdf', [RiwayatController::class, 'export_pdf'])->name('riwayat.export_pdf');
+        Route::get('/export_excel', [RiwayatController::class, 'export_excel'])->name('riwayat.export_excel');
+        Route::get('export_form', [RiwayatController::class, 'show_export_form'])->name('riwayat.export_form');
     });
 
     //Rute Hasil Peserta
