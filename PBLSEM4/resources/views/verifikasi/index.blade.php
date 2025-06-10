@@ -3,8 +3,13 @@
 @section('content')
 <div class="card card-outline card-primary shadow-sm">
     <div class="card-header">
-            <h3 class="card-title">{{ $page->title }}</h3>
+        <h3 class="card-title">{{ $page->title }}</h3>
+        <div class="card-tools">
+            <button type="button" class="btn btn-success btn-sm" onclick="verifyAll()">
+                <i class="fas fa-check-double"></i> Verify All
+            </button>
         </div>
+    </div>
         
     <div class="card-body">
         @if (session('success'))
@@ -156,6 +161,104 @@ function updateStatus(id, status) {
     });
 }
 
+function verifyAll() {
+    Swal.fire({
+        title: 'Verify All Pending Status?',
+        text: "Semua status 'menunggu' akan diubah menjadi 'diterima'!",
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Ya, Verify All',
+        cancelButtonText: 'Batal',
+        reverseButtons: true,
+        customClass: {
+            confirmButton: 'btn btn-success me-5',
+            cancelButton: 'btn btn-secondary'
+        },
+        buttonsStyling: false
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Tampilkan prompt untuk catatan global
+            Swal.fire({
+                title: 'Catatan untuk Semua Peserta',
+                input: 'text',
+                inputPlaceholder: 'Catatan umum (opsional)...',
+                showCancelButton: true,
+                confirmButtonText: 'Verify All',
+                cancelButtonText: 'Batal',
+                customClass: {
+                    confirmButton: 'btn btn-success me-2',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            }).then((inputResult) => {
+                if (inputResult.isConfirmed) {
+                    let catatan = inputResult.value;
+
+                    // Tampilkan loading
+                    Swal.fire({
+                        title: 'Memproses...',
+                        text: 'Sedang memverifikasi semua data',
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+
+                    fetch('/verifikasi/verify-all', {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ catatan: catatan })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Berhasil!',
+                                text: `${data.count} data berhasil diverifikasi`,
+                                confirmButtonText: 'OKE',
+                                customClass: {
+                                    confirmButton: 'btn btn-primary'
+                                },
+                                buttonsStyling: false
+                            }).then(() => {
+                                location.reload();
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Gagal',
+                                text: data.message || 'Gagal memverifikasi data.',
+                                confirmButtonText: 'Coba Lagi',
+                                customClass: {
+                                    confirmButton: 'btn btn-danger'
+                                },
+                                buttonsStyling: false
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Terjadi kesalahan saat memproses permintaan.',
+                            confirmButtonText: 'OKE',
+                            customClass: {
+                                confirmButton: 'btn btn-danger'
+                            },
+                            buttonsStyling: false
+                        });
+                    });
+                }
+            });
+        }
+    });
+}
+
 </script>
 @endpush
-
