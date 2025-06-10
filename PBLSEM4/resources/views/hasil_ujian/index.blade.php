@@ -160,7 +160,7 @@
             }
             $('#modal-master').find('#nilai_total').val(total);
             
-            if (total >= 600) {
+            if (total >= 500) {
                 $('#modal-master').find('#status_preview').val('Lulus').removeClass('text-danger').addClass('text-success');
             } else if (total > 0) {
                 $('#modal-master').find('#status_preview').val('Tidak Lulus').removeClass('text-success').addClass('text-danger');
