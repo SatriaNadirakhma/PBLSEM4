@@ -40,11 +40,6 @@
             </div>
         @endif
 
-        <div class="mb-3">
-            <input type="text" id="searchInput" class="form-control form-control-sm shadow-sm rounded-pill px-3"
-                placeholder="Cari nama peserta...">
-        </div>
-
         <div class="table-responsive">
             <table class="table table-bordered table-striped table-hover table-sm" id="table_hasil_ujian">
                 <thead class="table-primary text-center">

@@ -75,7 +75,8 @@ class DosenController extends Controller
 
     public function create_ajax()
     {
-        $jurusan = JurusanModel::all();
+        // Ambil semua jurusan dan mapping ke id dan jurusan_nama
+        $jurusan = JurusanModel::select('jurusan_id as id', 'jurusan_nama')->get();
         return view('biodata.dosen.create_ajax', compact('jurusan'));
     }
 
@@ -192,6 +193,11 @@ class DosenController extends Controller
     public function confirm_ajax(string $id)
     {
         $dosen = DosenModel::find($id);
+        $jurusan = JurusanModel::all();
+        if ($dosen && $dosen->jurusan_id) {
+            $jurusan_nama = JurusanModel::where('jurusan_id', $dosen->jurusan_id)->value('jurusan_nama');
+            $dosen->jurusan_nama = $jurusan_nama;
+        }
         return view('biodata.dosen.confirm_ajax', compact('dosen'));
     }
 

@@ -76,13 +76,13 @@
                                         <h5 class="card-title mb-0 text-primary fw-bold">
                                             <i class="fas fa-file-alt me-2"></i>Ujian #{{ $loop->iteration }}
                                         </h5>
-                                        @if ($hasil->status_lulus == 'Lulus')
+                                        @if ($hasil->status_lulus == 'lulus')
                                             <span class="badge bg-success fs-6 px-3 py-2">
-                                                <i class="fas fa-check-circle me-1"></i>{{ $hasil->status_lulus }}
+                                                <i class="fas fa-check-circle me-1"></i> {{ $hasil->status_lulus }}
                                             </span>
                                         @else
                                             <span class="badge bg-danger fs-6 px-3 py-2">
-                                                <i class="fas fa-times-circle me-1"></i>{{ $hasil->status_lulus }}
+                                                <i class="fas fa-times-circle me-1"></i> {{ $hasil->status_lulus }}
                                             </span>
                                         @endif
                                     </div>
@@ -97,7 +97,7 @@
                                         <div class="mb-3">
                                             <div class="d-flex justify-content-between mb-1">
                                                 <small class="fw-semibold">Listening</small>
-                                                <small class="fw-semibold">{{ $hasil->nilai_listening }}/500</small>
+                                                <small class="fw-semibold">{{ $hasil->nilai_listening }}/495</small>
                                             </div>
                                             <div class="progress" style="height: 8px;">
                                                 <div class="progress-bar bg-primary" role="progressbar" 
@@ -109,7 +109,7 @@
                                         <div class="mb-3">
                                             <div class="d-flex justify-content-between mb-1">
                                                 <small class="fw-semibold">Reading</small>
-                                                <small class="fw-semibold">{{ $hasil->nilai_reading }}/500</small>
+                                                <small class="fw-semibold">{{ $hasil->nilai_reading }}/495</small>
                                             </div>
                                             <div class="progress" style="height: 8px;">
                                                 <div class="progress-bar bg-warning" role="progressbar" 
@@ -123,11 +123,18 @@
                                         <h6 class="text-muted mb-1">Total Nilai</h6>
                                         <h2 class="mb-0 fw-bold 
                                             @if($hasil->nilai_total >= 800) text-success
-                                            @elseif($hasil->nilai_total >= 600) text-warning
+                                            @elseif($hasil->nilai_total >= 500) text-warning
                                             @else text-danger @endif">
                                             {{ $hasil->nilai_total }}
                                         </h2>
-                                        <small class="text-muted">dari 1000</small>
+                                        <small class="text-muted d-block mb-2">dari 990</small>
+
+                                        <!-- Icon Status Lulus / Tidak -->
+                                        @if (strtolower($hasil->status_lulus) === 'lulus')
+                                            <i class="fas fa-check-circle text-success" style="font-size: 2rem;" title="Lulus"></i>
+                                        @else
+                                            <i class="fas fa-times-circle text-danger" style="font-size: 2rem;" title="Tidak Lulus"></i>
+                                        @endif
                                     </div>
 
                                     <!-- Additional Information -->

@@ -75,7 +75,7 @@ class HasilUjianController extends Controller
             ->addColumn('nilai_total', fn($h) => $h->nilai_total ?? 0)
             ->addColumn('status_lulus', function($h) {
                 $status = $h->status_lulus ?? 'Tidak Lulus';
-                $badgeClass = $status == 'Lulus' ? 'badge bg-success' : 'badge bg-danger';
+                $badgeClass = strtolower($status) === 'lulus' ? 'badge bg-success' : 'badge bg-danger';
                 return '<span class="' . $badgeClass . '">' . $status . '</span>';
             })
             ->addColumn('role', function ($h) {

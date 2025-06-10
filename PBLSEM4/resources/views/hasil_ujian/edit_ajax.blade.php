@@ -26,6 +26,12 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
+                    <label>Nama User</label>
+                    <input type="number" name="user_id" id="user_id" class="form-control"
+                        value="{{ $hasil_ujian->user_id }}" required>
+                    <small id="error-user_id" class="error-text form-text text-danger"></small>
+                </div>
+                <div class="form-group">
                     <label>Nilai Listening</label>
                     <input type="number" name="nilai_listening" id="nilai_listening" class="form-control"
                         value="{{ $hasil_ujian->nilai_listening }}" min="0" max="495" required>
@@ -38,24 +44,36 @@
                     <small id="error-nilai_reading" class="error-text form-text text-danger"></small>
                 </div>
                 <div class="form-group">
+                    <label>Nilai Total</label>
+                    <input type="number" name="nilai_total" id="nilai_total" class="form-control"
+                        value="{{ $hasil_ujian->nilai_listening + $hasil_ujian->nilai_reading }}" readonly>
+                    <small id="error-nilai_total" class="error-text form-text text-danger"></small>
+                </div>
+                <script>
+                $(document).ready(function() {
+                    function updateNilaiTotal() {
+                        var listening = parseInt($('#nilai_listening').val()) || 0;
+                        var reading = parseInt($('#nilai_reading').val()) || 0;
+                        $('#nilai_total').val(listening + reading);
+                    }
+                    $('#nilai_listening, #nilai_reading').on('input', updateNilaiTotal);
+                });
+                </script>
+                @php
+                    $total_nilai = $hasil_ujian->nilai_listening + $hasil_ujian->nilai_reading;
+                    $is_lulus = $total_nilai >= 500;
+                @endphp
+                <div class="form-group">
                     <label>Status Lulus</label>
-                    <select name="status_lulus" id="status_lulus" class="form-control" required>
-                        <option value="">-- Pilih Status --</option>
-                        <option value="Lulus" {{ $hasil_ujian->status_lulus == 'Lulus' ? 'selected' : '' }}>Lulus</option>
-                        <option value="Tidak Lulus" {{ $hasil_ujian->status_lulus == 'Tidak Lulus' ? 'selected' : '' }}>Tidak Lulus</option>
-                    </select>
+                    <input type="text" name="status_lulus" id="status_lulus"
+                        class="form-control {{ $is_lulus ? 'bg-success text-white' : 'bg-danger text-white' }}"
+                        value="{{ $is_lulus ? 'Lulus' : 'Tidak Lulus' }}" readonly>
                     <small id="error-status_lulus" class="error-text form-text text-danger"></small>
                 </div>
                 <div class="form-group">
                     <label>Catatan</label>
                     <textarea name="catatan" id="catatan" class="form-control" rows="3">{{ $hasil_ujian->catatan }}</textarea>
                     <small id="error-catatan" class="error-text form-text text-danger"></small>
-                </div>
-                <div class="form-group">
-                    <label>User ID</label>
-                    <input type="number" name="user_id" id="user_id" class="form-control"
-                        value="{{ $hasil_ujian->user_id }}" required>
-                    <small id="error-user_id" class="error-text form-text text-danger"></small>
                 </div>
             </div>
             <div class="modal-footer">
