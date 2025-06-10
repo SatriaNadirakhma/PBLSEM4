@@ -5,11 +5,11 @@
         <div class="col-lg-10">
             <!-- Header Section -->
             <div class="d-flex align-items-center mb-4">
-                <div class="bg-primary rounded-circle p-3 me-3">
+                <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 48px; height: 48px;">
                     <i class="fas fa-poll text-white fs-4"></i>
                 </div>
                 <div>
-                    <p class="text-muted mb-0">Ringkasan hasil ujian dan pencapaian Anda</p>
+                    <p class="text-muted mb-0" style="margin-left: 16px;">Ringkasan hasil ujian dan pencapaian Anda <br> Silakan tinjau hasil di bawah ini.</p>
                 </div>
             </div>
 
@@ -74,7 +74,7 @@
                                 <div class="card-header bg-white border-bottom-0 py-3">
                                     <div class="d-flex justify-content-between align-items-center">
                                         <h5 class="card-title mb-0 text-primary fw-bold">
-                                            <i class="fas fa-file-alt me-2"></i>Ujian #{{ $loop->iteration }}
+                                            <i class="fas fa-file-alt me-2"></i>Ujian #{{ $loop->iteration }}</>
                                         </h5>
                                         @if ($hasil->status_lulus == 'lulus')
                                             <span class="badge bg-success fs-6 px-3 py-2">
@@ -174,8 +174,24 @@
                             </div>
                         </div>
                     @endforeach
-                </div>
 
+                    <!-- Ujian Lagi Card -->
+                    <div class="col-lg-6 mb-4">
+                        <div class="card border-0 shadow-sm h-100 hover-card d-flex align-items-center justify-content-center" style="min-height: 100%;">
+                            <div class="card-body text-center d-flex flex-column align-items-center justify-content-center">
+                                <div class="mb-3">
+                                    <i class="fas fa-plus-circle text-primary" style="font-size: 3rem;"></i>
+                                </div>
+                                <h5 class="card-title mb-2 fw-bold text-primary">Ikuti Ujian Lagi</h5>
+                                <p class="text-muted mb-3">Ingin mencoba ujian lagi untuk meningkatkan skor Anda?</p>
+                                <a href="{{ route('pendaftaran.index') }}" class="btn btn-primary">
+                                    <i class="fas fa-play me-2"></i> Mulai Ujian Baru
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Add Ujian Again Container --></div>
             @endif
         </div>
     </div>
