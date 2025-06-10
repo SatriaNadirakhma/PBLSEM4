@@ -101,7 +101,7 @@
                             <label>Status Kelulusan</label>
                             <input type="text" id="status_preview" class="form-control" readonly 
                                 placeholder="Otomatis berdasarkan total nilai">
-                            <small class="form-text text-muted">Lulus jika total ≥ 600</small>
+                            <small class="form-text text-muted">Lulus jika total ≥ 500</small>
                         </div>
                     </div>
                 </div>
