@@ -95,6 +95,12 @@
             $('#searchInput').on('keyup', function () {
                 dataKampus.ajax.reload();
             });
+            $('#btn-tambah').on('click', function(e) {
+                e.preventDefault();
+                var url = $(this).data('url');
+                console.log('URL:', url);
+                modalAction(url);
+            });
         });
     </script>
 @endpush

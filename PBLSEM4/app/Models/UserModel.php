@@ -72,5 +72,10 @@ class UserModel extends Authenticatable
         );
     }
 
+    public function hasil_ujian()
+    {
+        return $this->belongsTo(HasilUjianModel::class, 'hasil_id');
+    }
+
 
 }

@@ -60,19 +60,19 @@
                             </div>
                             <div class="form-group">
                                 <label>NIDN</label>
-                                <input type="text" value="{{ $dosen->nidn }}" readonly>
+                                <input type="text" class="form-control bg-light text-muted readonly-field" value="{{ $dosen->nidn }}" readonly>
                                 <div class="readonly-feedback">Kolom NIDN tidak dapat diubah</div>
                             </div>
 
                             <div class="form-group">
                                 <label>NIK</label>
-                                <input type="text" value="{{ $dosen->nik }}"  readonly>
+                                <input type="text" class="form-control bg-light text-muted readonly-field" value="{{ $dosen->nik }}"  readonly>
                                 <div class="readonly-feedback">Kolom NIK tidak dapat diubah</div>
                             </div>
 
                             <div class="form-group">
                                 <label>Nama</label>
-                                <input type="text" value="{{ $dosen->dosen_nama }}" readonly >
+                                <input type="text" class="form-control bg-light text-muted readonly-field" value="{{ $dosen->dosen_nama }}" readonly >
                                 <div class="readonly-feedback">Kolom nama tidak dapat diubah</div>
                             </div>
 
@@ -93,13 +93,13 @@
 
                             <div class="form-group">
                                 <label>Jenis Kelamin</label>
-                                <input type="text" value="{{ $dosen->jenis_kelamin }}" readonly>
+                                <input type="text" class="form-control bg-light text-muted readonly-field" value="{{ $dosen->jenis_kelamin }}" readonly>
                                 <div class="readonly-feedback">Kolom ini tidak dapat diubah</div>
                             </div>
 
                             <div class="form-group">
                                 <label>Jurusan</label>
-                                <input type="text" value="{{ $dosen->jurusan->jurusan_nama ?? '-' }}" readonly >
+                                <input type="text" class="form-control bg-light text-muted readonly-field" value="{{ $dosen->jurusan->jurusan_nama ?? '-' }}" readonly >
                                 <div class="readonly-feedback">Kolom ini tidak dapat diubah</div>
                             </div>
                         </div>
