@@ -59,18 +59,15 @@
             </form>
             <hr class="my-4"> {{-- Garis pemisah --}}
 
-            {{-- Bagian PRATINJAU PDF --}}
-            @if ($panduan && $panduan->file_url) {{-- Pastikan ada panduan dan URL file tersedia --}}
+          {{-- Bagian PRATINJAU PDF --}}
+            @if ($panduan) {{-- Cukup periksa jika ada data panduan --}}
                 <div class="mt-4">
                     <h5><i class="fas fa-eye"></i> Pratinjau Panduan</h5>
                     <div class="embed-responsive embed-responsive-16by9" style="height: 600px;">
-                        <embed class="embed-responsive-item" src="{{ $panduan->file_url }}" type="application/pdf" width="100%" height="100%">
-                        <p>Browser Anda tidak mendukung preview PDF. Anda bisa <a href="{{ $panduan->file_url }}" target="_blank">klik di sini untuk mengunduh/melihat PDF</a>.</p>
+                        {{-- Menggunakan route('panduan.show') yang sudah terbukti berhasil --}}
+                        <embed class="embed-responsive-item" src="{{ route('panduan.show') }}" type="application/pdf" width="100%" height="100%">
+                        <p>Browser Anda tidak mendukung preview PDF. Anda bisa <a href="{{ route('panduan.show') }}" target="_blank">klik di sini untuk melihat PDF di tab baru</a>.</p>
                     </div>
-                </div>
-            @elseif ($panduan && !$panduan->file_url)
-                 <div class="mt-4 alert alert-warning">
-                    <i class="fas fa-exclamation-triangle"></i> File PDF tidak ditemukan di lokasi penyimpanan. Pastikan file telah diunggah dengan benar.
                 </div>
             @else
                 <div class="mt-4 alert alert-info">
