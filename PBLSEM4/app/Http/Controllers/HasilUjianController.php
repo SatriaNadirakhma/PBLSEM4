@@ -190,80 +190,102 @@ class HasilUjianController extends Controller
 
 
     public function edit_ajax($id)
-    {
-        $hasil_ujian = HasilUjianModel::with(['user'])->find($id);
-        if (!$hasil_ujian) {
-            return response()->json(['status' => false, 'message' => 'Data tidak ditemukan']);
-        }
-        
-        $jadwal = JadwalModel::all();
-        return view('hasil_ujian.edit_ajax', compact('hasil_ujian', 'jadwal'));
+{
+    $hasil_ujian = HasilUjianModel::with(['user.mahasiswa', 'user.dosen', 'user.tendik'])->find($id);
+
+    if (!$hasil_ujian) {
+        return response()->view('hasil_ujian.edit_ajax', ['hasil_ujian' => null]);
     }
+
+    // Tambahkan nama_user berdasarkan role
+    if ($hasil_ujian->user) {
+        $hasil_ujian->user->nama_user = match ($hasil_ujian->user->role) {
+            'mahasiswa' => optional($hasil_ujian->user->mahasiswa)->mahasiswa_nama ?? $hasil_ujian->user->username,
+            'dosen'     => optional($hasil_ujian->user->dosen)->dosen_nama ?? $hasil_ujian->user->username,
+            'tendik'    => optional($hasil_ujian->user->tendik)->tendik_nama ?? $hasil_ujian->user->username,
+            default     => $hasil_ujian->user->username,
+        };
+    } else {
+        $hasil_ujian->user = (object)[
+            'nama_user' => '-'
+        ];
+    }
+
+    $jadwal = JadwalModel::all();
+
+    return view('hasil_ujian.edit_ajax', compact('hasil_ujian', 'jadwal'));
+}
 
     public function update_ajax(Request $request, $id)
-    {
-        $rules = [
-            'nilai_listening' => 'required|integer|min:0|max:495',
-            'nilai_reading' => 'required|integer|min:0|max:495',
-            'jadwal_id' => 'required|exists:jadwal,jadwal_id',
-            'user_id' => 'required|exists:users,id',
-            'catatan' => 'nullable|string|max:255',
-        ];
+{
+    $rules = [
+        'nilai_listening' => 'required|integer|min:0|max:495',
+        'nilai_reading' => 'required|integer|min:0|max:495',
+        'jadwal_id' => 'required|exists:jadwal,jadwal_id',
+        'user_id' => 'required|exists:user,user_id',
+        'catatan' => 'nullable|string|max:255',
+    ];
 
-        $validator = Validator::make($request->all(), $rules);
+    $validator = Validator::make($request->all(), $rules);
 
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Validasi Gagal',
-                'msgField' => $validator->errors(),
-            ]);
-        }
-
-        $hasil_ujian = HasilUjianModel::find($id);
-        if (!$hasil_ujian) {
-            return response()->json(['status' => false, 'message' => 'Data tidak ditemukan']);
-        }
-
-        try {
-            $existingResult = HasilUjianModel::where('user_id', $request->input('user_id'))
-                                           ->where('jadwal_id', $request->input('jadwal_id'))
-                                           ->where('hasil_id', '!=', $id)
-                                           ->first();
-            
-            if ($existingResult) {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Peserta sudah memiliki hasil ujian pada jadwal ini',
-                ]);
-            }
-
-            $nilaiListening = $request->input('nilai_listening');
-            $nilaiReading = $request->input('nilai_reading');
-            $nilaiTotal = $nilaiListening + $nilaiReading;
-
-            $hasil_ujian->update([
-                'nilai_listening' => $nilaiListening,
-                'nilai_reading' => $nilaiReading,
-                'nilai_total' => $nilaiTotal,
-                'status_lulus' => $nilaiTotal >= 500 ? 'Lulus' : 'Tidak Lulus',
-                'jadwal_id' => $request->input('jadwal_id'),
-                'user_id' => $request->input('user_id'),
-                'catatan' => $request->input('catatan'),
-            ]);
-
-            return response()->json([
-                'status' => true,
-                'message' => 'Data hasil ujian berhasil diperbarui',
-            ]);
-        } catch (\Exception $e) {
-            Log::error('Error in update_ajax: ' . $e->getMessage());
-            return response()->json([
-                'status' => false,
-                'message' => 'Gagal memperbarui data: ' . $e->getMessage(),
-            ]);
-        }
+    if ($validator->fails()) {
+        return response()->json([
+            'status' => false,
+            'message' => 'Validasi Gagal',
+            'msgField' => $validator->errors(),
+        ]);
     }
+
+    $hasil_ujian = HasilUjianModel::find($id);
+    if (!$hasil_ujian) {
+        return response()->json(['status' => false, 'message' => 'Data tidak ditemukan']);
+    }
+
+    try {
+        // Cek apakah user sudah punya hasil ujian untuk jadwal itu (selain dirinya sendiri)
+        $existingResult = HasilUjianModel::where('user_id', $request->user_id)
+            ->where('jadwal_id', $request->jadwal_id)
+            ->where('hasil_id', '!=', $id) // ini nama kolom yg benar
+            ->first();
+
+        if ($existingResult) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Peserta sudah memiliki hasil ujian pada jadwal ini',
+            ]);
+        }
+
+        // Hitung nilai total dan status kelulusan
+        $nilaiListening = $request->nilai_listening;
+        $nilaiReading = $request->nilai_reading;
+        $nilaiTotal = $nilaiListening + $nilaiReading;
+        $statusLulus = $nilaiTotal >= 500 ? 'Lulus' : 'Tidak Lulus';
+
+        // Update data
+        $hasil_ujian->update([
+            'nilai_listening' => $nilaiListening,
+            'nilai_reading'   => $nilaiReading,
+            'nilai_total'     => $nilaiTotal,
+            'status_lulus'    => $statusLulus,
+            'jadwal_id'       => $request->jadwal_id,
+            'user_id'         => $request->user_id,
+            'catatan'         => $request->catatan,
+        ]);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Data hasil ujian berhasil diperbarui',
+        ]);
+
+    } catch (\Exception $e) {
+        Log::error('Error in update_ajax: ' . $e->getMessage());
+        return response()->json([
+            'status' => false,
+            'message' => 'Gagal memperbarui data: ' . $e->getMessage(),
+        ]);
+    }
+}
+
 
     public function confirm_ajax($id)
     {
