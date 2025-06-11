@@ -227,6 +227,7 @@ Route::prefix('biodata/mahasiswa')->name('biodata.mahasiswa.')->middleware(['aut
         Route::post('{id}/update', [VerifikasiPendaftaranController::class, 'update'])->name('update');
         Route::get('{id}/edit', [VerifikasiPendaftaranController::class, 'edit'])->name('edit');
         Route::get('/show/{id}', [VerifikasiPendaftaranController::class, 'show'])->name('verifikasi.show');
+        Route::post('/toggle-status', [VerifikasiPendaftaranController::class, 'updateRegistrationStatus'])->name('verifikasi.toggleRegistrationStatus');
         Route::post('/verify-all', [VerifikasiPendaftaranController::class, 'verifyAll'])->name('verifikasi.verify-all');
     });
 
