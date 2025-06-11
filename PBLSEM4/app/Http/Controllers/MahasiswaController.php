@@ -287,6 +287,12 @@ class MahasiswaController extends Controller
                             continue;
                         }
 
+                        // Ambil nilai keterangan dari file Excel atau set default 'gratis'
+                        $keterangan = trim($row['J'] ?? '');
+                        if (empty($keterangan)) {
+                            $keterangan = 'gratis'; // Set default ke 'gratis'
+                        }
+
                         $insert[] = [
                             'nim' => $nim,
                             'nik' => $nik,
@@ -297,8 +303,8 @@ class MahasiswaController extends Controller
                             'alamat_sekarang' => trim($row['G'] ?? ''),
                             'jenis_kelamin' => trim($row['H'] ?? ''),
                             'status' => trim($row['I'] ?? ''),
-                            'keterangan' => trim($row['J'] ?? ''),
-                            'prodi_id' => trim($row['K'] ?? ''),
+                            'keterangan' => $keterangan,
+                            'prodi_id' => trim($row['J'] ?? ''),
                             'created_at' => now(),
                             'updated_at' => now()
                         ];
