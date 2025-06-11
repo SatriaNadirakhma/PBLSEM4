@@ -51,20 +51,26 @@ class PendaftaranController extends Controller
                                  ->latest()
                                  ->first();
 
-        // 1. Jika pendaftaran terakhirnya sedang 'menunggu', arahkan ke dashboard.
-        if ($pendaftaranTerakhir && ($pendaftaranTerakhir->detail->status ?? '') === 'menunggu') {
-            return redirect()->route('dashboard')->with('warning', 'Anda sudah mendaftar. Silakan tunggu verifikasi dari admin.');
-        }
-        
+        // Ambil status terakhir pendaftaran jika ada
+        $lastPendaftaranStatus = $pendaftaranTerakhir->detail->status ?? null;
+
         // 2. Cek status pendaftaran global dari admin
         $registrationOpen = Cache::rememberForever('registration_status', function () {
             return Config::get('app_settings.registration_open') ? 'open' : 'closed';
         }) === 'open';
 
-        // Logika penutupan pendaftaran HANYA berlaku untuk:
-        // - Mahasiswa yang BELUM PERNAH DITERIMA (pendaftaran gratis)
-        // - Mahasiswa yang BELUM PERNAH MENDAFTAR SAMA SEKALI (pendaftaranTerakhir adalah null)
-        if (!$registrationOpen && !$pernahDiterima && is_null($pendaftaranTerakhir)) {
+
+        // LOGIKA UNTUK MENAMPILKAN HALAMAN PENDAFTARAN DITUTUP (hanya berlaku untuk mahasiswa GRATIS yang belum/gagal mendaftar)
+        // Ini akan berlaku jika:
+        // - Pendaftaran global DITUTUP
+        // - Mahasiswa BELUM PERNAH DITERIMA (gratis)
+        // - Mahasiswa BELUM PERNAH MENDAFTAR SAMA SEKALI (pendaftaranTerakhir null)
+        // - ATAU Mahasiswa PERNAH MENDAFTAR TAPI DITOLAK (lastPendaftaranStatus 'ditolak')
+        if (
+            !$registrationOpen && // Pendaftaran global CLOSED
+            !$pernahDiterima && // Mahasiswa belum pernah diterima (berarti gratis)
+            ($pendaftaranTerakhir === null || $lastPendaftaranStatus === 'ditolak') // Belum pernah daftar ATAU sudah ditolak
+        ) {
             return view('pendaftaran.mahasiswa_closed_registration', [
                 'breadcrumb' => (object) [
                     'title' => 'Form Pendaftaran',
@@ -74,9 +80,9 @@ class PendaftaranController extends Controller
             ]);
         }
 
-        // Jika pendaftaran terbuka ATAU mahasiswa sudah pernah diterima ATAU mahasiswa sudah pernah mendaftar (meskipun ditolak),
-        // lanjutkan ke alur pendaftaran yang sesuai.
-
+        // Jika sampai sini, berarti pendaftaran dibuka ATAU mahasiswa sudah diterima ATAU mahasiswa sedang menunggu/ditolak
+        // kita akan menampilkan form pendaftaran, tetapi validasi submit akan menghandle status 'menunggu'
+        
         $breadcrumb = (object) [
             'title' => 'Form Pendaftaran',
             'list' => ['Home', 'Pendaftaran', 'Form Pendaftaran'],
@@ -95,6 +101,10 @@ class PendaftaranController extends Controller
         if ($pernahDiterima) {
             return view('pendaftaran.mahasiswa_berbayar', $data);
         }
+        
+        // Mahasiswa gratis (belum pernah diterima)
+        // Jika status terakhir adalah 'menunggu', dia tetap akan melihat form
+        // Tapi notifikasi akan muncul saat submit (dihandle di store_ajax)
         return view('pendaftaran.mahasiswa_gratis', $data);
     }
 
@@ -133,7 +143,7 @@ class PendaftaranController extends Controller
     public function store_ajax(Request $request)
     {
         $mahasiswaId = $request->mahasiswa_id;
-        $user = auth()->user(); // Get current authenticated user
+        $user = auth()->user(); 
 
         // Cek pendaftaran terakhir mahasiswa ini
         $lastPendaftaran = PendaftaranModel::where('mahasiswa_id', $mahasiswaId)
@@ -150,31 +160,29 @@ class PendaftaranController extends Controller
         // 2. Cek status pendaftaran global dari admin
         $registrationOpen = Cache::get('registration_status') === 'open';
 
-        // Logika pencegahan pengiriman form (store_ajax) HANYA berlaku untuk:
-        // - Mahasiswa (role 'mahasiswa')
-        // - Mahasiswa yang BELUM PERNAH DITERIMA (pendaftaran gratis)
-        // - Mahasiswa yang BELUM PERNAH MENDAFTAR SAMA SEKALI (lastPendaftaran adalah null)
-        if (strtolower($user->role) === 'mahasiswa' && !$registrationOpen && !$pernahDiterima && is_null($lastPendaftaran)) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Pendaftaran untuk mahasiswa gratis sedang ditutup oleh admin.'
-            ], 403);
-        }
+        // Ambil status terakhir pendaftaran jika ada
+        $lastPendaftaranStatus = $lastPendaftaran->detail->status ?? null;
 
-        // Cek pendaftaran terakhir untuk status menunggu/diterima (berlaku untuk semua, tidak hanya yang gratis)
-        if ($lastPendaftaran) {
-            $lastStatus = DB::table('detail_pendaftaran')
-                ->where('pendaftaran_id', $lastPendaftaran->pendaftaran_id)
-                ->latest('updated_at')
-                ->value('status');
 
-            if (in_array($lastStatus, ['menunggu', 'diterima'])) {
+        // LOGIKA PENCEGAHAN SUBMIT FORM (berlaku untuk mahasiswa)
+        if (strtolower($user->role) === 'mahasiswa') {
+            // Jika status terakhir 'menunggu', langsung berikan notifikasi
+            if ($lastPendaftaran && $lastPendaftaranStatus === 'menunggu') {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Anda tidak dapat mendaftar ulang sebelum status pendaftaran sebelumnya selesai.'
+                    'message' => 'Anda sudah mendaftar. Silakan tunggu verifikasi dari admin.'
+                ], 403);
+            }
+            // Jika pendaftaran global CLOSED DAN mahasiswa gratis yang BELUM PERNAH DITERIMA DAN (belum pernah daftar SAMA SEKALI ATAU status ditolak)
+            else if (!$registrationOpen && !$pernahDiterima && ($lastPendaftaran === null || $lastPendaftaranStatus === 'ditolak')) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Pendaftaran untuk mahasiswa gratis sedang ditutup oleh admin.'
                 ], 403);
             }
         }
+        
+        // --- Lanjutkan validasi dan proses penyimpanan jika lolos dari semua kondisi di atas ---
 
         $request->validate([
             'scan_ktp' => 'required|file|mimes:jpg,jpeg,png|max:2048',
