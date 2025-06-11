@@ -55,10 +55,10 @@ Route::post('login', [AuthController::class, 'postlogin']);
 Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
 
-Route::get('/password/reset', [PasswordResetController::class, 'showLinkRequestForm'])->name('password.request');
-Route::post('/password/email', [PasswordResetController::class, 'sendResetLinkEmail'])->name('password.email');
-Route::get('/password/reset/{token}', [PasswordResetController::class, 'showResetForm'])->name('password.reset');
-Route::post('/password/reset', [PasswordResetController::class, 'reset'])->name('password.update');
+Route::get('/password/reset', [UserController::class, 'showForgotPasswordForm'])->name('password.request');
+Route::post('/password/email', [UserController::class, 'sendResetLinkEmail'])->name('password.email');
+Route::get('/password/reset/{token}', [UserController::class, 'showResetPasswordForm'])->name('password.reset');
+Route::post('/password/reset', [UserController::class, 'resetPassword'])->name('password.update');
 
 // Grup rute yang butuh autentikasi
 Route::middleware(['auth'])->group(function () {
@@ -227,6 +227,7 @@ Route::prefix('biodata/mahasiswa')->name('biodata.mahasiswa.')->middleware(['aut
         Route::post('{id}/update', [VerifikasiPendaftaranController::class, 'update'])->name('update');
         Route::get('{id}/edit', [VerifikasiPendaftaranController::class, 'edit'])->name('edit');
         Route::get('/show/{id}', [VerifikasiPendaftaranController::class, 'show'])->name('verifikasi.show');
+        Route::post('/toggle-status', [VerifikasiPendaftaranController::class, 'updateRegistrationStatus'])->name('verifikasi.toggleRegistrationStatus');
         Route::post('/verify-all', [VerifikasiPendaftaranController::class, 'verifyAll'])->name('verifikasi.verify-all');
     });
 

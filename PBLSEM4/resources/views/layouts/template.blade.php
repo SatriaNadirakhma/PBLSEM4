@@ -46,8 +46,8 @@
   
   <aside class="main-sidebar sidebar-dark-primary elevation-4" style="background: linear-gradient(to bottom, #362e6c, #05368b );">
       <!-- Brand Logo -->
-      <a href="{{ url('/') }}" class="brand-link d-flex align-items-center">
-        <img src="{{ asset('img\logowhite.png') }}" alt="logo sipinta" class="brand-image img">
+      <a href="{{ url('/dashboard') }}" class="brand-link d-flex align-items-center">
+        <img src="{{ asset('img\logowhite.png') }}" alt="logo sipinta" class="brand-image img" style="display: block; margin: 0 auto; margin-top: 8px; margin-bottom: 8px;">
         <span class="brand-text font-weight-bold text-white d-none">TOEIC Test</span>
       </a>
 

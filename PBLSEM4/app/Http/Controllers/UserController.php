@@ -16,7 +16,9 @@ use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
-  use Barryvdh\DomPDF\Facade\Pdf;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ResetPasswordMail;
 
 use Illuminate\Http\Request;
 
@@ -590,7 +592,143 @@ class UserController extends Controller
         return $pdf->download('Data_User_' . date('Y-m-d_H-i-s') . '.pdf');
     }
 
+    public function showForgotPasswordForm()
+{
+    $breadcrumb = (object) [
+        'title' => 'Lupa Password',
+        'list' => ['Home', 'Lupa Password'],
+    ];
 
+    $page = (object) [
+        'title' => 'Reset Password Anda',
+    ];
+
+    return view('auth.forgot-password', compact('breadcrumb', 'page'));
+}
+
+/**
+ * Proses pengiriman email reset password
+ */
+public function sendResetLinkEmail(Request $request)
+{
+    $validator = Validator::make($request->all(), [
+        'username' => 'required|string|exists:user,username',
+        'email' => 'required|email|exists:user,email',
+    ], [
+        'username.required' => 'Username wajib diisi',
+        'username.exists' => 'Username tidak ditemukan',
+        'email.required' => 'Email wajib diisi',
+        'email.email' => 'Format email tidak valid',
+        'email.exists' => 'Email tidak terdaftar',
+    ]);
+
+    if ($validator->fails()) {
+        return redirect()->back()
+            ->withErrors($validator)
+            ->withInput();
+    }
+
+    // Cek apakah username dan email cocok
+    $user = UserModel::where('username', $request->username)
+                    ->where('email', $request->email)
+                    ->first();
+
+    if (!$user) {
+        return redirect()->back()
+            ->withErrors(['email' => 'Username dan email tidak cocok'])
+            ->withInput();
+    }
+
+    try {
+        // Generate token reset password
+        $token = Str::random(60);
+        
+        // Simpan token ke database (buat tabel password_resets jika belum ada)
+        DB::table('password_reset_tokens')->updateOrInsert(
+            ['email' => $request->email],
+            [
+                'email' => $request->email,
+                'token' => Hash::make($token),
+                'created_at' => now()
+            ]
+        );
+
+        // Kirim email
+        Mail::to($request->email)->send(new ResetPasswordMail($user, $token));
+
+        return redirect()->back()->with('status', 'Link reset password telah dikirim ke email Anda!');
+
+    } catch (\Exception $e) {
+        return redirect()->back()
+            ->withErrors(['email' => 'Gagal mengirim email: ' . $e->getMessage()])
+            ->withInput();
+    }
+}
+
+/**
+ * Menampilkan form reset password
+ */
+public function showResetPasswordForm($token)
+{ 
+    return view('auth.reset-password');
+}
+
+/**
+ * Proses reset password
+ */
+public function resetPassword(Request $request)
+{
+    $validator = Validator::make($request->all(), [
+        'token' => 'required',
+        'email' => 'required|email|exists:user,email',
+        'password' => 'required|min:5|confirmed',
+    ], [
+        'email.required' => 'Email wajib diisi',
+        'email.exists' => 'Email tidak terdaftar',
+        'password.required' => 'Password wajib diisi',
+        'password.min' => 'Password minimal 5 karakter',
+        'password.confirmed' => 'Konfirmasi password tidak cocok',
+    ]);
+
+    if ($validator->fails()) {
+        return redirect()->back()
+            ->withErrors($validator)
+            ->withInput();
+    }
+
+    // Cek token di database
+    $passwordReset = DB::table('password_reset_tokens')
+        ->where('email', $request->email)
+        ->first();
+
+    if (!$passwordReset || !Hash::check($request->token, $passwordReset->token)) {
+        return redirect()->back()
+            ->withErrors(['token' => 'Token reset password tidak valid atau sudah kadaluarsa']);
+    }
+
+    // Cek apakah token sudah kadaluarsa (24 jam)
+    if (now()->diffInHours($passwordReset->created_at) > 24) {
+        DB::table('password_reset_tokens')->where('email', $request->email)->delete();
+        return redirect()->back()
+            ->withErrors(['token' => 'Token reset password sudah kadaluarsa']);
+    }
+
+    try {
+        // Update password user
+        $user = UserModel::where('email', $request->email)->first();
+        $user->password = Hash::make($request->password);
+        $user->save();
+
+        // Hapus token dari database
+        DB::table('password_reset_tokens')->where('email', $request->email)->delete();
+
+        return redirect('/login')->with('success', 'Password berhasil direset! Silakan login dengan password baru.');
+
+    } catch (\Exception $e) {
+        return redirect()->back()
+            ->withErrors(['password' => 'Gagal mereset password: ' . $e->getMessage()]);
+    }
+}
 
 
 }

@@ -3,13 +3,18 @@
 @section('content')
 <div class="card card-outline card-primary shadow-sm">
     <div class="card-header">
-        <h3 class="card-title">{{ $page->title }}</h3>
-        <div class="card-tools">
-            <button type="button" class="btn btn-success btn-sm" onclick="verifyAll()">
-                <i class="fas fa-check-double"></i> Verify All
-            </button>
-        </div>
-    </div>
+            <h3 class="card-title">{{ $page->title }}</h3>
+            <div class="card-tools">
+                {{-- Tombol Buka/Tutup Pendaftaran --}}
+                <button id="toggle-registration-btn" class="btn btn-sm {{ $registrationStatus === 'open' ? 'btn-danger' : 'btn-success' }}" onclick="toggleRegistrationStatus()">
+                    {{ $registrationStatus === 'open' ? 'Tutup Pendaftaran' : 'Buka Pendaftaran' }}
+                </button>
+
+                {{-- Tombol Verify All --}}
+                <button type="button" class="btn btn-success btn-sm ml-2" onclick="verifyAll()">
+                    <i class="fas fa-check-double"></i> Verify All
+                </button>
+            </div>
         
     <div class="card-body">
         @if (session('success'))
@@ -38,7 +43,6 @@
                         <th>Kampus</th>
                         <th>Status</th>
                         <th>Aksi</th>
-                        
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -99,7 +103,6 @@ function updateStatus(id, status) {
         buttonsStyling: false
     }).then((result) => {
         if (result.isConfirmed) {
-            // Tampilkan prompt untuk catatan setelah konfirmasi
             Swal.fire({
                 title: 'Tuliskan Catatan untuk Peserta',
                 input: 'text',
@@ -153,14 +156,88 @@ function updateStatus(id, status) {
                         }
                     });
                 }
-                // Jika klik Batal di input, tidak lakukan apa pun
             });
 
         }
-        // Jika klik "Tidak", tidak terjadi apa-apa
     });
 }
 
+// Function to toggle registration status
+function toggleRegistrationStatus() {
+    let currentStatusText = $('#toggle-registration-btn').text();
+    let newStatus = currentStatusText.includes('Tutup') ? 'closed' : 'open';
+    let confirmationText = newStatus === 'open' ? 'Anda yakin ingin membuka pendaftaran?' : 'Anda yakin ingin menutup pendaftaran?';
+
+    Swal.fire({
+        title: 'Konfirmasi',
+        text: confirmationText,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Ya',
+        cancelButtonText: 'Tidak',
+        customClass: {
+            confirmButton: 'btn btn-primary me-2',
+            cancelButton: 'btn btn-secondary'
+        },
+        buttonsStyling: false
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: "{{ route('verifikasi.toggleRegistrationStatus') }}",
+                type: "POST",
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    status: newStatus
+                },
+                success: function(response) {
+                    if (response.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil',
+                            text: response.message,
+                            confirmButtonText: 'OKE',
+                            customClass: {
+                                confirmButton: 'btn btn-primary'
+                            },
+                            buttonsStyling: false
+                        }).then(() => {
+                            let button = $('#toggle-registration-btn');
+                            if (response.newStatus === 'open') {
+                                button.removeClass('btn-success').addClass('btn-danger').text('Tutup Pendaftaran');
+                            } else {
+                                button.removeClass('btn-danger').addClass('btn-success').text('Buka Pendaftaran');
+                            }
+                            // No need for location.reload() here, button already updated
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Gagal',
+                            text: 'Gagal mengubah status pendaftaran.',
+                            confirmButtonText: 'Coba Lagi',
+                            customClass: {
+                                confirmButton: 'btn btn-danger'
+                            },
+                            buttonsStyling: false
+                        });
+                    }
+                },
+                error: function(xhr) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Terjadi kesalahan saat berkomunikasi dengan server.',
+                        confirmButtonText: 'Oke',
+                        customClass: {
+                            confirmButton: 'btn btn-danger'
+                        },
+                        buttonsStyling: false
+                    });
+                }
+            });
+        }
+    });
+}
 function verifyAll() {
     Swal.fire({
         title: 'Verify All Pending Status?',

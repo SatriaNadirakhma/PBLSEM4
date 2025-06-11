@@ -6,7 +6,7 @@
             <li class="nav-item">
                 <a href="{{ url('/dashboard') }}" class="nav-link {{ ($activeMenu == 'dashboard') ? 'active' : '' }}">
                     <i class="nav-icon fas fa-tachometer-alt"></i>
-                    <p>Dashboard</p>
+                    <p style="font-weight: 500;">Dashboard</p>
                 </a>
             </li>
             <!--DATA USER -->
@@ -15,7 +15,7 @@
             <li class="nav-item mt-1">
                 <a href="{{ route('user') }}" class="nav-link {{ in_array($activeMenu, ['user']) ? 'active' : '' }}">
                     <i class="nav-icon fas fa-layer-group"></i>
-                    <p>DATA USER</p>
+                    <p style="font-weight: 500;">DATA USER</p>
                 </a>
             </li>
             @endif
@@ -28,7 +28,7 @@
             <li class="nav-item mt-1 has-treeview {{ in_array($activeMenu, ['peserta-mahasiswa', 'peserta-dosen', 'peserta-tendik', 'admin']) ? 'menu-open' : '' }}">
                 <a href="#" class="nav-link {{ in_array($activeMenu, ['peserta-mahasiswa', 'peserta-dosen', 'peserta-tendik', 'admin']) ? 'active' : '' }}">
                     <i class="nav-icon fas fa-users"></i>
-                    <p>
+                    <p style="font-weight: 500;">
                         BIODATA USER
                         <i class="right fas fa-angle-left"></i>
                     </p>
@@ -77,7 +77,7 @@
             <li class="nav-item mt-1 has-treeview {{ in_array($activeMenu, ['kampus', 'jurusan', 'prodi']) ? 'menu-open' : '' }}">
                 <a href="#" class="nav-link {{ in_array($activeMenu, ['kampus', 'jurusan', 'prodi']) ? 'active' : '' }}">
                     <i class="nav-icon fas fa-home"></i>
-                    <p>
+                    <p style="font-weight: 500;">
                         KAMPUS
                         <i class="right fas fa-angle-left"></i>
                     </p>
@@ -112,7 +112,7 @@
             <li class="nav-item mt-1 has-treeview {{ in_array($activeMenu, ['verifikasi', 'edit-formulir']) ? 'menu-open' : '' }}">
                 <a href="#" class="nav-link {{ in_array($activeMenu, ['verifikasi', 'edit-formulir']) ? 'active' : '' }}">
                     <i class="nav-icon fas fa-clipboard-list"></i>
-                    <p>
+                    <p style="font-weight: 500;">
                         PENDAFTARAN
                         <i class="right fas fa-angle-left"></i>
                     </p>
@@ -149,10 +149,10 @@
 
             @auth
             @if(Auth::user()->role == 'admin')
-            <li class="nav-item mt-1 has-treeview {{ in_array($activeMenu, ['jadwal', 'informasi', 'hasil_ujian']) ? 'menu-open' : '' }}">
-                <a href="#" class="nav-link {{ in_array($activeMenu, ['jadwal', 'informasi', 'hasil_ujian']) ? 'active' : '' }}">
+            <li class="nav-item mt-1 has-treeview {{ in_array($activeMenu, ['jadwal', 'informasi', 'hasil_ujian', 'kelolaPanduan']) ? 'menu-open' : '' }}">
+                <a href="#" class="nav-link {{ in_array($activeMenu, ['jadwal', 'informasi', 'hasil_ujian', 'kelolaPanduan']) ? 'active' : '' }}">
                     <i class="nav-icon fas fa-info-circle"></i>
-                    <p>
+                    <p style="font-weight: 500;">
                         PUSAT INFORMASI
                         <i class="right fas fa-angle-left"></i>
                     </p>
@@ -193,7 +193,7 @@
                     <li class="nav-item mt-1">
                         <a href="{{ route('kirimpesan.index') }}" class="nav-link {{ in_array($activeMenu, ['kirimpesan']) ? 'active' : '' }}">
                             <i class="nav-icon fab fa-whatsapp"></i>
-                            <p>KIRIM PESAN</p>
+                            <p style="font-weight: 500;">KIRIM PESAN</p>
                         </a>
                     </li>
                 @endif
@@ -204,7 +204,7 @@
                     <li class="nav-item mt-1">
                         <a href="{{ route('kirimemail.index') }}" class="nav-link {{ in_array($activeMenu, ['kirimemail']) ? 'active' : '' }}">
                             <i class="nav-icon fas fa-envelope"></i>
-                            <p>KIRIM EMAIL</p>
+                            <p style="font-weight: 500;">KIRIM EMAIL</p>
                         </a>
                     </li>
                 @endif
@@ -215,7 +215,7 @@
                     <li class="nav-item mt-1">
                         <a href="{{ route('datadiri.index') }}" class="nav-link {{ ($activeMenu === 'datadiri') ? 'active' : '' }}">
                             <i class="nav-icon fas fa-id-card"></i>
-                            <p>Data Diri</p>
+                            <p style="font-weight: 500;">Data Diri</p>
                         </a>
                     </li>
                 @endif
@@ -226,7 +226,7 @@
                     <li class="nav-item mt-1">
                         <a href="{{ route('pendaftaran.index') }}" class="nav-link {{ ($activeMenu === 'pendaftaran') ? 'active' : '' }}">
                             <i class="nav-icon fas fa-file-alt"></i>
-                            <p>Pendaftaran</p>
+                            <p style="font-weight: 500;">Pendaftaran</p>
                         </a>
                     </li>
                 @endif
@@ -237,7 +237,7 @@
             <li class="nav-item mt-1">
                 <a href="{{ url('/riwayatPeserta') }}" class="nav-link {{ ($activeMenu == 'riwayatPeserta') ? 'active' : '' }}">
                     <i class="nav-icon fas fa-file-excel"></i>
-                    <p>Riwayat Pendaftaran</p>
+                    <p style="font-weight: 500;">Riwayat Pendaftaran</p>
                 </a>
             </li>
             @endif
@@ -248,7 +248,7 @@
                     <li class="nav-item mt-1">
                         <a href="{{ route('hasilPeserta.index') }}" class="nav-link {{ ($activeMenu === 'hasilPeserta') ? 'active' : '' }}">
                             <i class="nav-icon fas fa-poll"></i>
-                            <p>Hasil Ujian</p>
+                            <p style="font-weight: 500;">Hasil Ujian</p>
                         </a>
                     </li>
                 @endif
@@ -257,7 +257,7 @@
                     <li class="nav-item mt-1">
                         <a href="{{ route('panduan.show') }}" class="nav-link {{ ($activeMenu ?? '') === 'Panduan' ? 'active' : '' }}" target="_blank">
                             <i class="nav-icon fas fa-lightbulb"></i>
-                            <p>Panduan</p>
+                            <p style="font-weight: 500;">Panduan</p>
                         </a>
                     </li>
                 @endif
