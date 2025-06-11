@@ -9,8 +9,8 @@
         <div class="card-body text-center">
             <i class="fas fa-exclamation-circle fa-4x text-danger mb-3"></i>
             <p class="lead">
-                Mohon maaf, pendaftaran untuk program ini sedang <b>ditutup</b> saat ini.
-                Silakan cek secara berkala untuk informasi lebih lanjut mengenai pembukaan pendaftaran.
+                Mohon maaf, pendaftaran untuk program TOEIC gratis saat ini masih <b>ditutup</b>.  
+                Silakan pantau dashboard informasi secara berkala untuk mengetahui kapan pendaftaran akan dibuka kembali.
             </p>
             <p class="text-muted">
                 Jika Anda memiliki pertanyaan, silakan hubungi administrator.
