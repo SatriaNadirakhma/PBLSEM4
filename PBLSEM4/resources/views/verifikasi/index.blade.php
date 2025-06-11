@@ -3,20 +3,29 @@
 @section('content')
 <div class="card card-outline card-primary shadow-sm">
     <div class="card-header">
-            <h3 class="card-title">{{ $page->title }}</h3>
-            <div class="card-tools">
-                {{-- Tombol Buka/Tutup Pendaftaran --}}
-                <button id="toggle-registration-btn" class="btn btn-sm {{ $registrationStatus === 'open' ? 'btn-danger' : 'btn-success' }}" onclick="toggleRegistrationStatus()">
-                    {{ $registrationStatus === 'open' ? 'Tutup Pendaftaran' : 'Buka Pendaftaran' }}
-                </button>
-
-                {{-- Tombol Verify All --}}
-                <button type="button" class="btn btn-success btn-sm ml-2" onclick="verifyAll()">
-                    <i class="fas fa-check-double"></i> Verify All
-                </button>
+        <h3 class="card-title">{{ $page->title }}</h3>
+        <div class="card-tools d-flex align-items-center">
+            {{-- Wrapper for registration toggle status --}}
+            <div class="p-2 border border-secondary rounded d-flex align-items-center"> {{-- Added p-2, border, border-secondary, rounded, and d-flex --}}
+                <span id="registration-status-text" class="me-2 fw-bold text-{{ $registrationStatus === 'open' ? 'success' : 'danger' }}">
+                    Pendaftaran Sedang {{ $registrationStatus === 'open' ? 'Terbuka' : 'Tertutup' }}
+                </span>
+                {{-- Toggle switch for registration --}}
+                <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success ms-2"> {{-- Added ms-2 for margin-left --}}
+                    <input type="checkbox" class="custom-control-input" id="toggle-registration-switch" {{ $registrationStatus === 'open' ? 'checked' : '' }}>
+                    <label class="custom-control-label" for="toggle-registration-switch"></label>
+                </div>
             </div>
+
+            {{-- Tombol Verify All --}}
+            <button type="button" class="btn btn-success btn-sm ml-2" onclick="verifyAll()">
+                <i class="fas fa-check-double"></i> Verify All
+            </button>
+        </div>
+    </div>
         
     <div class="card-body">
+        {{-- ... (sisa konten card-body tetap sama) ... --}}
         @if (session('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 {{ session('success') }}
@@ -55,6 +64,7 @@
 @endsection
 
 @push('js')
+{{-- ... (bagian JavaScript tetap sama) ... --}}
 <script>
 function modalAction(url = '') {
     console.log("Memuat URL: ", url); // debug
@@ -84,6 +94,11 @@ $(document).ready(function () {
             { data: 'aksi', name: 'aksi', className: 'text-center', orderable: false, searchable: false },
         ]
 
+    });
+
+    // Event listener for the custom switch
+    $('#toggle-registration-switch').on('change', function() {
+        toggleRegistrationStatus($(this).is(':checked'));
     });
 });
 
@@ -162,11 +177,11 @@ function updateStatus(id, status) {
     });
 }
 
-// Function to toggle registration status
-function toggleRegistrationStatus() {
-    let currentStatusText = $('#toggle-registration-btn').text();
-    let newStatus = currentStatusText.includes('Tutup') ? 'closed' : 'open';
+function toggleRegistrationStatus(isChecked) {
+    let newStatus = isChecked ? 'open' : 'closed';
     let confirmationText = newStatus === 'open' ? 'Anda yakin ingin membuka pendaftaran?' : 'Anda yakin ingin menutup pendaftaran?';
+    let switchElement = $('#toggle-registration-switch');
+    let statusTextElement = $('#registration-status-text');
 
     Swal.fire({
         title: 'Konfirmasi',
@@ -201,15 +216,18 @@ function toggleRegistrationStatus() {
                             },
                             buttonsStyling: false
                         }).then(() => {
-                            let button = $('#toggle-registration-btn');
+                            // Update text and color next to the switch
                             if (response.newStatus === 'open') {
-                                button.removeClass('btn-success').addClass('btn-danger').text('Tutup Pendaftaran');
+                                statusTextElement.text('Pendaftaran Sedang Terbuka').removeClass('text-danger').addClass('text-success');
+                                switchElement.prop('checked', true); // Ensure switch is on
                             } else {
-                                button.removeClass('btn-danger').addClass('btn-success').text('Buka Pendaftaran');
+                                statusTextElement.text('Pendaftaran Sedang Tertutup').removeClass('text-success').addClass('text-danger');
+                                switchElement.prop('checked', false); // Ensure switch is off
                             }
-                            // No need for location.reload() here, button already updated
                         });
                     } else {
+                        // If AJAX call fails, revert the switch state
+                        switchElement.prop('checked', !isChecked);
                         Swal.fire({
                             icon: 'error',
                             title: 'Gagal',
@@ -223,6 +241,8 @@ function toggleRegistrationStatus() {
                     }
                 },
                 error: function(xhr) {
+                    // If AJAX call fails, revert the switch state
+                    switchElement.prop('checked', !isChecked);
                     Swal.fire({
                         icon: 'error',
                         title: 'Error',
@@ -235,9 +255,13 @@ function toggleRegistrationStatus() {
                     });
                 }
             });
+        } else {
+            // If user cancels, revert the switch state to its original position
+            switchElement.prop('checked', !isChecked);
         }
     });
 }
+
 function verifyAll() {
     Swal.fire({
         title: 'Verify All Pending Status?',
@@ -254,7 +278,6 @@ function verifyAll() {
         buttonsStyling: false
     }).then((result) => {
         if (result.isConfirmed) {
-            // Tampilkan prompt untuk catatan global
             Swal.fire({
                 title: 'Catatan untuk Semua Peserta',
                 input: 'text',
@@ -271,7 +294,6 @@ function verifyAll() {
                 if (inputResult.isConfirmed) {
                     let catatan = inputResult.value;
 
-                    // Tampilkan loading
                     Swal.fire({
                         title: 'Memproses...',
                         text: 'Sedang memverifikasi semua data',
