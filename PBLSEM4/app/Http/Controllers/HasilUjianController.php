@@ -158,7 +158,7 @@ class HasilUjianController extends Controller
         $listening = $request->nilai_listening;
         $reading = $request->nilai_reading;
         $total = $listening + $reading;
-        $status = $total >= 600 ? 'Lulus' : 'Tidak Lulus';
+        $status = $total >= 500 ? 'Lulus' : 'Tidak Lulus';
 
         // Ambil nama peserta dari relasi
         $user = UserModel::with(['mahasiswa', 'dosen', 'tendik'])->find($request->user_id);
@@ -246,7 +246,7 @@ class HasilUjianController extends Controller
                 'nilai_listening' => $nilaiListening,
                 'nilai_reading' => $nilaiReading,
                 'nilai_total' => $nilaiTotal,
-                'status_lulus' => $nilaiTotal >= 600 ? 'Lulus' : 'Tidak Lulus',
+                'status_lulus' => $nilaiTotal >= 500 ? 'Lulus' : 'Tidak Lulus',
                 'jadwal_id' => $request->input('jadwal_id'),
                 'user_id' => $request->input('user_id'),
                 'catatan' => $request->input('catatan'),
