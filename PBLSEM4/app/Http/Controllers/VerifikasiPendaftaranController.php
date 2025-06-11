@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\PendaftaranModel;
 use App\Models\DetailPendaftaranModel;
 use Yajra\DataTables\DataTables;
+use Illuminate\Support\Facades\DB;
 
 class VerifikasiPendaftaranController extends Controller
 {
@@ -115,6 +116,32 @@ public function list(Request $request)
         return view('verifikasi.show_ajax', compact('pendaftaran'));
     }
 
+    public function verifyAll(Request $request)
+    {
+        try {
+            $catatan = $request->input('catatan', '');
+            
+            // Update semua data dengan status 'menunggu' menjadi 'diterima'
+            $updated = DB::table('detail_pendaftaran') 
+                ->where('status', 'menunggu') // atau sesuaikan dengan value status menunggu
+                ->update([
+                    'status' => 'diterima', // atau sesuaikan dengan value status diterima
+                    'catatan' => $catatan,
+                    'updated_at' => now()
+                ]);
 
+            return response()->json([
+                'success' => true,
+                'count' => $updated,
+                'message' => "Berhasil memverifikasi {$updated} data"
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage()
+            ], 500);
+        }
+    }
 
 }
