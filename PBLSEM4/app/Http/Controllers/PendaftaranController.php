@@ -170,7 +170,7 @@ protected function handleTendik()
 
         return response()->json([
             'success' => true,
-            'message' => 'Pendaftaran berhasil. Mohon menunggu proses verifikasi oleh admin.'
+            'message' => 'Terima kasih! Pendaftaran Anda berhasil. Silakan periksa email Anda secara berkala untuk konfirmasi dan informasi selanjutnya dari admin.'
         ]);
     } catch (\Exception $e) {
         DB::rollBack();
