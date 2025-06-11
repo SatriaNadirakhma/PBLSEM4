@@ -1,42 +1,35 @@
-@empty($hasil_ujian)
-<div class="modal-dialog" role="document">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h5 class="modal-title">Kesalahan</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span>&times;</span>
-            </button>
-        </div>
-        <div class="modal-body">
-            <div class="alert alert-danger">Data hasil ujian tidak ditemukan.</div>
-        </div>
-    </div>
-</div>
-@else
-<div id="modal-master" class="modal-dialog modal-lg" role="document">
+<div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
         <div class="modal-header">
             <h5 class="modal-title">Detail Data Hasil Ujian</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <button type="button" class="close" data-dismiss="modal">
                 <span>&times;</span>
             </button>
         </div>
         <div class="modal-body">
-            <table class="table table-bordered table-sm">
+            <table class="table table-bordered">
                 <tr>
                     <th>Nama Peserta</th>
-                    <td>{{ $hasil_ujian->user->nama ?? 'Tidak tersedia' }}</td>
+                    <td>
+                        @php
+                            $role = $hasil_ujian->user->role;
+                            if ($role === 'mahasiswa') {
+                                $nama = $hasil_ujian->user->mahasiswa->mahasiswa_nama ?? 'Tidak tersedia';
+                            } elseif ($role === 'dosen') {
+                                $nama = $hasil_ujian->user->dosen->dosen_nama ?? 'Tidak tersedia';
+                            } elseif ($role === 'tendik') {
+                                $nama = $hasil_ujian->user->tendik->tendik_nama ?? 'Tidak tersedia';
+                            } else {
+                                $nama = 'Tidak tersedia';
+                            }
+                        @endphp
+                        {{ $nama }}
+                    </td>
                 </tr>
                 <tr>
-                    <th>Username</th>
-                    <td>{{ $hasil_ujian->user->username ?? 'Tidak tersedia' }}</td>
+                    <th>Jadwal</th>
+                    <td>{{ \Carbon\Carbon::parse($hasil_ujian->jadwal->tanggal_pelaksanaan)->format('d/m/Y') ?? 'Tidak tersedia' }}</td>
                 </tr>
-                @if($hasil_ujian->user->mahasiswa)
-                <tr>
-                    <th>NIM</th>
-                    <td>{{ $hasil_ujian->user->mahasiswa->nim }}</td>
-                </tr>
-                @endif
                 <tr>
                     <th>Nilai Listening</th>
                     <td>{{ $hasil_ujian->nilai_listening }}</td>
@@ -50,33 +43,22 @@
                     <td><strong>{{ $hasil_ujian->nilai_total }}</strong></td>
                 </tr>
                 <tr>
-                    <th>Status Lulus</th>
+                    <th>Status</th>
                     <td>
-                        @if($hasil_ujian->status_lulus == 'lulus')
-                            <span class="badge badge-success">{{ $hasil_ujian->status_lulus }}</span>
+                        @if($hasil_ujian->status_lulus === 'lulus')
+                            <span class="badge badge-success">Lulus</span>
                         @else
-                            <span class="badge badge-danger">{{ $hasil_ujian->status_lulus }}</span>
+                            <span class="badge badge-danger">Tidak Lulus</span>
                         @endif
                     </td>
                 </tr>
-                @if($hasil_ujian->catatan)
                 <tr>
-                    <th>Catatan</th>
-                    <td>{{ $hasil_ujian->catatan }}</td>
-                </tr>
-                @endif
-                @if($hasil_ujian->jadwal)
-                <tr>
-                    <th>Jadwal Ujian</th>
-                    <td>{{ $hasil_ujian->jadwal->mata_kuliah ?? 'Tidak tersedia' }}</td>
-                </tr>
-                <tr>
-                    <th>Tanggal</th>
-                    <td>{{ $hasil_ujian->jadwal->tanggal ?? 'Tidak tersedia' }}</td>
-                </tr>
-                @endif
+                    <th>Role</th>
+                    <td>{{ ucfirst($hasil_ujian->user->role) }}</td>
             </table>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">Tutup</button>
         </div>
     </div>
 </div>
-@endempty
