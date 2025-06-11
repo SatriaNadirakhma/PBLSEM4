@@ -55,10 +55,10 @@ Route::post('login', [AuthController::class, 'postlogin']);
 Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
 
-Route::get('/password/reset', [PasswordResetController::class, 'showLinkRequestForm'])->name('password.request');
-Route::post('/password/email', [PasswordResetController::class, 'sendResetLinkEmail'])->name('password.email');
-Route::get('/password/reset/{token}', [PasswordResetController::class, 'showResetForm'])->name('password.reset');
-Route::post('/password/reset', [PasswordResetController::class, 'reset'])->name('password.update');
+Route::get('/password/reset', [UserController::class, 'showForgotPasswordForm'])->name('password.request');
+Route::post('/password/email', [UserController::class, 'sendResetLinkEmail'])->name('password.email');
+Route::get('/password/reset/{token}', [UserController::class, 'showResetPasswordForm'])->name('password.reset');
+Route::post('/password/reset', [UserController::class, 'resetPassword'])->name('password.update');
 
 // Grup rute yang butuh autentikasi
 Route::middleware(['auth'])->group(function () {
