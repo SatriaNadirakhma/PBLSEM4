@@ -85,48 +85,56 @@ class MahasiswaController extends Controller
     }
 
     public function store_ajax(Request $request)
-    {
-        if ($request->ajax()|| $request->wantsJson()) {
-            $rules = [
-                'nim' => 'required|string|max:10|unique:mahasiswa,nim',
-                'nik' => 'required|string|max:16|unique:mahasiswa,nik',
-                'mahasiswa_nama' => 'required|string|max:100',
-                'angkatan' => 'required|string|max:4',
-                'no_telp' => 'nullable|string|max:15',
-                'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
-                'status' => 'required|in:aktif,alumni',
-                'keterangan' => 'required|in:gratis,berbayar',
-                'prodi_id' => 'required|integer|exists:prodi,prodi_id',
-            ];
+{
+    if ($request->ajax() || $request->wantsJson()) {
+        $rules = [
+            'nim' => 'required|string|max:10|unique:mahasiswa,nim',
+            'nik' => 'required|string|max:16|unique:mahasiswa,nik',
+            'mahasiswa_nama' => 'required|string|max:100',
+            'angkatan' => 'required|string|max:4',
+            'no_telp' => 'nullable|string|max:15',
+            'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
+            'status' => 'required|in:aktif,alumni',
+            'keterangan' => 'nullable|in:gratis,berbayar',
+            'prodi_id' => 'required|integer|exists:prodi,prodi_id',
+        ];
 
-            $validator = Validator::make($request->all(), $rules);
+        $validator = Validator::make($request->all(), $rules);
 
-            if ($validator->fails()) {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Validasi Gagal',
-                    'msgField' => $validator->errors(),
-                ]);
-            }
-
-            try {
-                MahasiswaModel::create($request->all());
-
-                return response()->json([
-                    'status' => true,
-                    'message' => 'Data mahasiswa berhasil disimpan',
-                ]);
-                
-            } catch (\Exception $e) {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Gagal menyimpan data: ' . $e->getMessage(),
-                ]);
-            }
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Validasi Gagal',
+                'msgField' => $validator->errors(),
+            ]);
         }
 
-        return redirect('/');
+        try {
+            // Ambil semua data dari request
+            $data = $request->all();
+            
+            // Set keterangan otomatis ke 'gratis' jika kosong atau tidak ada
+            if (empty($data['keterangan'])) {
+                $data['keterangan'] = 'gratis';
+            }
+
+            MahasiswaModel::create($data);
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Data mahasiswa berhasil disimpan',
+            ]);
+            
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Gagal menyimpan data: ' . $e->getMessage(),
+            ]);
+        }
     }
+
+    return redirect('/');
+}
 
     public function edit_ajax(string $id)
     {

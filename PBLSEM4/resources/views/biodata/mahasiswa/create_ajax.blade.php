@@ -76,13 +76,9 @@
 
                 <div class="form-group">
                     <label>Keterangan</label>
-                    <select name="keterangan" id="keterangan" class="form-control" required>
-                        <option value="">- Pilih Keterangan -</option>
-                        @foreach($keteranganEnum as $ket)
-                            <option value="{{ $ket }}">{{ ucfirst($ket) }}</option>
-                        @endforeach
-                    </select>
+                    <input type="text" name="keterangan" id="keterangan" class="form-control" value="gratis" readonly>
                     <small id="error-keterangan" class="error-text text-danger"></small>
+                    <small class="text-info">Status keterangan otomatis diset sebagai "Gratis"</small>
                 </div>
                 
                 <div class="form-group">
@@ -113,14 +109,14 @@ $(document).ready(function() {
             mahasiswa_nama: { required: true, minlength: 3, maxlength: 100 },
             angkatan: { required: true, digits: true, minlength: 4, maxlength: 4, min: 2000},
             no_telp: { required: false, digits: true, minlength: 10, maxlength: 15 },
-            alamat_asal: { required: true, maxlength: 255 },
-            alamat_sekarang: { required: true, maxlength: 255 },
+            alamat_asal: { required: false, maxlength: 255 },
+            alamat_sekarang: { required: false, maxlength: 255 },
             jenis_kelamin: { required: true },
             status: { required: true },
-            keterangan: { required: true },
+            keterangan: { required: false }, // Tidak wajib diisi
             prodi_id: { required: true }
         },
-            messages: {
+        messages: {
             angkatan: {
                 min: "Tahun angkatan tidak valid, Tahun angkatan harus 2000 ke atas"
             }
