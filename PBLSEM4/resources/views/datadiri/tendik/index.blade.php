@@ -18,7 +18,7 @@
     <div class="card card-outline card-primary shadow-sm">
        <div class="card-header d-flex align-items-center">
             <h3 class="card-title mb-0 flex-grow-1">{{ $page->title }}</h3>
-            <button class="btn btn-primary ms-auto" id="btn-edit">
+            <button class="btn btn-warning btn-sm rounded-pill shadow-sm me-2 px-4 py-2" id="btn-edit" style="font-size: 0.95rem;">
                 <i class="fas fa-edit"></i> Edit Data Diri
             </button>
         </div>
