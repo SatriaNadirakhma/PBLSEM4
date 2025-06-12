@@ -85,19 +85,19 @@
                 <ul class="nav nav-treeview">
                     <li class="nav-item ml-2">
                         <a href="{{ url('/kampus') }}" class="nav-link {{ ($activeMenu == 'kampus') ? 'active' : '' }}">
-                            <i class="fa fa-list nav-icon"></i>
+                            <i class="fas fa-university nav-icon"></i>
                             <p>Daftar Kampus</p>
                         </a>
                     </li>
                     <li class="nav-item ml-2">
                         <a href="{{ url('/jurusan') }}" class="nav-link {{ ($activeMenu == 'jurusan') ? 'active' : '' }}">
-                            <i class="fa fa-list nav-icon"></i>
+                            <i class="fas fa-building nav-icon"></i>
                             <p>Daftar Jurusan</p>
                         </a>
                     </li>
                     <li class="nav-item ml-2">
                         <a href="{{ url('/prodi') }}" class="nav-link {{ ($activeMenu == 'prodi') ? 'active' : '' }}">
-                            <i class="fa fa-list nav-icon"></i>
+                            <i class="fas fa-book nav-icon"></i>
                             <p>Daftar Program Studi</p>
                         </a>
                     </li>
@@ -109,8 +109,8 @@
             <!-- Dropdown PENDAFTARAN -->
             @auth
             @if(Auth::user()->role == 'admin')
-            <li class="nav-item mt-1 has-treeview {{ in_array($activeMenu, ['verifikasi', 'edit-formulir']) ? 'menu-open' : '' }}">
-                <a href="#" class="nav-link {{ in_array($activeMenu, ['verifikasi', 'edit-formulir']) ? 'active' : '' }}">
+            <li class="nav-item mt-1 has-treeview {{ in_array($activeMenu, ['verifikasi', 'riwayat']) ? 'menu-open' : '' }}">
+                <a href="#" class="nav-link {{ in_array($activeMenu, ['verifikasi', 'riwayat']) ? 'active' : '' }}">
                     <i class="nav-icon fas fa-clipboard-list"></i>
                     <p style="font-weight: 500;">
                         PENDAFTARAN
@@ -121,14 +121,14 @@
                     @if(Auth::user()->role == 'admin')
                     <li class="nav-item ml-2">
                         <a href="{{ url('/verifikasi') }}" class="nav-link {{ ($activeMenu == 'verifikasi') ? 'active' : '' }}">
-                            <i class="fa fa-list nav-icon"></i>
+                            <i class="fas fa-check-circle nav-icon"></i>
                             <p>Verifikasi Pendaftaran</p>
                         </a>
                     </li>
                     @endif
                     @if(Auth::user()->role == 'admin')
                     <li class="nav-item ml-2">
-                        <a href="{{ url('riwayat') }}" class="nav-link {{ ($activeMenu == 'riwayat-pendaftaran') ? 'active' : '' }}">
+                        <a href="{{ url('riwayat') }}" class="nav-link {{ ($activeMenu == 'riwayat') ? 'active' : '' }}">
                             <i class="fa fa-list nav-icon"></i>
                             <p>Riwayat Pendaftaran</p>
                         </a>
@@ -149,8 +149,8 @@
 
             @auth
             @if(Auth::user()->role == 'admin')
-            <li class="nav-item mt-1 has-treeview {{ in_array($activeMenu, ['jadwal', 'informasi', 'hasil_ujian', 'kelolaPanduan']) ? 'menu-open' : '' }}">
-                <a href="#" class="nav-link {{ in_array($activeMenu, ['jadwal', 'informasi', 'hasil_ujian', 'kelolaPanduan']) ? 'active' : '' }}">
+            <li class="nav-item mt-1 has-treeview {{ in_array($activeMenu, ['jadwal', 'informasi', 'hasil_ujian', 'KelolaPanduan']) ? 'menu-open' : '' }}">
+                <a href="#" class="nav-link {{ in_array($activeMenu, ['jadwal', 'informasi', 'hasil_ujian', 'KelolaPanduan']) ? 'active' : '' }}">
                     <i class="nav-icon fas fa-info-circle"></i>
                     <p style="font-weight: 500;">
                         PUSAT INFORMASI
@@ -160,19 +160,19 @@
                 <ul class="nav nav-treeview">
                     <li class="nav-item ml-2">
                         <a href="{{ url('jadwal') }}" class="nav-link {{ ($activeMenu == 'jadwal') ? 'active' : '' }}">
-                            <i class="far fa-circle nav-icon"></i>
+                            <i class="fas fa-calendar-alt nav-icon"></i>
                             <p>Jadwal</p>
                         </a>
                     </li>
                     <li class="nav-item ml-2">
                         <a href="{{ url('informasi') }}" class="nav-link {{ ($activeMenu == 'informasi') ? 'active' : '' }}">
-                            <i class="far fa-circle nav-icon"></i>
+                            <i class="fas fa-bullhorn nav-icon"></i>
                             <p>Pengumuman</p>
                         </a>
                     </li>
                     <li class="nav-item ml-2">
                         <a href="{{ url('hasil_ujian') }}" class="nav-link {{ ($activeMenu == 'hasil_ujian') ? 'active' : '' }}">
-                            <i class="far fa-circle nav-icon"></i>
+                            <i class="fas fa-poll nav-icon"></i>
                             <p>Hasil Ujian</p>
                         </a>
                     </li>
