@@ -70,7 +70,7 @@
           <span class="sitename">Sipinta <br> Polinema</span>
         </a>
         <div class="footer-contact pt-3">
-          <p>Politeknik Negeri Malang</p>
+          <p>Kantor UPA Bahasa, Graha Polinema, Lantai 3</p>
           <p>Jl. Soekarno-Hatta No. 9 Malang 65141</p>
           <p class="mt-3"><strong>Telepon:</strong> <span>(0341) 404424</span></p>
           <p><strong>Website:</strong> <span>polinema.ac.id</span></p>
