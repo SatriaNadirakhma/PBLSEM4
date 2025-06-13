@@ -125,20 +125,38 @@ class VerifikasiPendaftaranController extends Controller
     {
         try {
             $catatan = $request->input('catatan', '');
-            
-            // Update semua data dengan status 'menunggu' menjadi 'diterima'
-            $updated = DB::table('detail_pendaftaran') 
-                ->where('status', 'menunggu') // atau sesuaikan dengan value status menunggu
-                ->update([
-                    'status' => 'diterima', // atau sesuaikan dengan value status diterima
+
+            // Ambil semua detail dengan status 'menunggu' beserta relasi pendaftaran dan mahasiswa
+            $details = DetailPendaftaranModel::where('status', 'menunggu')
+                        ->with(['pendaftaran.mahasiswa'])
+                        ->get();
+
+            $count = 0;
+
+            foreach ($details as $detail) {
+                // Update status dan catatan
+                $detail->update([
+                    'status' => 'diterima',
                     'catatan' => $catatan,
-                    'updated_at' => now()
                 ]);
+
+                // Jika mahasiswa masih berstatus 'gratis', ubah menjadi 'berbayar'
+                if ($detail->pendaftaran && $detail->pendaftaran->mahasiswa) {
+                    $mahasiswa = $detail->pendaftaran->mahasiswa;
+                    if ($mahasiswa->keterangan === 'gratis') {
+                        $mahasiswa->update([
+                            'keterangan' => 'berbayar',
+                        ]);
+                    }
+                }
+
+                $count++;
+            }
 
             return response()->json([
                 'success' => true,
-                'count' => $updated,
-                'message' => "Berhasil memverifikasi {$updated} data"
+                'count' => $count,
+                'message' => "Berhasil memverifikasi {$count} data"
             ]);
 
         } catch (\Exception $e) {
@@ -147,16 +165,5 @@ class VerifikasiPendaftaranController extends Controller
                 'message' => 'Terjadi kesalahan: ' . $e->getMessage()
             ], 500);
         }
-    }    // New method for registration status
-    public function updateRegistrationStatus(Request $request)
-    {
-        $request->validate([
-            'status' => 'required|in:open,closed',
-        ]);
-
-        // Store status in cache
-        Cache::forever('registration_status', $request->status);
-
-        return response()->json(['success' => true, 'message' => 'Status pendaftaran berhasil diperbarui.', 'newStatus' => $request->status]);
     }
 }
