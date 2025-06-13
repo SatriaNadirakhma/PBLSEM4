@@ -1,30 +1,80 @@
-<!-- Testimoni Section -->
-<section id="overview" class="py-5" style="background-color:rgb(255, 255, 255);">
-  <div class="container">
-    <div class="row align-items-center">
-      <!-- Foto Dosen -->
-      <div class="col-md-2 text-center">
-        <img src="{{ asset('img/atiqah.jpg') }}" alt="Foto Dosen"
-             class="rounded-circle mb-2" style="width: 150px; height: 150px; object-fit: cover;">
-        <h6 class="mb-0">Atiqah Nurul Asri, S.Pd., M.Pd.</h6>
-        <small class="text-muted">Ketua UPA BAHASA</small>
+<!-- Logo Section -->
+<section class="py-5 position-relative text-center text-dark" style="background: url('{{ asset('img/gedung_background.png') }}') center center / cover no-repeat;">
+  <div class="position-absolute top-0 start-0 w-100 h-100" style="background-color: rgba(255, 255, 255, 0.57); z-index: 1;"></div>
+
+  <div class="container position-relative" style="z-index: 2;">
+    <p class="fw-semibold">Dukungan Institusi & Eksternal</p>
+    <div class="row justify-content-center align-items-center text-center">
+      
+      <!-- Logo Kiri (Polinema) -->
+      <div class="col-6 col-md-3 d-flex justify-content-center">
+        <img src="{{ asset('img/logo_polinema.png') }}" alt="Logo Polinema" class="img-fluid" style="max-height: 110px;">
       </div>
 
-      <!-- Isi Testimoni -->
-      <div class="col-md-10">
-        <h5 class="fw-bold">OVERVIEW</h5>
-        <p class="mb-0" style="font-size: 1rem;">
-          Selamat datang di Sistem Informasi Pendaftaran TOEIC Politeknik Negeri Malang!<br><br>
-
-UPA Bahasa sebagai unit pelaksana akademik yang bertanggung jawab dalam pengembangan kemampuan bahasa asing sivitas akademika, terus berupaya memberikan layanan terbaik dalam mendukung kesiapan mahasiswa menghadapi tantangan global. Salah satu bentuk komitmen tersebut adalah melalui penyelenggaraan tes TOEIC (Test of English for International Communication) secara berkala.
-
-Dengan adanya sistem informasi ini, kami berharap proses pendaftaran TOEIC menjadi lebih mudah, cepat, dan transparan. <br><br>Mahasiswa dapat melakukan pendaftaran, melihat jadwal tes, serta memantau status pendaftaran secara daring kapan saja dan di mana saja.
-
-Kami mengajak seluruh mahasiswa untuk memanfaatkan fasilitas ini sebaik mungkin sebagai bagian dari persiapan menghadapi dunia kerja maupun studi lanjut.
-
-<br><br>Terima kasih atas kepercayaan dan partisipasi Anda. Mari bersama kita tingkatkan kompetensi bahasa untuk masa depan yang lebih baik.
+      <!-- Logo Tengah (Unit Bahasa) - tetap, disejajarkan -->
+      <div class="col-12 col-md-4 d-flex flex-column align-items-center">
+        <img src="{{ asset('img/logo_polinema.png') }}" alt="Logo Unit Bahasa" class="img-fluid" style="max-height: 80px;">
+        <p class="mt-2 mb-0 small text-center" style="color: #4B0082;">
+          Unit Pelaksana Akademik Bahasa<br><strong>Politeknik Negeri Malang</strong>
         </p>
       </div>
+
+      <!-- Logo Kanan (ITC) -->
+      <div class="col-6 col-md-3 d-flex justify-content-center">
+        <img src="{{ asset('img/logo_itc.png') }}" alt="Logo ITC" class="img-fluid" style="max-height: 300px;">
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+
+
+<!-- Overview Section -->
+<section id="overview" class="py-5 position-relative" style="background-color: #007bff; height: 70vh; overflow: hidden;">
+  <div class="container h-100">
+    <div class="row h-100">
+
+      <!-- Kolom Foto -->
+      <div class="col-md-4 position-relative d-flex align-items-end " style="padding-bottom: 10px;">
+        <!-- Lingkaran & Foto -->
+        <div style="width: 360px; height: 360px; border-radius: 50%; border: 12px solid white; background-color: white; position: relative;">
+        <img src="{{ asset('img/atiqah.png') }}" alt="Foto Dosen"
+     style="width: 320px; height: 440px; object-fit: cover; border-radius: 12px; position: absolute; top: 55%; left: 50%; transform: translate(-50%, -50%);">
+
+        </div>
+
+        <!-- Nama & Jabatan -->
+        <div class="position-absolute" style="bottom: 30px; text-align: center;">
+          <div style="background-color:rgb(221, 177, 56); color: white; font-weight: bold; font-size: 1.30rem; padding: 6px 20px; border-radius: 6px;">
+            Atiqah Nurul Asri, S.Pd., M.Pd.
+          </div>
+</div>
+<div class="position-absolute" style="bottom: 0px; text-align: center;">
+          <div style="background-color: #1d4ed8; color: white; font-size: 0.85rem; padding: 4px 12px; margin-right: 50px; border-radius: 5px;">
+    Ketua UPA Bahasa
+  </div>
+        </div>
+      
+</div>
+      <!-- Kolom Teks -->
+      <div class="col-md-8 d-flex flex-column justify-content-center text-white">
+        <div class="mb-2">
+          <span class="badge bg-white text-primary" style="font-size: 1.1rem;">● Overview</span>
+        </div>
+       <h4 class="fw-bold text-white">Selamat datang di Sistem Informasi Pendaftaran TOEIC Politeknik Negeri Malang!</h4>
+        <p style="text-align: justify;">
+          <strong>UPA Bahasa</strong> sebagai unit pelaksana akademik yang bertanggung jawab dalam pengembangan kemampuan bahasa asing sivitas akademika, terus berupaya memberikan layanan terbaik dalam mendukung kesiapan mahasiswa menghadapi tantangan global. Salah satu bentuk komitmen tersebut adalah melalui penyelenggaraan tes TOEIC (Test of English for International Communication) secara berkala. Dengan adanya sistem informasi ini, kami berharap proses pendaftaran TOEIC menjadi lebih mudah, cepat, dan transparan.
+        </p>
+        <p style="text-align: justify;">
+          Mahasiswa dapat melakukan pendaftaran, melihat jadwal tes, serta memantau status pendaftaran secara daring kapan saja dan di mana saja. Kami mengajak seluruh mahasiswa untuk memanfaatkan fasilitas ini sebaik mungkin sebagai bagian dari persiapan menghadapi dunia kerja maupun studi lanjut.
+        </p>
+        <p style="text-align: justify;">
+          Terima kasih atas kepercayaan dan partisipasi Anda. Mari bersama kita tingkatkan kompetensi bahasa untuk masa depan yang lebih baik.
+        </p>
+      </div>
+
     </div>
   </div>
 </section>
