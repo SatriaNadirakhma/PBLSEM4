@@ -32,24 +32,68 @@
                     <h5><i class="icon fas fa-exclamation-triangle"></i> Peringatan!</h5>
                     Apakah Anda yakin ingin menghapus data hasil ujian berikut?
                 </div>
-                
+
                 <div class="row">
                     <div class="col-md-12">
                         <table class="table table-sm table-bordered table-striped">
                             <tr>
-                                <th class="text-right col-4">ID Hasil:</th>
+                                <th class="text-right col-4">ID Hasil</th>
                                 <td class="col-8">{{ $hasil_ujian->hasil_id }}</td>
                             </tr>
                             <tr>
-                                <th class="text-right">Nilai Listening:</th>
+                                <th class="text-right col-4">Status</th>
+                                <td class="col-8">{{ $hasil_ujian->user->role }}</td>
+                            </tr>
+                           <tr>
+                                    <th class="text-right">Nama Peserta</th>
+                                    <td>
+                                        @php
+                                            $user = $hasil_ujian->user;
+                                            $nama = '-';
+
+                                            if ($user->role == 'mahasiswa' && isset($user->mahasiswa)) {
+                                                $nama = $user->mahasiswa->mahasiswa_nama;
+                                            } elseif ($user->role == 'dosen' && isset($user->dosen)) {
+                                                $nama = $user->dosen->dosen_nama;
+                                            } elseif ($user->role == 'tendik' && isset($user->tendik)) {
+                                                $nama = $user->tendik->tendik_nama;
+                                            } else {
+                                                $nama = $user->nama ?? '-';
+                                            }
+                                        @endphp
+                                        {{ $nama }}
+                                    </td>
+                                </tr>  
+                            <tr>
+                            <th class="text-right">ID Peserta</th>
+                                <td>
+                                     @php
+                                        $user = $hasil_ujian->user;
+                                        $Id = '-';
+
+                                        if ($user->role == 'mahasiswa' && isset($user->mahasiswa)) {
+                                            $Id = $user->mahasiswa->nim;
+                                        } elseif ($user->role == 'dosen' && isset($user->dosen)) {
+                                            $Id = $user->dosen->nidn;
+                                        } elseif ($user->role == 'tendik' && isset($user->tendik)) {
+                                            $Id = $user->tendik->nip;
+                                        } else {
+                                            $Id = $user->Id ?? '-';
+                                        }
+                                    @endphp
+                                    {{ $Id }}
+                                </td>
+                            </tr>   
+                            <tr>
+                                <th class="text-right">Nilai Listening</th>
                                 <td>{{ $hasil_ujian->nilai_listening }}</td>
                             </tr>
                             <tr>
-                                <th class="text-right">Nilai Reading:</th>
+                                <th class="text-right">Nilai Reading</th>
                                 <td>{{ $hasil_ujian->nilai_reading }}</td>
                             </tr>
                             <tr>
-                                <th class="text-right">Status Lulus:</th>
+                                <th class="text-right">Status Lulus</th>
                                 <td>
                                     <span class="badge {{ $hasil_ujian->status_lulus == 'Lulus' ? 'badge-success' : 'badge-danger' }}">
                                         {{ $hasil_ujian->status_lulus }}
@@ -57,26 +101,15 @@
                                 </td>
                             </tr>
                             @if($hasil_ujian->jadwal)
-                            <tr>
-                                <th class="text-right">Jadwal Ujian:</th>
-                                <td>{{ $hasil_ujian->jadwal->tanggal_ujian ?? 'Tidak ada data' }}</td>
-                            </tr>
-                            @endif
-                            @if($hasil_ujian->user)
-                            <tr>
-                                <th class="text-right">Peserta:</th>
-                                <td>
-                                    {{ $hasil_ujian->user->nama ?? 'Tidak ada data' }}
-                                    @if($hasil_ujian->user->mahasiswa)
-                                        ({{ $hasil_ujian->user->mahasiswa->nim ?? '' }})
-                                    @endif
-                                </td>
-                            </tr>
+                                <tr>
+                                    <th class="text-right">Jadwal Ujian</th>
+                                    <td>{{ $hasil_ujian->jadwal->tanggal_pelaksanaan ?? '-' }}</td>
+                                </tr>
                             @endif
                         </table>
                     </div>
                 </div>
-                
+
                 <div class="alert alert-info">
                     <small><i class="fas fa-info-circle"></i> Data yang sudah dihapus tidak dapat dikembalikan!</small>
                 </div>
@@ -93,74 +126,62 @@
     </div>
 
     <script>
-    $(document).ready(function() {
-        // Handle konfirmasi delete
-        $('#btn-confirm-delete').on('click', function() {
-            let hasil_id = $(this).data('id');
-            
-            // Disable button untuk mencegah double click
-            $(this).prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Menghapus...');
-            
-            $.ajax({
-                url: '/hasil_ujian/' + hasil_id + '/delete_ajax',
-                type: 'POST',
-                data: {
-                    '_token': $('meta[name="csrf-token"]').attr('content'),
-                    '_method': 'DELETE'
-                },
-                success: function(response) {
-                    if (response.status) {
-                        // Tutup modal
-                        $('#modal-confirm-delete').modal('hide');
-                        
-                        // Tampilkan notifikasi sukses
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Berhasil!',
-                            text: response.message || 'Data berhasil dihapus',
-                            timer: 2000,
-                            showConfirmButton: false
-                        });
+        $(document).ready(function() {
+            $('#btn-confirm-delete').on('click', function() {
+                let hasil_id = $(this).data('id');
+                let $btn = $(this);
 
-                        // Reload datatable jika ada
-                        if (typeof dataHasil !== 'undefined' && dataHasil.ajax) {
-                            dataHasil.ajax.reload(null, false);
-                        } else if (typeof table !== 'undefined' && table.ajax) {
-                            table.ajax.reload(null, false);
+                $btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Menghapus...');
+
+                $.ajax({
+                    url: '/hasil_ujian/' + hasil_id + '/delete_ajax',
+                    type: 'POST',
+                    data: {
+                        _token: $('meta[name="csrf-token"]').attr('content'),
+                        _method: 'DELETE'
+                    },
+                    success: function(response) {
+                        if (response.status) {
+                            $('#modal-confirm-delete').modal('hide');
+
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Berhasil!',
+                                text: response.message || 'Data berhasil dihapus',
+                                timer: 2000,
+                                showConfirmButton: false
+                            });
+
+                            if (typeof dataHasil !== 'undefined' && dataHasil.ajax) {
+                                dataHasil.ajax.reload(null, false);
+                            } else if (typeof table !== 'undefined' && table.ajax) {
+                                table.ajax.reload(null, false);
+                            } else {
+                                setTimeout(() => location.reload(), 2000);
+                            }
                         } else {
-                            // Fallback: reload page setelah 2 detik
-                            setTimeout(function() {
-                                location.reload();
-                            }, 2000);
+                            $btn.prop('disabled', false).html('<i class="fas fa-trash"></i> Ya, Hapus Data');
+
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Gagal!',
+                                text: response.message || 'Terjadi kesalahan saat menghapus data'
+                            });
                         }
-                    } else {
-                        // Enable button kembali
-                        $('#btn-confirm-delete').prop('disabled', false).html('<i class="fas fa-trash"></i> Ya, Hapus Data');
-                        
+                    },
+                    error: function(xhr) {
+                        $btn.prop('disabled', false).html('<i class="fas fa-trash"></i> Ya, Hapus Data');
+
+                        let errorMessage = xhr.responseJSON?.message || 'Terjadi kesalahan saat menghapus data';
+
                         Swal.fire({
                             icon: 'error',
-                            title: 'Gagal!',
-                            text: response.message || 'Terjadi kesalahan saat menghapus data'
+                            title: 'Error!',
+                            text: errorMessage
                         });
                     }
-                },
-                error: function(xhr, status, error) {
-                    // Enable button kembali
-                    $('#btn-confirm-delete').prop('disabled', false).html('<i class="fas fa-trash"></i> Ya, Hapus Data');
-                    
-                    let errorMessage = 'Terjadi kesalahan saat menghapus data';
-                    if (xhr.responseJSON && xhr.responseJSON.message) {
-                        errorMessage = xhr.responseJSON.message;
-                    }
-                    
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error!',
-                        text: errorMessage
-                    });
-                }
+                });
             });
         });
-    });
     </script>
 @endempty

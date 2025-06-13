@@ -296,21 +296,25 @@ class HasilUjianController extends Controller
         return view('hasil_ujian.confirm_ajax', compact('hasil_ujian'));
     }
 
-    public function delete_ajax($id)
-    {
-        $hasil_ujian = HasilUjianModel::find($id);
-        return view('hasil_ujian.delete_ajax', compact('hasil_ujian'));
-    }
 
-    public function destroy_ajax($id)
+    public function delete_ajax(Request $request, $id)
     {
-        $hasil_ujian = HasilUjianModel::find($id);
-        if (!$hasil_ujian) {
-            return response()->json(['status' => false, 'message' => 'Data tidak ditemukan.']);
+        if ($request->ajax()) {
+            $hasil = HasilUjianModel::find($id);
+            if ($hasil) {
+                $hasil->delete();
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Data berhasil dihapus'
+                ]);
+            } else {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Data tidak ditemukan'
+                ]);
+            }
         }
-
-        $hasil_ujian->delete();
-        return response()->json(['status' => true, 'message' => 'Data berhasil dihapus.']);
+        return redirect('/');
     }
 
 
