@@ -5,7 +5,9 @@
   <div class="container position-relative" style="z-index: 2;">
     <div class="row justify-content-center">
       <div class="col-lg-10">
-        <h2 class="fw-bold text-center mb-5 display-5" style="font-weight: 700;">Pertanyaan yang Sering Diajukan (FAQ)</h2>
+      <h2 class="fw-bold text-center mb-5 display-5 text-white" style="font-weight: 700;">
+  Pertanyaan yang Sering Diajukan (FAQ)
+</h2>
 
         <div class="accordion accordion-flush" id="faqAccordion">
 

@@ -64,7 +64,7 @@
                             @if($mahasiswa->status == 'aktif')
                                 <span class="badge badge-success">Aktif</span>
                             @else($mahasiswa->status == 'alumni')
-                                <span class="badge badge-danger">Nonaktif</span>
+                                <span class="badge badge-danger">Alumni</span>
                             @endif
                         </td>
                     </tr>
