@@ -272,7 +272,7 @@ Route::prefix('biodata/mahasiswa')->name('biodata.mahasiswa.')->middleware(['aut
     });
 
     // Route untuk user peserta melihat daftar surat
-    Route::get('/daftar-surat', [SuratController::class, 'userIndex'])->name('surat.user.index');
+    //Route::get('/daftar-surat', [SuratController::class, 'userIndex'])->name('surat.user.index');
  
 
     // Rute pendaftaran     
@@ -294,6 +294,8 @@ Route::prefix('biodata/mahasiswa')->name('biodata.mahasiswa.')->middleware(['aut
     //Rute Hasil Peserta
     Route::prefix('hasilPeserta')->group(function () {
         Route::get('/', [HasilPesertaController::class, 'index'])->name('hasilPeserta.index');
+        // Ubah rute ini untuk menampilkan pratinjau surat keterangan
+        Route::get('/surat-keterangan', [HasilPesertaController::class, 'SuratKeterangan'])->name('hasilPeserta.SuratKeterangan');    
 
     });
 

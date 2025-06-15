@@ -266,12 +266,13 @@
                             <p style="font-weight: 500;">Panduan</p>
                         </a>
                     </li>
-                     <li class="nav-item mt-1">
-                        <a href="{{ route('surat.user.index') }}" class="nav-link {{ ($activeMenu ?? '') === 'Surat' ? 'active' : '' }}"> {{-- Hapus target="_blank" karena ini daftar surat --}}
+                    {{-- <li class="nav-item mt-1">
+                        <a href="{{ route('surat.user.index') }}" class="nav-link {{ ($activeMenu ?? '') === 'Surat' ? 'active' : '' }}">
                             <i class="nav-icon fas fa-envelope-open-text"></i> 
                             <p style="font-weight: 500;">Surat</p>
                         </a>
-                    </li>
+                    </li> --}}
+                    
                 @endif
             @endauth
             
