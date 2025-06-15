@@ -190,8 +190,56 @@
                             </div>
                         </div>
                     </div>
+                    {{-- tombol SURAT KETERANGAN --}}
+                    <div class="col-lg-6 mb-4">
+                        <div class="card border-0 shadow-sm h-100 hover-card d-flex align-items-center justify-content-center">
+                            <div class="card-body text-center d-flex flex-column align-items-center justify-content-center">
+                                <div class="mb-3">
+                                    <i class="fas fa-file-pdf text-danger" style="font-size: 3rem;"></i>
+                                </div>
+                                <h5 class="card-title mb-2 fw-bold text-danger">Surat Keterangan</h5> {{-- Ganti judul card --}}
+                                <p class="text-muted mb-3">Dapatkan surat keterangan khusus bagi Anda yang telah mencoba berkali-kali namun belum berhasil.</p>
+                                
+                                {{-- Tombol akan mengarah ke rute preview --}}
+                                @if ($canAccessSurat && $suratKeterangan)
+                                    <a href="{{ route('hasilPeserta.SuratKeterangan') }}" class="btn btn-danger" target="_blank"> {{-- Ubah rute dan target="_blank" --}}
+                                        <i class="fas fa-download me-2"></i> Unduh Surat Keterangan {{-- Ubah teks tombol dan ikon --}}
+                                    </a>
+                                @else
+                                    {{-- Tombol untuk memicu modal jika kondisi tidak terpenuhi --}}
+                                    <button type="button" class="btn btn-secondary disabled-download-btn" data-toggle="modal" data-target="#notQualifiedModal">
+                                        <i class="fas fa-download me-2"></i> Unduh Surat Keterangan {{-- Ubah teks tombol dan ikon --}}
+                                    </button>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal fade" id="notQualifiedModal" tabindex="-1" role="dialog" aria-labelledby="notQualifiedModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="notQualifiedModalLabel">Informasi Surat Keterangan</h5> {{-- Ubah judul modal --}}
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body text-center">
+                                    <i class="fas fa-info-circle text-info mb-3" style="font-size: 3rem;"></i>
+                                    <p>Maaf, Anda belum memenuhi kriteria untuk mengakses surat ini.</p> {{-- Ubah pesan --}}
+                                    <p class="text-muted small">Surat keterangan ini hanya tersedia bagi peserta yang telah mengikuti ujian dan tidak lulus sebanyak dua kali atau lebih.</p>
+                                    @if (session('error'))
+                                        <div class="alert alert-warning mt-3" role="alert">
+                                            {{ session('error') }}
+                                        </div>
+                                    @endif
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <!-- Add Ujian Again Container --></div>
             @endif
         </div>
     </div>

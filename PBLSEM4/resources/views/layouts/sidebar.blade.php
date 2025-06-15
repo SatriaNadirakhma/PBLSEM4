@@ -182,6 +182,12 @@
                             <p>Kelola Panduan</p>
                         </a>
                     </li>
+                    <li class="nav-item ml-2">
+                        <a href="{{ route('surat.admin.index') }}" class="nav-link {{ ($activeMenu ?? '') === 'KelolaSurat' ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-envelope"></i> {{-- Ganti ikon jika perlu --}}
+                            <p>Kelola Surat</p>
+                        </a>
+                    </li>
                 </ul>
             </li>
             @endif
@@ -260,6 +266,13 @@
                             <p style="font-weight: 500;">Panduan</p>
                         </a>
                     </li>
+                    {{-- <li class="nav-item mt-1">
+                        <a href="{{ route('surat.user.index') }}" class="nav-link {{ ($activeMenu ?? '') === 'Surat' ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-envelope-open-text"></i> 
+                            <p style="font-weight: 500;">Surat</p>
+                        </a>
+                    </li> --}}
+                    
                 @endif
             @endauth
             

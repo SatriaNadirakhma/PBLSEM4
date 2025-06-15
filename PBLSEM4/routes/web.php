@@ -27,6 +27,7 @@ use App\Http\Controllers\HasilPesertaController;
 use App\Http\Controllers\RiwayatPesertaController;
 use App\Http\Controllers\KirimEmailController;
 use App\Http\Controllers\PanduanController;
+use App\Http\Controllers\SuratController;
 use App\Http\Controllers\AboutPageController;
 use App\Http\Controllers\PasswordResetController;
 
@@ -256,12 +257,23 @@ Route::prefix('biodata/mahasiswa')->name('biodata.mahasiswa.')->middleware(['aut
     
     // Route untuk semua role melihat panduan (di dalam grup middleware 'auth')
     Route::get('/panduan', [PanduanController::class, 'show'])->name('panduan.show');
+    Route::get('/surat/{surat}', [SuratController::class, 'show'])->name('surat.show'); // Menggunakan route model binding
 
-   // Route untuk admin mengelola panduan
+   // Route untuk admin KELOLA PANDUAN - SURAT
     Route::prefix('kelola')->middleware(['role:admin'])->group(function () {
         Route::get('/panduan', [PanduanController::class, 'adminIndex'])->name('panduan.admin.index'); // <-- Ini sudah benar
         Route::post('/panduan/upload', [PanduanController::class, 'upload'])->name('panduan.admin.upload');
+
+        //route SURAT
+        Route::get('/surat', [SuratController::class, 'adminIndex'])->name('surat.admin.index');
+        Route::get('/surat/create', [SuratController::class, 'create'])->name('surat.admin.create');
+        Route::post('/surat', [SuratController::class, 'store'])->name('surat.admin.store');
+        Route::delete('/surat/{surat}', [SuratController::class, 'destroy'])->name('surat.admin.destroy');
     });
+
+    // Route untuk user peserta melihat daftar surat
+    //Route::get('/daftar-surat', [SuratController::class, 'userIndex'])->name('surat.user.index');
+ 
 
     // Rute pendaftaran     
     Route::prefix('pendaftaran')->name('pendaftaran.')->group(function () {
@@ -282,6 +294,8 @@ Route::prefix('biodata/mahasiswa')->name('biodata.mahasiswa.')->middleware(['aut
     //Rute Hasil Peserta
     Route::prefix('hasilPeserta')->group(function () {
         Route::get('/', [HasilPesertaController::class, 'index'])->name('hasilPeserta.index');
+        // Ubah rute ini untuk menampilkan pratinjau surat keterangan
+        Route::get('/surat-keterangan', [HasilPesertaController::class, 'SuratKeterangan'])->name('hasilPeserta.SuratKeterangan');    
 
     });
 
