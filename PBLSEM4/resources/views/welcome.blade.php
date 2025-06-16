@@ -956,27 +956,30 @@
                         </div>
 
                         <div class="row">
+                            {{-- KARTU BAR CHART (PENGGANTI LINE CHART) --}}
                             <div class="col-lg-8 mb-4">
                                 <div class="chart-card">
                                     <div class="chart-header">
                                         <h6 class="chart-title">
-                                            <i class="fas fa-chart-line"></i>
-                                            Statistik Pendaftar Per Bulan {{ \Carbon\Carbon::now()->year }}
+                                            <i class="fas fa-chart-bar"></i> {{-- ICON DIUBAH --}}
+                                            Rata-rata Nilai Mahasiswa per Jurusan {{-- JUDUL DIUBAH --}}
                                         </h6>
                                     </div>
                                     <div class="chart-body">
                                         <div style="height: 350px; position: relative;">
-                                            <canvas id="lineChart"></canvas>
+                                            <canvas id="barChart"></canvas> {{-- ID CANVAS DIUBAH --}}
                                         </div>
                                     </div>
                                 </div>
                             </div>
+
+                            {{-- KARTU PIE CHART (TETAP) --}}
                             <div class="col-lg-4 mb-4">
                                 <div class="chart-card">
                                     <div class="chart-header">
                                         <h6 class="chart-title">
                                             <i class="fas fa-chart-pie"></i>
-                                            Persentase Hasil Seleksi
+                                            Persentase Seleksi Hasil Ujian
                                         </h6>
                                     </div>
                                     <div class="chart-body">
@@ -985,8 +988,10 @@
                                         </div>
                                         <div class="mt-3 text-center">
                                             <small class="text-muted">
-                                                <i class="fas fa-circle text-success me-1"></i>Lolos
-                                                <i class="fas fa-circle text-danger me-1 ms-3"></i>Tidak Lolos
+                                                <br>
+                                                <br>
+                                                <i class=""></i>
+                                                <i class=""></i>
                                             </small>
                                         </div>
                                     </div>
@@ -1032,102 +1037,96 @@
 
 
     @push('js')
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+       <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
         <script>
-            // Variabel global untuk menyimpan instance chart
-            let lineChartInstance;
+            let barChartInstance;
             let pieChartInstance;
-            let eventSource; // Deklarasikan eventSource di scope global
+            let eventSource; 
+
+            // Fungsi untuk membersihkan koneksi SSE
+            function cleanupSSE() {
+                if (eventSource) {
+                    console.log('Closing SSE connection...');
+                    eventSource.close();
+                    eventSource = null; // Hapus referensi
+                }
+            }
 
             window.addEventListener('load', function() {
                 const userRole = '{{ $user->role ?? "" }}';
-                console.log('User role:', userRole);
-
                 if (userRole === 'admin') {
-                    console.log('Initializing charts for admin...');
-
-                    const initialPendaftarPerBulan = @json($dataPendaftarPerBulan ?? array_fill(0, 12, 0));
-                    const initialJumlahLolos = @json($jumlah_lolos ?? 0);
-                    const initialJumlahTidakLolos = @json($jumlah_tidak_lolos ?? 0);
-
-                    initLineChart(initialPendaftarPerBulan);
-                    initPieChart(initialJumlahLolos, initialJumlahTidakLolos);
-
+                    initBarChart(@json($barChartLabels ?? []), @json($barChartValues ?? []));
+                    initPieChart(@json($jumlah_lolos ?? 0), @json($jumlah_tidak_lolos ?? 0));
+                    
                     setupSSE(); 
-                } else {
-                    console.log('Not admin, charts will not be initialized.');
                 }
             });
 
-            // Tambahkan event listener untuk membersihkan SSE saat halaman ditutup/di-refresh
-            // Ini sangat penting untuk mencegah koneksi SSE yang "menggantung" di server
-            window.addEventListener('beforeunload', function() {
-                if (eventSource) {
-                    console.log('Closing SSE connection before unload.');
-                    eventSource.close();
-                }
-            });
+            // PERBAIKAN: Gunakan event 'pagehide' dan 'beforeunload' untuk memastikan
+            // koneksi SSE ditutup saat user meninggalkan halaman. 'pagehide' lebih modern
+            // dan andal untuk kasus ini.
+            window.addEventListener('pagehide', cleanupSSE);
+            window.addEventListener('beforeunload', cleanupSSE);
 
-            function initLineChart(data) {
-                console.log('Initializing line chart with data:', data);
-                const lineCanvas = document.getElementById('lineChart');
-                if (!lineCanvas) {
-                    console.error('Line chart canvas not found');
-                    return;
-                }
-                const bulanLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
-                const ctx = lineCanvas.getContext('2d');
+            /**
+             * Menginisialisasi atau memperbarui Bar Chart.
+             */
+            function initBarChart(labels, values) {
+                const barCanvas = document.getElementById('barChart');
+                if (!barCanvas) return;
+                const ctx = barCanvas.getContext('2d');
 
-                if (lineChartInstance) {
-                    lineChartInstance.destroy();
+                if (barChartInstance) {
+                    barChartInstance.destroy();
                 }
 
-                lineChartInstance = new Chart(ctx, {
-                    type: 'line',
+                barChartInstance = new Chart(ctx, {
+                    type: 'bar',
                     data: {
-                        labels: bulanLabels,
+                        labels: labels,
                         datasets: [{
-                            label: 'Jumlah Pendaftar',
-                            data: data,
-                            fill: false,
-                            borderColor: 'rgba(54, 162, 235, 1)',
-                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                            tension: 0.3,
-                            pointRadius: 5,
-                            pointHoverRadius: 7,
-                            borderWidth: 3,
+                            label: 'Rata-rata Nilai',
+                            data: values,
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.5)',
+                                'rgba(54, 162, 235, 0.5)',
+                                'rgba(255, 206, 86, 0.5)',
+                                'rgba(75, 192, 192, 0.5)',
+                                'rgba(153, 102, 255, 0.5)',
+                                'rgba(255, 159, 64, 0.5)'
+                            ],
+                            borderColor: [
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)',
+                                'rgba(255, 159, 64, 1)'
+                            ],
+                            borderWidth: 1
                         }]
                     },
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
-                        interaction: {
-                            intersect: false
+                        plugins: {
+                            legend: { display: false }
                         },
                         scales: {
-                            y: {
-                                beginAtZero: true,
-                                ticks: {
-                                    precision: 0,
-                                    stepSize: 1
-                                }
-                            }
+                            y: { beginAtZero: true, title: { display: true, text: 'Rata-rata Nilai' } },
+                            x: { title: { display: true, text: 'Jurusan' } }
                         }
                     }
                 });
-                console.log('Line chart initialized successfully');
             }
-
+            
+            /**
+             * Menginisialisasi atau memperbarui Pie Chart.
+             */
             function initPieChart(lolos, tidakLolos) {
-                console.log('Initializing pie chart with data:', { lolos, tidakLolos });
                 const pieCanvas = document.getElementById('pieChart');
-                if (!pieCanvas) {
-                    console.error('Pie chart canvas not found');
-                    return;
-                }
-
+                if (!pieCanvas) return;
                 const ctx = pieCanvas.getContext('2d');
-                
                 const totalData = lolos + tidakLolos;
                 let chartData, chartLabels, backgroundColors, borderColors;
                 
@@ -1139,14 +1138,8 @@
                 } else {
                     chartData = [lolos, tidakLolos];
                     chartLabels = ['Lolos (' + lolos + ')', 'Tidak Lolos (' + tidakLolos + ')'];
-                    backgroundColors = [
-                        'rgba(75, 192, 192, 0.7)', // Lolos (Hijau kebiruan)
-                        'rgba(255, 99, 132, 0.7)'  // Tidak Lolos (Merah)
-                    ];
-                    borderColors = [
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(255, 99, 132, 1)'
-                    ];
+                    backgroundColors = ['rgba(75, 192, 192, 0.7)', 'rgba(255, 99, 132, 0.7)'];
+                    borderColors = ['rgba(75, 192, 192, 1)', 'rgba(255, 99, 132, 1)'];
                 }
 
                 if (pieChartInstance) {
@@ -1169,13 +1162,7 @@
                         responsive: true,
                         maintainAspectRatio: false,
                         plugins: {
-                            legend: {
-                                position: 'bottom',
-                                labels: {
-                                    padding: 20,
-                                    usePointStyle: true
-                                }
-                            },
+                            legend: { position: 'bottom', labels: { padding: 20, usePointStyle: true } },
                             tooltip: {
                                 callbacks: {
                                     label: function(context) {
@@ -1183,71 +1170,43 @@
                                         const value = context.parsed;
                                         const total = context.dataset.data.reduce((a, b) => a + b, 0);
                                         const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
-                                        return label + ': ' + value + ' (' + percentage + '%)';
+                                        return `${label}: ${value} (${percentage}%)`;
                                     }
                                 }
                             }
                         }
                     }
                 });
-                console.log('Pie chart initialized successfully');
             }
 
+            /**
+             * Mengatur koneksi Server-Sent Events (SSE).
+             */
             function setupSSE() {
-                console.log('Setting up Server-Sent Events...');
-                // Tutup koneksi SSE yang ada sebelum membuat yang baru
-                if (eventSource) {
-                    eventSource.close();
-                    console.log('Existing SSE connection closed.');
-                }
+                cleanupSSE(); // Selalu bersihkan koneksi lama sebelum memulai yang baru
+                
                 eventSource = new EventSource("{{ route('dashboard.chart.stream') }}");
-
+                
                 eventSource.onmessage = function(event) {
                     try {
                         const data = JSON.parse(event.data);
-                        console.log('Data SSE diterima:', data);
 
-                        // Perbarui Line Chart
-                        if (lineChartInstance && data.lineChartData) {
-                            lineChartInstance.data.datasets[0].data = data.lineChartData;
-                            lineChartInstance.update();
-                            console.log('Line chart updated.');
+                        // Update Bar Chart
+                        if (barChartInstance && data.barChart) {
+                            barChartInstance.data.labels = data.barChart.labels;
+                            barChartInstance.data.datasets[0].data = data.barChart.values;
+                            barChartInstance.update();
                         }
 
-                        // Perbarui Pie Chart
+                        // Update Pie Chart
                         if (pieChartInstance && data.pieChartData) {
-                            const totalPieData = data.pieChartData.lolos + data.pieChartData.tidakLolos;
-                            if (totalPieData === 0) {
-                                pieChartInstance.data.labels = ['Belum Ada Data'];
-                                pieChartInstance.data.datasets[0].data = [1];
-                                pieChartInstance.data.datasets[0].backgroundColor = ['rgba(128, 128, 128, 0.7)'];
-                                pieChartInstance.data.datasets[0].borderColor = ['rgba(128, 128, 128, 1)'];
-                            } else {
-                                pieChartInstance.data.labels = [
-                                    'Lolos (' + data.pieChartData.lolos + ')',
-                                    'Tidak Lolos (' + data.pieChartData.tidakLolos + ')'
-                                ];
-                                pieChartInstance.data.datasets[0].data = [
-                                    data.pieChartData.lolos,
-                                    data.pieChartData.tidakLolos
-                                ];
-                                pieChartInstance.data.datasets[0].backgroundColor = [
-                                    'rgba(75, 192, 192, 0.7)',
-                                    'rgba(255, 99, 132, 0.7)'
-                                ];
-                                pieChartInstance.data.datasets[0].borderColor = [
-                                    'rgba(75, 192, 192, 1)',
-                                    'rgba(255, 99, 132, 1)'
-                                ];
-                            }
-                            pieChartInstance.update();
-                            console.log('Pie chart updated.');
+                            initPieChart(data.pieChartData.lolos, data.pieChartData.tidakLolos);
                         }
 
-                        // Perbarui Card Statistik
+                        // Update Kartu Statistik
                         if (data.cardData) {
-                            for (const key in data.cardData) {
-                                if (data.cardData.hasOwnProperty(key)) {
+                        for (const key in data.cardData) {
+                                if (Object.prototype.hasOwnProperty.call(data.cardData, key)) {
                                     const elementId = `card-count-${key.replace(/_/g, '-')}`;
                                     const cardElement = document.getElementById(elementId);
                                     if (cardElement) {
@@ -1255,29 +1214,16 @@
                                     }
                                 }
                             }
-                            console.log('Card statistics updated.');
                         }
-                        
                     } catch (error) {
                         console.error('Error parsing SSE data or updating elements:', error);
-                        console.log('Raw event data:', event.data);
                     }
                 };
 
                 eventSource.onerror = function(err) {
-                    console.error('EventSource error:', err, err.message, err.status); // Log lebih detail
-                    eventSource.close(); 
-                    console.log('SSE connection closed due to error. Retrying in 5 seconds...');
+                    console.error('EventSource error:', err);
+                    cleanupSSE();
                     setTimeout(setupSSE, 5000); 
-                };
-
-                eventSource.onopen = function() {
-                    console.log('SSE connection opened.');
-                };
-
-                eventSource.onclose = function() {
-                    console.log('SSE connection closed by server or client.');
-                    // Tidak perlu setTimeout di sini karena onerror sudah menangani retry
                 };
             }
         </script>

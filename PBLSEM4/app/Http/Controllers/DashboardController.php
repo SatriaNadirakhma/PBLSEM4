@@ -12,204 +12,181 @@ use App\Models\DosenModel;
 use App\Models\TendikModel;
 use App\Models\HasilUjianModel;
 use App\Models\InformasiModel;
+use App\Models\JurusanModel; 
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class DashboardController extends Controller
 {
-    public function index()
+    /**
+     * Method privat untuk mengambil data statistik dashboard.
+     */
+    private function getDashboardStatistics()
     {
-        // ... (Kode method index() Anda yang sudah ada) ...
-        // Pastikan Anda mem-pass 'user' dan 'dataPendaftarPerBulan' ke view
-        // seperti yang sudah Anda lakukan di kode asli Anda.
+        // --- DATA UNTUK BAR CHART (QUERY DIPERBARUI) ---
+        // PERBAIKAN: Menambahkan join melalui tabel 'prodi'
+        $barChartData = JurusanModel::query()
+            ->select(
+                'jurusan.jurusan_nama',
+                // Gunakan COALESCE untuk mengubah nilai NULL (jurusan tanpa data) menjadi 0
+                DB::raw('COALESCE(AVG(hasil_ujian.nilai_total), 0) as rata_rata_nilai')
+            )
+            ->leftJoin('prodi', 'jurusan.jurusan_id', '=', 'prodi.jurusan_id')
+            ->leftJoin('mahasiswa', 'prodi.prodi_id', '=', 'mahasiswa.prodi_id')
+            ->leftJoin('user', 'mahasiswa.mahasiswa_id', '=', 'user.mahasiswa_id')
+            ->leftJoin('hasil_ujian', 'user.user_id', '=', 'hasil_ujian.user_id')
+            ->groupBy('jurusan.jurusan_id', 'jurusan.jurusan_nama') // Group by ID dan Nama Jurusan
+            ->orderBy('jurusan.jurusan_nama', 'asc')
+            ->get();
 
-        $breadcrumb = (object)[
-            'title' => 'Selamat Datang di SIPINTA👋',
-            'list' => ['Home', 'Dashboard']
-        ];
+        // --- PERBAIKAN UTAMA: Memformat label menjadi multi-baris ---
+        $barChartLabels = $barChartData->pluck('jurusan_nama')->map(function ($label) {
+            // Memecah nama jurusan berdasarkan spasi menjadi sebuah array.
+            // Contoh: "Teknologi Informasi" menjadi ["Teknologi", "Informasi"]
+            // Chart.js akan otomatis merender array ini menjadi beberapa baris.
+            return explode(' ', $label);
+        })->toArray();
 
-        $activeMenu = 'dashboard';
+         $barChartValues = $barChartData->pluck('rata_rata_nilai')->map(function ($value) {
+            return round($value, 2);
+        })->toArray();
 
-        $user = auth()->user();
 
-        // Statistik user
+        // --- DATA UNTUK PIE CHART (TETAP) ---
+        $jumlahLolos = HasilUjianModel::where('status_lulus', 'lulus')->count();
+        $jumlahTidakLolos = HasilUjianModel::where('status_lulus', 'tidak lulus')->count();
+
+        // --- DATA UNTUK KARTU STATISTIK (TETAP) ---
         $jumlah_user = UserModel::count();
         $jumlah_admin = AdminModel::count();
         $jumlah_mahasiswa = MahasiswaModel::count();
         $jumlah_dosen = DosenModel::count();
         $jumlah_tendik = TendikModel::count();
+        $status_menunggu = DetailPendaftaranModel::where('status', 'menunggu')->count();
+        $status_diterima = DetailPendaftaranModel::where('status', 'diterima')->count();
+        $status_ditolak = DetailPendaftaranModel::where('status', 'ditolak')->count();
+        $jumlah_pendaftar = $status_menunggu + $status_diterima + $status_ditolak;
 
-        // Inisialisasi statistik pendaftaran dan hasil ujian
-        $status_menunggu = 0;
-        $status_diterima = 0;
-        $status_ditolak = 0;
-        $jumlah_pendaftar = 0;
-        $jumlah_lolos = 0;
-        $jumlah_tidak_lolos = 0;
-
-        if ($user && $user->role === 'admin') {
-            // Hitung status pendaftaran
-            $status_menunggu = DetailPendaftaranModel::where('status', 'menunggu')->count();
-            $status_diterima = DetailPendaftaranModel::where('status', 'diterima')->count();
-            $status_ditolak = DetailPendaftaranModel::where('status', 'ditolak')->count();
-
-            $jumlah_pendaftar = $status_menunggu + $status_diterima + $status_ditolak;
-
-            // Hitung hasil ujian
-            $jumlah_lolos = HasilUjianModel::where('status_lulus', 'lulus')->count();
-            $jumlah_tidak_lolos = HasilUjianModel::where('status_lulus', 'tidak lulus')->count();
-        }
-
-        // Ambil data pendaftar per bulan (12 bulan) untuk tahun berjalan
-        $currentYear = Carbon::now()->year;
-
-        $pendaftarPerBulan = PendaftaranModel::select(
-            DB::raw('MONTH(created_at) as bulan'),
-            DB::raw('COUNT(*) as total')
-        )
-        ->whereYear('created_at', $currentYear)
-        ->groupBy('bulan')
-        ->orderBy('bulan')
-        ->get();
-
-        // Siapkan array 12 bulan dengan default 0
-        $dataPendaftarPerBulan = array_fill(0, 12, 0);
-
-        foreach ($pendaftarPerBulan as $data) {
-            if ($data->bulan >= 1 && $data->bulan <= 12) {
-                $dataPendaftarPerBulan[$data->bulan - 1] = $data->total;
-            }
-        }
-
-        $informasi = collect(); // Default kosong
-
-        if ($user && in_array($user->role, ['mahasiswa', 'dosen', 'tendik'])) {
-            $informasi = InformasiModel::latest()->get(); // ambil semua informasi, urutkan terbaru dulu
-        }
-
-        // dd($dataPendaftarPerBulan, $jumlah_lolos, $jumlah_tidak_lolos, $user->role);
-        return view('welcome', compact(
-            'breadcrumb',
-            'activeMenu',
-            'jumlah_user',
-            'jumlah_admin',
-            'jumlah_mahasiswa',
-            'jumlah_dosen',
-            'jumlah_tendik',
-            'status_menunggu',
-            'status_diterima',
-            'status_ditolak',
-            'jumlah_pendaftar',
-            'jumlah_lolos',
-            'jumlah_tidak_lolos',
-            'user', // Pastikan $user di-pass untuk cek role di blade
-            'dataPendaftarPerBulan',
-            'informasi'
-        ));
+        // --- MENGEMBALIKAN SEMUA DATA DALAM SATU ARRAY ---
+        return [
+            'barChart' => [
+                'labels' => $barChartLabels,
+                'values' => $barChartValues,
+            ],
+            'pieChartData' => [
+                'lolos' => $jumlahLolos,
+                'tidakLolos' => $jumlahTidakLolos,
+            ],
+            'cardData' => [
+                'jumlah_user' => $jumlah_user,
+                'jumlah_admin' => $jumlah_admin,
+                'jumlah_mahasiswa' => $jumlah_mahasiswa,
+                'jumlah_dosen' => $jumlah_dosen,
+                'jumlah_tendik' => $jumlah_tendik,
+                'jumlah_pendaftar' => $jumlah_pendaftar,
+                'status_menunggu' => $status_menunggu,
+                'status_diterima' => $status_diterima,
+                'status_ditolak' => $status_ditolak,
+                'jumlah_losos' => $jumlahLolos,
+                'jumlah_tidak_lolos' => $jumlahTidakLolos,
+            ],
+            'timestamp' => Carbon::now()->toDateTimeString(),
+        ];
     }
 
-    public function chartDataStream(Request $request)
+    public function index()
+    {
+        $breadcrumb = (object)[
+            'title' => 'Selamat Datang di SIPINTA👋',
+            'list' => ['Home', 'Dashboard']
+        ];
+        $activeMenu = 'dashboard';
+        $user = auth()->user();
+        
+        $dashboardData = $this->getDashboardStatistics();
+
+        $informasi = collect();
+        if ($user && in_array($user->role, ['mahasiswa', 'dosen', 'tendik'])) {
+            $informasi = InformasiModel::latest()->get();
+        }
+        
+        return view('welcome', [
+            'breadcrumb' => $breadcrumb,
+            'activeMenu' => $activeMenu,
+            'user' => $user,
+            'informasi' => $informasi,
+            'jumlah_user' => $dashboardData['cardData']['jumlah_user'],
+            'jumlah_admin' => $dashboardData['cardData']['jumlah_admin'],
+            'jumlah_mahasiswa' => $dashboardData['cardData']['jumlah_mahasiswa'],
+            'jumlah_dosen' => $dashboardData['cardData']['jumlah_dosen'],
+            'jumlah_tendik' => $dashboardData['cardData']['jumlah_tendik'],
+            'status_menunggu' => $dashboardData['cardData']['status_menunggu'],
+            'status_diterima' => $dashboardData['cardData']['status_diterima'],
+            'status_ditolak' => $dashboardData['cardData']['status_ditolak'],
+            'jumlah_pendaftar' => $dashboardData['cardData']['jumlah_pendaftar'],
+            'jumlah_lolos' => $dashboardData['pieChartData']['lolos'],
+            'jumlah_tidak_lolos' => $dashboardData['pieChartData']['tidakLolos'],
+            'barChartLabels' => $dashboardData['barChart']['labels'],
+            'barChartValues' => $dashboardData['barChart']['values'],
+        ]);
+    }
+
+  public function chartDataStream(Request $request)
     {
         $user = auth()->user();
         if (!$user || $user->role !== 'admin') {
             abort(403, 'Unauthorized access to real-time data stream.');
         }
 
-        // Set timeout eksekusi skrip (misalnya 0 untuk tak terbatas, atau nilai tinggi)
         set_time_limit(0);
-        // Abaikan abort oleh user jika koneksi ditutup (penting untuk SSE)
         ignore_user_abort(true);
 
         $response = new StreamedResponse(function () {
-            // Nonaktifkan buffering output PHP di awal loop
-            // Hapus semua buffer output yang mungkin ada sebelum memulai loop SSE
             while (ob_get_level() > 0) {
                 ob_end_clean();
             }
 
-            // Aktifkan buffering output baru untuk SSE
-            // ob_start(); // Tidak perlu ini jika kita langsung flush setiap kali
+            // Variabel untuk melacak kapan terakhir kali data dikirim
+            $lastRun = 0;
+            // Interval pengiriman data dalam detik
+            $interval = 5; 
 
+            // Loop tak terbatas untuk koneksi SSE
             while (true) {
-                // Cek apakah koneksi masih hidup
+                // PERBAIKAN UTAMA 1: Cek apakah koneksi diputus oleh user
+                // Jika ya, langsung hentikan loop tanpa menunggu.
                 if (connection_aborted()) {
-                    break; // Keluar dari loop jika koneksi terputus
+                    break;
                 }
+                
+                // PERBAIKAN UTAMA 2: Hanya ambil data dan kirim jika sudah waktunya
+                // Ini mencegah query database yang berlebihan setiap detik.
+                if ((time() - $lastRun) >= $interval) {
+                    $realtimeData = $this->getDashboardStatistics();
+                    echo "data: " . json_encode($realtimeData) . "\n\n";
 
-                // --- Ambil Data Statistik TERBARU dari Database ---
-                $currentYear = Carbon::now()->year;
-                $pendaftarPerBulan = PendaftaranModel::select(
-                    DB::raw('MONTH(created_at) as bulan'),
-                    DB::raw('COUNT(*) as total')
-                )
-                ->whereYear('created_at', $currentYear)
-                ->groupBy('bulan')
-                ->orderBy('bulan')
-                ->get();
-
-                $dataPendaftarPerBulan = array_fill(0, 12, 0);
-                foreach ($pendaftarPerBulan as $data) {
-                    if ($data->bulan >= 1 && $data->bulan <= 12) {
-                        $dataPendaftarPerBulan[$data->bulan - 1] = $data->total;
+                    // Pastikan data langsung terkirim
+                    if (ob_get_level() > 0) {
+                        ob_flush();
                     }
+                    flush();
+
+                    // Update waktu terakhir pengiriman data
+                    $lastRun = time();
                 }
 
-                $jumlahLolos = HasilUjianModel::where('status_lulus', 'lulus')->count();
-                $jumlahTidakLolos = HasilUjianModel::where('status_lulus', 'tidak lulus')->count();
-
-                $jumlah_user_realtime = UserModel::count();
-                $jumlah_admin_realtime = AdminModel::count();
-                $jumlah_mahasiswa_realtime = MahasiswaModel::count();
-                $jumlah_dosen_realtime = DosenModel::count();
-                $jumlah_tendik_realtime = TendikModel::count();
-
-                $status_menunggu_realtime = DetailPendaftaranModel::where('status', 'menunggu')->count();
-                $status_diterima_realtime = DetailPendaftaranModel::where('status', 'diterima')->count();
-                $status_ditolak_realtime = DetailPendaftaranModel::where('status', 'ditolak')->count();
-                $jumlah_pendaftar_realtime = $status_menunggu_realtime + $status_diterima_realtime + $status_ditolak_realtime;
-
-
-                $realtimeData = [
-                    'lineChartData' => $dataPendaftarPerBulan,
-                    'pieChartData' => [
-                        'lolos' => $jumlahLolos,
-                        'tidakLolos' => $jumlahTidakLolos,
-                    ],
-                    'cardData' => [
-                        'jumlah_user' => $jumlah_user_realtime,
-                        'jumlah_admin' => $jumlah_admin_realtime,
-                        'jumlah_mahasiswa' => $jumlah_mahasiswa_realtime,
-                        'jumlah_dosen' => $jumlah_dosen_realtime,
-                        'jumlah_tendik' => $jumlah_tendik_realtime,
-                        'jumlah_pendaftar' => $jumlah_pendaftar_realtime,
-                        'status_menunggu' => $status_menunggu_realtime,
-                        'status_diterima' => $status_diterima_realtime,
-                        'status_ditolak' => $status_ditolak_realtime,
-                        'jumlah_lolos' => $jumlahLolos,
-                        'jumlah_tidak_lolos' => $jumlahTidakLolos,
-                    ],
-                    'timestamp' => Carbon::now()->toDateTimeString(),
-                ];
-
-                echo "data: " . json_encode($realtimeData) . "\n\n";
-
-                // Flush output buffer agar data segera terkirim ke browser
-                // Ini mungkin perlu disesuaikan tergantung pada konfigurasi web server (Apache/Nginx)
-                if (ob_get_level() > 0) {
-                    ob_flush();
-                }
-                flush();
-
-                // Tunggu beberapa detik sebelum mengirim data lagi
-                sleep(5); // Kirim data setiap 5 detik. Sesuaikan sesuai kebutuhan.
+                // PERBAIKAN UTAMA 3: Tidur hanya 1 detik
+                // Ini membuat loop lebih sering memeriksa `connection_aborted()`
+                // sehingga server bisa lebih cepat tahu jika user meninggalkan halaman.
+                sleep(1);
             }
         });
 
         $response->headers->set('Content-Type', 'text/event-stream');
         $response->headers->set('Cache-Control', 'no-cache');
         $response->headers->set('Connection', 'keep-alive');
-        $response->headers->set('X-Accel-Buffering', 'no'); // Penting untuk Nginx
+        $response->headers->set('X-Accel-Buffering', 'no');
 
         return $response;
     }
