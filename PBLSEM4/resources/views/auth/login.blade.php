@@ -51,6 +51,15 @@
         height: 30px;
         }
 
+        .description {
+            text-align: center;
+            color: #6c757d;
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.4;
+        }
+
+
         .login-box img {
             height: 60px;
             margin-bottom: 1.5rem;
@@ -72,7 +81,17 @@
         .form-button { width: 100%; background: #0d6efd; color: white; padding: 0.75rem; font-weight: 600; border: none; border-radius: 6px; cursor: pointer; margin-top: 1rem; }
         .form-links { text-align: center; margin-top: 1rem; }
         .form-links a { color: #0d6efd; text-decoration: none; font-size: 0.9rem; margin: 0 5px; }
-        .footer { position: absolute; bottom: 1rem; font-size: 0.75rem; color: #999; }
+        .footer { 
+            position: static;
+            margin-top: 2.5rem;
+            font-size: 0.75rem; 
+            color: #999; 
+            text-align: center;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+        }
     </style>
 </head>
 <body>
@@ -90,10 +109,14 @@
     <div class="right">
         <div class="login-box">
             <img src="{{ asset('img/logo_sipinta.png') }}" alt="tcToeic Logo">
+
+            <div class="description">
+                Masukkan username dan password Anda untuk login ke Dashboard Sipinta.
+            </div>
             <form id="loginForm">
                 <div class="form-group">
                     <label for="username">Username</label>
-                    <input type="text" id="username" name="username" placeholder="Ketik Nama Pengguna" required>
+                    <input type="text" id="username" name="username" placeholder="Ketik Nama Pengguna" required autofocus>
                 </div>
 
                 <div class="form-group">

@@ -42,7 +42,7 @@ class ResetPasswordMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'password.reset-passwordmail',
+            view: 'auth.reset-passwordmail',
             with: [
                 'user' => $this->user,
                 'resetUrl' => url('/password/reset/' . $this->token . '?email=' . urlencode($this->user->email)),

@@ -14,7 +14,7 @@
     <style>
         * { margin: 0; padding: 0; font-family: 'Inter', sans-serif; box-sizing: border-box; }
         
-        body { display: flex; height: 100vh; background-color: #ffffff; }
+        body { display: flex; height: 100vh; background-color: #ffffff; flex-wrap: nowrap; overflow-y: hidden;}
         .left {
             flex: 1;
             background: url('{{ asset('img/gedung_polinema1.jpg') }}') no-repeat center center;
@@ -32,7 +32,6 @@
         .reset-box {
             width: 100%;
             max-width: 400px;
-            margin-top: -30px;
             text-align: center;
         }
 
@@ -58,7 +57,6 @@
             display: block;
             margin-left: auto;
             margin-right: auto;
-            margin-top: -30px;
         }
 
         .reset-title {
@@ -169,10 +167,10 @@
         }
 
         .footer { 
-            position: absolute; 
-            bottom: 1rem; 
-            font-size: 0.75rem; 
-            color: #999; 
+            margin-top: 2.5rem;
+      font-size: 0.75rem;
+      color: #999;
+      text-align: center;
         }
 
         .alert {

@@ -594,16 +594,8 @@ class UserController extends Controller
 
     public function showForgotPasswordForm()
 {
-    $breadcrumb = (object) [
-        'title' => 'Lupa Password',
-        'list' => ['Home', 'Lupa Password'],
-    ];
 
-    $page = (object) [
-        'title' => 'Reset Password Anda',
-    ];
-
-    return view('auth.forgot-password', compact('breadcrumb', 'page'));
+    return view('auth.forgot-password');
 }
 
 /**
@@ -670,7 +662,7 @@ public function sendResetLinkEmail(Request $request)
  */
 public function showResetPasswordForm($token)
 { 
-    return view('auth.reset-password');
+    return view('auth.reset-password', ['token' => $token]);
 }
 
 /**
