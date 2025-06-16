@@ -37,7 +37,7 @@
             <form action="{{ route('panduan.admin.upload') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="form-group">
-                    <label for="panduan_pdf">Unggah/Ganti File Panduan (PDF)</label>
+                    <label for="panduan_pdf">Ganti File Panduan (PDF)</label>
                     <div class="input-group">
                         <div class="custom-file">
                             <input type="file" class="custom-file-input" id="panduan_pdf" name="panduan_pdf" accept="application/pdf">
@@ -55,7 +55,7 @@
                         </small>
                     @endif
                 </div>
-                <button type="submit" class="btn btn-primary mt-3">Unggah/Ganti Panduan</button>
+                <button type="submit" class="btn btn-primary mt-3">Ganti File Panduan</button>
             </form>
             <hr class="my-4"> {{-- Garis pemisah --}}
 

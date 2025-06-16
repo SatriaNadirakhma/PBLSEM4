@@ -12,7 +12,7 @@ class SuratModel extends Model
 
     protected $table = 'surat'; // Pastikan nama tabelnya 'surat'
     protected $primaryKey = 'surat_id'; // Tentukan primary key kustom
-    protected $fillable = ['file_path', 'file_name', 'judul_surat'];
+     protected $fillable = ['surat_id', 'file_path', 'file_name', 'judul_surat']; 
 
     protected $appends = ['file_url'];
 

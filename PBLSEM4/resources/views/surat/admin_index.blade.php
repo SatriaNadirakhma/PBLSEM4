@@ -1,4 +1,4 @@
-@extends('layouts.template')
+@extends('layouts.template') {{-- Sesuaikan dengan layout AdminLTE Anda --}}
 
 @section('content')
 
@@ -6,12 +6,9 @@
         <div class="card-header">
             <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
                 <h3 class="card-title">
-                    <i class="fas fa-envelope"></i>
+                    <i class="fas fa-file-pdf"></i>
                     <b>{{ $page->title }}</b>
                 </h3>
-                <a href="{{ route('surat.admin.create') }}" class="btn btn-sm btn-primary mt-2 mt-md-0">
-                    <i class="fas fa-plus"></i> Tambah Surat Baru
-                </a>
             </div>
         </div>
         <div class="card-body">
@@ -37,39 +34,62 @@
                 </div>
             @endif
 
-            <div class="table-responsive">
-                <table class="table table-bordered table-hover table-striped">
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Judul Surat</th>
-                            <th>Nama File</th>
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse ($surats as $surat)
-                            <tr>
-                                <td>{{ $loop->iteration }}</td>
-                                <td>{{ $surat->judul_surat }}</td>
-                                <td>{{ $surat->file_name }}</td>
-                                <td>
-                                    <a href="{{ route('surat.show', $surat->surat_id) }}" class="btn btn-info btn-sm" target="_blank" title="Lihat"><i class="fas fa-eye"></i></a>
-                                    <form action="{{ route('surat.admin.destroy', $surat->surat_id) }}" method="POST" style="display:inline-block;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus surat ini?')" title="Hapus"><i class="fas fa-trash"></i></button>
-                                    </form>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="4" class="text-center">Tidak ada surat yang tersedia.</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
+            <form action="{{ route('surat.admin.upload') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="form-group">
+                    <label for="surat_pdf">Ganti File Surat Keterangan (PDF)</label>
+                    <div class="input-group">
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="surat_pdf" name="surat_pdf" accept="application/pdf">
+                            <label class="custom-file-label" for="surat_pdf">Pilih file PDF</label>
+                        </div>
+                    </div>
+                    @if ($suratKeterangan)
+                        <small class="form-text text-muted mt-2">
+                            File surat keterangan saat ini: <strong>{{ $suratKeterangan->file_name }}</strong>.
+                            Anda bisa menggantinya dengan mengunggah file baru.
+                        </small>
+                    @else
+                        <small class="form-text text-muted mt-2">
+                            Belum ada file surat keterangan yang diunggah.
+                        </small>
+                    @endif
+                    <small class="form-text text-muted">Ukuran file maksimal 10MB.</small>
+                </div>
+                <button type="submit" class="btn btn-primary mt-3">Ganti File Surat Keterangan</button>
+            </form>
+            <hr class="my-4"> {{-- Garis pemisah --}}
+
+            {{-- Bagian PRATINJAU PDF --}}
+            @if ($suratKeterangan) {{-- Cukup periksa jika ada data suratKeterangan --}}
+                <div class="mt-4">
+                    <h5><i class="fas fa-eye"></i> Pratinjau Surat Keterangan</h5>
+                    <div class="embed-responsive embed-responsive-16by9" style="height: 600px;">
+                        {{-- Menggunakan route('surat.show') dengan surat_id = 1 --}}
+                        <embed class="embed-responsive-item" src="{{ route('surat.show', ['surat_id' => 1]) }}" type="application/pdf" width="100%" height="100%">
+                        <p>Browser Anda tidak mendukung preview PDF. Anda bisa <a href="{{ route('surat.show', ['surat_id' => 1]) }}" target="_blank">klik di sini untuk melihat PDF di tab baru</a>.</p>
+                    </div>
+                </div>
+            @else
+                <div class="mt-4 alert alert-info">
+                    <i class="fas fa-info-circle"></i> Belum ada surat keterangan yang diunggah untuk ditampilkan pratinjaunya.
+                </div>
+            @endif
+
+        </div> {{-- End card-body --}}
+    </div> {{-- End card --}}
 @endsection
+
+@push('js')
+<script>
+    // Agar nama file muncul di label input file
+    document.addEventListener('DOMContentLoaded', function() {
+        const fileInput = document.getElementById('surat_pdf');
+        fileInput.addEventListener('change', function(e) {
+            const fileName = e.target.files[0] ? e.target.files[0].name : 'Pilih file PDF';
+            const nextSibling = e.target.nextElementSibling;
+            nextSibling.innerText = fileName;
+        });
+    });
+</script>
+@endpush
