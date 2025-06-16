@@ -44,7 +44,7 @@ class HasilPesertaController extends Controller
     /**
      * Metode baru untuk menampilkan pratinjau surat keterangan di tab baru.
      */
-    public function SuratKeterangan() // Mengubah nama metode
+    public function PreviewSuratKeterangan() // Mengubah nama metode
     {
         $userId = Auth::id();
         $hasilPeserta = HasilUjianModel::where('user_id', $userId)->get();

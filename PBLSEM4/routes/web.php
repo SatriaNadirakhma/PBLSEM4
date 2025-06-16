@@ -257,18 +257,16 @@ Route::prefix('biodata/mahasiswa')->name('biodata.mahasiswa.')->middleware(['aut
     
     // Route untuk semua role melihat panduan (di dalam grup middleware 'auth')
     Route::get('/panduan', [PanduanController::class, 'show'])->name('panduan.show');
-    Route::get('/surat/{surat}', [SuratController::class, 'show'])->name('surat.show'); // Menggunakan route model binding
+    Route::get('/surat/{surat_id}', [SuratController::class, 'show'])->name('surat.show'); // Ubah parameter ke {surat_id}
 
    // Route untuk admin KELOLA PANDUAN - SURAT
     Route::prefix('kelola')->middleware(['role:admin'])->group(function () {
         Route::get('/panduan', [PanduanController::class, 'adminIndex'])->name('panduan.admin.index'); // <-- Ini sudah benar
         Route::post('/panduan/upload', [PanduanController::class, 'upload'])->name('panduan.admin.upload');
 
-        //route SURAT
+        // === Rute untuk admin mengelola SATU surat keterangan ===
         Route::get('/surat', [SuratController::class, 'adminIndex'])->name('surat.admin.index');
-        Route::get('/surat/create', [SuratController::class, 'create'])->name('surat.admin.create');
-        Route::post('/surat', [SuratController::class, 'store'])->name('surat.admin.store');
-        Route::delete('/surat/{surat}', [SuratController::class, 'destroy'])->name('surat.admin.destroy');
+        Route::post('/surat/upload', [SuratController::class, 'upload'])->name('surat.admin.upload');
     });
 
     // Route untuk user peserta melihat daftar surat
@@ -295,7 +293,7 @@ Route::prefix('biodata/mahasiswa')->name('biodata.mahasiswa.')->middleware(['aut
     Route::prefix('hasilPeserta')->group(function () {
         Route::get('/', [HasilPesertaController::class, 'index'])->name('hasilPeserta.index');
         // Ubah rute ini untuk menampilkan pratinjau surat keterangan
-        Route::get('/surat-keterangan', [HasilPesertaController::class, 'SuratKeterangan'])->name('hasilPeserta.SuratKeterangan');    
+        Route::get('/Surat Keterangan', [HasilPesertaController::class, 'PreviewSuratKeterangan'])->name('hasilPeserta.PreviewSuratKeterangan');
 
     });
 

@@ -20,7 +20,7 @@ class PanduanController extends Controller
         ];
 
         $page = (object) [
-            'title' => 'Kelola file panduan yang akan diakses oleh peserta.',
+            'title' => 'Kelola file panduan TOEIC yang akan diakses oleh peserta.',
         ];
 
 
