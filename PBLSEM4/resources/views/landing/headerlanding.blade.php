@@ -10,8 +10,8 @@
       <nav id="navmenu" class="navmenu">
         <ul>
           <li><a href="#hero" class="active">Halaman Awal</a></li>
-          <li><a href="#about">Tentang Kami</a></li>
           <li><a href="#overview">Overview</a></li>
+           <li><a href="#about">Tentang Kami</a></li>
           <li><a href="#faq">FAQ</a></li>
         </ul>
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>

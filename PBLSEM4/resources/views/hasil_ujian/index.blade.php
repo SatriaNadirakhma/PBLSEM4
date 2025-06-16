@@ -6,18 +6,22 @@
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
             <h3 class="card-title mb-2 mb-md-0">{{ $page->title }}</h3>
             <div class="btn-toolbar flex-wrap gap-2" role="toolbar" aria-label="Aksi Hasil Ujian" style="gap: 0.50rem;">
-                <a href="{{ url('/hasil_ujian/import') }}" class="btn btn-sm shadow-sm rounded-pill"
-                    style="background-color: #6f42c1; color: white; font-size: 0.95rem;">
-                    <i class="fa fa-upload me-1"></i> Impor Excel
-                </a>
+                
+            <button onclick="modalAction('{{ url('/hasil_ujian/import') }}')" class="btn btn-sm shadow-sm rounded-pill"
+                        style="background-color: #6f42c1; color: white; font-size: 0.95rem;">
+                        <i class="fa fa-upload me-1"></i> Impor Excel
+                    </button>
+
                 <a href="{{ url('/hasil_ujian/export_excel') }}" class="btn btn-sm shadow-sm rounded-pill"
                     style="background-color: #004085; color: white; font-size: 0.95rem;">
                     <i class="fa fa-file-excel me-1"></i> Ekspor Excel
                 </a>
+
                 <a href="{{ url('/hasil_ujian/export_pdf') }}" class="btn btn-sm shadow-sm rounded-pill"
                     style="background-color: #20c997; color: black; font-size: 0.95rem;">
                     <i class="fa fa-file-pdf me-1"></i> Ekspor PDF
                 </a>
+                
                 {{-- Ubah tombol ini agar memicu modalAction --}}
                 <button type="button" onclick="modalAction('{{ url('/hasil_ujian/create_ajax') }}')"
                     class="btn btn-sm shadow-sm rounded-pill"
@@ -64,17 +68,15 @@
 </div>
 
 {{-- Pastikan elemen modalnya ada di halaman utama ini --}}
-<div id="modal-master" class="modal fade" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-hidden="true"></div>
+   <div id="myModal" class="modal fade animate shake" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" data-width="75%" aria-hidden="true"></div>
 @endsection
 
 @push('js')
 <script>
     // Fungsi untuk memuat konten modal
-    function modalAction(url = '') {
-        $('#modal-master').load(url, function () {
-            $('#modal-master').modal('show');
-            // PENTING: Inisialisasi Select2 dan Validasi FORM SETELAH KONTEN MODAL DIMUAT
-            initModalFormScripts();
+   function modalAction(url = '') {
+        $('#myModal').load(url, function () {
+            $('#myModal').modal('show');
         });
     }
 

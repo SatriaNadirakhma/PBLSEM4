@@ -389,135 +389,116 @@ class HasilUjianController extends Controller
         return view('hasil_ujian.import');
     }
 
-    public function import_ajax(Request $request)
-    {
-        if ($request->ajax() || $request->wantsJson()) {
-            $rules = [
-                'file_hasil_ujian' => ['required', 'mimes:xlsx', 'max:2025']
-            ];
+public function import_ajax(Request $request)
+{
+    if ($request->ajax() || $request->wantsJson()) {
+        $rules = [
+            'file_hasil_ujian' => ['required', 'mimes:xlsx', 'max:2025']
+        ];
 
-            $validator = Validator::make($request->all(), $rules);
-            if ($validator->fails()) {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Validasi Gagal',
-                    'msgField' => $validator->errors()
-                ]);
-            }
-
-            try {
-                $file = $request->file('file_hasil_ujian');
-                $reader = IOFactory::createReader('Xlsx');
-                $reader->setReadDataOnly(true);
-                $spreadsheet = $reader->load($file->getRealPath());
-                $sheet = $spreadsheet->getActiveSheet();
-                $data = $sheet->toArray(null, false, true, true);
-
-                // Validasi header
-                $expectedHeaders = ['Nama Peserta', 'Jadwal', 'Nilai Listening', 'Nilai Reading', 'Nilai Total', 'Status Lulus'];
-                $actualHeaders = array_map('trim', $data[1]);
-                if ($actualHeaders !== $expectedHeaders) {
-                    return response()->json([
-                        'status' => false,
-                        'message' => 'Format header file tidak sesuai dengan template'
-                    ]);
-                }
-
-                $insert = [];
-                $failedRows = [];
-
-                if (count($data) > 2) { // Header + minimal 1 data
-                    for ($baris = 2; $baris <= count($data); $baris++) {
-                        $value = $data[$baris];
-                        if (empty($value['A'])) continue; // Skip baris kosong
-
-                        $nama = trim($value['A']);
-
-                        // Cari user berdasarkan nama di relasi
-                        $user = UserModel::whereHas('mahasiswa', function ($q) use ($nama) {
-                            $q->where('mahasiswa_nama', 'like', '%' . $nama . '%');
-                        })->orWhereHas('dosen', function ($q) use ($nama) {
-                            $q->where('dosen_nama', 'like', '%' . $nama . '%');
-                        })->orWhereHas('tendik', function ($q) use ($nama) {
-                            $q->where('tendik_nama', 'like', '%' . $nama . '%');
-                        })->first();
-
-                        if (!$user) {
-                            $failedRows[] = "Baris $baris: User '$nama' tidak ditemukan";
-                            continue;
-                        }
-
-                        // Parse tanggal
-                        $tanggal = null;
-                        try {
-                            if (is_numeric($value['B'])) {
-                                $tanggal = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($value['B'])->format('Y-m-d');
-                            } else {
-                                $tanggal = \Carbon\Carbon::parse($value['B'])->format('Y-m-d');
-                            }
-                        } catch (\Exception $e) {
-                            $failedRows[] = "Baris $baris: Format tanggal '$value[B]' salah";
-                            continue;
-                        }
-
-                        // Cari jadwal_id
-                        $jadwalId = JadwalModel::whereDate('tanggal_pelaksanaan', $tanggal)->value('jadwal_id');
-                        if (!$jadwalId) {
-                            $failedRows[] = "Baris $baris: Jadwal untuk tanggal '$tanggal' tidak ditemukan";
-                            continue;
-                        }
-
-                        $listening = (int) ($value['C'] ?? 0);
-                        $reading = (int) ($value['D'] ?? 0);
-                        $total = (int) ($value['E'] ?? 0);
-                        $statusLulus = strtoupper(trim($value['F'] ?? '')) === 'LULUS' ? 'Lulus' : 'Tidak Lulus';
-
-                        // Validasi nilai
-                        if ($listening < 0 || $listening > 495 || $reading < 0 || $reading > 495 || $total != ($listening + $reading)) {
-                            $failedRows[] = "Baris $baris: Nilai tidak valid (Listening: $listening, Reading: $reading, Total: $total)";
-                            continue;
-                        }
-
-                        $insert[] = [
-                            'user_id' => $user->id,
-                            'jadwal_id' => $jadwalId,
-                            'nilai_listening' => $listening,
-                            'nilai_reading' => $reading,
-                            'nilai_total' => $total,
-                            'status_lulus' => $statusLulus,
-                            'created_at' => now(),
-                            'updated_at' => now(),
-                        ];
-                    }
-
-                    if (!empty($insert)) {
-                        HasilUjianModel::insert($insert); // Gunakan insert biasa untuk memastikan semua data masuk
-                        $successMessage = 'Data hasil ujian berhasil diimpor. ';
-                        if (!empty($failedRows)) {
-                            $successMessage .= 'Beberapa baris gagal: ' . implode('; ', $failedRows);
-                        }
-                        return response()->json([
-                            'status' => true,
-                            'message' => $successMessage
-                        ]);
-                    }
-                }
-
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Tidak ada data yang valid untuk diimpor. ' . (!empty($failedRows) ? 'Detail gagal: ' . implode('; ', $failedRows) : '')
-                ]);
-            } catch (\Throwable $e) {
-                Log::error('Import Error: ' . $e->getMessage());
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Import gagal: ' . $e->getMessage()
-                ]);
-            }
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Validasi Gagal',
+                'msgField' => $validator->errors()
+            ]);
         }
 
-        return redirect('/');
+        try {
+            $file = $request->file('file_hasil_ujian');
+            $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReader('Xlsx');
+            $reader->setReadDataOnly(true);
+            $spreadsheet = $reader->load($file->getRealPath());
+            $sheet = $spreadsheet->getActiveSheet();
+            $data = $sheet->toArray(null, false, true, true);
+
+            $insert = [];
+            $failedRows = [];
+
+            foreach ($data as $rowNumber => $row) {
+                if ($rowNumber == 1) continue; // Header
+                if (empty($row['A'])) continue; // Baris kosong
+
+                $nama = trim($row['A']);
+                $user = UserModel::whereHas('mahasiswa', function ($q) use ($nama) {
+                    $q->where('mahasiswa_nama', 'like', '%' . $nama . '%');
+                })->orWhereHas('dosen', function ($q) use ($nama) {
+                    $q->where('dosen_nama', 'like', '%' . $nama . '%');
+                })->orWhereHas('tendik', function ($q) use ($nama) {
+                    $q->where('tendik_nama', 'like', '%' . $nama . '%');
+                })->first();
+
+                if (!$user) {
+                    $failedRows[] = "Baris $rowNumber: User '$nama' tidak ditemukan";
+                    continue;
+                }
+
+                try {
+                    if (is_numeric($row['B'])) {
+                        $tanggal = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['B'])->format('Y-m-d');
+                    } else {
+                        $tanggal = \Carbon\Carbon::parse($row['B'])->format('Y-m-d');
+                    }
+                } catch (\Exception $e) {
+                    $failedRows[] = "Baris $rowNumber: Format tanggal salah";
+                    continue;
+                }
+
+                $jadwalId = JadwalModel::whereDate('tanggal_pelaksanaan', $tanggal)->value('jadwal_id');
+                if (!$jadwalId) {
+                    $failedRows[] = "Baris $rowNumber: Jadwal tanggal '$tanggal' tidak ditemukan";
+                    continue;
+                }
+
+                $listening = (int) ($row['C'] ?? 0);
+                $reading = (int) ($row['D'] ?? 0);
+                $total = (int) ($row['E'] ?? 0);
+                $statusLulus = strtoupper(trim($row['F'] ?? '')) === 'LULUS' ? 'lulus' : 'tidak lulus';
+                $catatan = $row['G'] ?? null;
+
+                if ($listening < 0 || $listening > 495 || $reading < 0 || $reading > 495 || $total != ($listening + $reading)) {
+                    $failedRows[] = "Baris $rowNumber: Nilai tidak valid";
+                    continue;
+                }
+
+               $insert[] = [
+    'nilai_listening' => $listening,
+    'nilai_reading' => $reading,
+    'nilai_total' => $total,
+    'status_lulus' => $statusLulus,
+    'jadwal_id' => $jadwalId,
+    'user_id' => $user->user_id,
+];
+
+            }
+
+            if (!empty($insert)) {
+                HasilUjianModel::insert($insert);
+                $successMessage = 'Data berhasil diimpor.';
+                if (!empty($failedRows)) {
+                    $successMessage .= ' Beberapa baris gagal: ' . implode('; ', $failedRows);
+                }
+                return response()->json([
+                    'status' => true,
+                    'message' => $successMessage
+                ]);
+            } else {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Tidak ada data yang berhasil diimpor.'
+                ]);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage()
+            ]);
+        }
     }
+}
+
+
 
     public function download_template()
     {
