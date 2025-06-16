@@ -73,9 +73,9 @@ class UserModel extends Authenticatable
     }
 
     public function hasil_ujian()
-    {
-        return $this->belongsTo(HasilUjianModel::class, 'hasil_id');
-    }
+{
+    return $this->hasMany(HasilUjianModel::class, 'user_id');
+}
 
 
 }
