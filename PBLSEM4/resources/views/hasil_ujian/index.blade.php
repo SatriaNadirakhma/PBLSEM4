@@ -68,15 +68,18 @@
 </div>
 
 {{-- Pastikan elemen modalnya ada di halaman utama ini --}}
-   <div id="myModal" class="modal fade animate shake" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" data-width="75%" aria-hidden="true"></div>
+<div id="modal-master" class="modal fade" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-hidden="true"></div>
 @endsection
 
 @push('js')
 <script>
     // Fungsi untuk memuat konten modal
-   function modalAction(url = '') {
-        $('#myModal').load(url, function () {
-            $('#myModal').modal('show');
+   function modalAction(url = '', init = true) {
+        $('#modal-master').load(url, function () {
+            $('#modal-master').modal('show');
+            if (init) {
+                initModalFormScripts();
+            }
         });
     }
 
