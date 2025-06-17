@@ -174,7 +174,6 @@ class HasilUjianController extends Controller
         HasilUjianModel::create([
             'user_id' => $request->user_id,
             'jadwal_id' => $request->jadwal_id,
-
             'nilai_listening' => $listening,
             'nilai_reading' => $reading,
             'nilai_total' => $total,

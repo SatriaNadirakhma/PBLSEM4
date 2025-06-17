@@ -11,9 +11,8 @@
         <ul>
 <li><a href="{{ route('landingpage') }}#hero">Halaman Awal</a></li>
   <li><a href="#body" class="active">Tentang Kami</a></li>
-  <li><a href="{{ route('landingpage') }}#faq">FAQ</a></li>
-  <li><a href="{{ route('landingpage') }}#benefit">Benefit</a></li>
-  <li><a href="{{ route('landingpage') }}#team">Team</a></li>
+  <li><a href="#benefit">Keuntungan</a></li>
+  <li><a href="#team">Tim</a></li>
 </ul>
 
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>

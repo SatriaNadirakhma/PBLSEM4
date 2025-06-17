@@ -104,7 +104,7 @@
 
         <!-- Tombol di bawah teks, rata kanan -->
         <div class="text-end mt-3">
-          <a href="{{ route('aboutpage') }}#body" class="btn-rounded-blue">Tentang Kami</a>
+          <a href="{{ route('aboutpage') }}#body" class="btn-rounded-blue">Selengkapnya</a>
         </div>
       </div>
   

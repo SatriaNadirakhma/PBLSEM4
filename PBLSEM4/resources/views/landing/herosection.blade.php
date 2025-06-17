@@ -1,5 +1,26 @@
 <main class="main">
 
+<style>
+ .btn-gradient {
+  display: inline-block;
+  padding: 12px 24px;
+  background: linear-gradient(to right, #007bff, #1e90ff); /* gradasi biru */
+  color: white;
+  text-decoration: none;
+  border: none;
+  border-radius: 10000px; /* bulat penuh */
+  font-weight: bold;
+  font-size: 16px;
+  font-family: sans-serif;
+  transition: opacity 0.3s ease;
+}
+
+.btn-gradient:hover {
+  opacity: 0.9;
+}
+
+  </style>
+
     <!-- Hero Section -->
     <section id="hero" class="hero section">
 
@@ -16,7 +37,7 @@
             <p class="hero-description mb-4">Peramban Internet untuk Kemudahan Mahasiswa dalam Mendaftar TOEIC di Civitas Akademika Politeknik Negeri Malang.</p>
 
             <div class="cta-wrapper">
-              <a href="/login" class="btn btn-primary">Masuk Sekarang!</a>
+             <a href="/login" class="btn-gradient">Masuk Sekarang!</a>
             </div>
           </div>
 
