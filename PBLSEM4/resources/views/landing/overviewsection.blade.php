@@ -39,9 +39,9 @@
       <!-- Kolom Foto -->
       <div class="col-md-4 position-relative d-flex align-items-end " style="padding-bottom: 10px;">
         <!-- Lingkaran & Foto -->
-        <div style="width: 360px; height: 360px; border-radius: 50%; border: 12px solid white; background-color: white; position: relative;">
+        <div style="width: 430px; height: 400px; border-radius: 50%; border: 12px solid white; background-color: white; position: relative; left: -25%;">
         <img src="{{ asset('img/atiqah.png') }}" alt="Foto Dosen"
-     style="width: 320px; height: 440px; object-fit: cover; border-radius: 12px; position: absolute; top: 55%; left: 50%; transform: translate(-50%, -50%);">
+     style="width: 410px; height: 580px; object-fit: cover; border-radius: 12px; position: absolute; top: 55%; left: 85%; transform: translate(-85%, -50%);">
 
         </div>
 
@@ -59,21 +59,32 @@
       
 </div>
       <!-- Kolom Teks -->
-      <div class="col-md-8 d-flex flex-column justify-content-center text-white">
-        <div class="mb-2">
-          <span class="badge bg-white text-primary" style="font-size: 1.1rem;">● Overview</span>
-        </div>
-       <h4 class="fw-bold text-white">Selamat datang di Sistem Informasi Pendaftaran TOEIC Politeknik Negeri Malang!</h4>
-        <p style="text-align: justify;">
-          <strong>UPA Bahasa</strong> sebagai unit pelaksana akademik yang bertanggung jawab dalam pengembangan kemampuan bahasa asing sivitas akademika, terus berupaya memberikan layanan terbaik dalam mendukung kesiapan mahasiswa menghadapi tantangan global. Salah satu bentuk komitmen tersebut adalah melalui penyelenggaraan tes TOEIC (Test of English for International Communication) secara berkala. Dengan adanya sistem informasi ini, kami berharap proses pendaftaran TOEIC menjadi lebih mudah, cepat, dan transparan.
-        </p>
-        <p style="text-align: justify;">
-          Mahasiswa dapat melakukan pendaftaran, melihat jadwal tes, serta memantau status pendaftaran secara daring kapan saja dan di mana saja. Kami mengajak seluruh mahasiswa untuk memanfaatkan fasilitas ini sebaik mungkin sebagai bagian dari persiapan menghadapi dunia kerja maupun studi lanjut.
-        </p>
-        <p style="text-align: justify;">
-          Terima kasih atas kepercayaan dan partisipasi Anda. Mari bersama kita tingkatkan kompetensi bahasa untuk masa depan yang lebih baik.
-        </p>
-      </div>
+<div class="col-md-8 d-flex flex-column justify-content-center text-white">
+  <div class="mb-2">
+    <span class="badge bg-white text-primary" style="font-size: 1.1rem;">● Overview</span>
+  </div>
+
+  <h4 class="fw-bold text-white">Selamat datang di Sistem Informasi Pendaftaran TOEIC Politeknik Negeri Malang!</h4>
+
+  <p style="text-align: justify;">
+    <strong>UPA Bahasa</strong> sebagai unit pelaksana akademik yang bertanggung jawab dalam pengembangan kemampuan bahasa asing sivitas akademika, terus berupaya memberikan layanan terbaik dalam mendukung kesiapan mahasiswa menghadapi tantangan global.
+     <span class="collapse" id="moreText">
+      Salah satu bentuk komitmen tersebut adalah melalui penyelenggaraan tes TOEIC (Test of English for International Communication) secara berkala. Dengan adanya sistem informasi ini, kami berharap proses pendaftaran TOEIC menjadi lebih mudah, cepat, dan transparan.
+      Mahasiswa dapat melakukan pendaftaran, melihat jadwal tes, serta memantau status pendaftaran secara daring kapan saja dan di mana saja. Kami mengajak seluruh mahasiswa untuk memanfaatkan fasilitas ini sebaik mungkin sebagai bagian dari persiapan menghadapi dunia kerja maupun studi lanjut.
+      Terima kasih atas kepercayaan dan partisipasi Anda. Mari bersama kita tingkatkan kompetensi bahasa untuk masa depan yang lebih baik.
+    </span>
+    <!-- Tombol Selengkapnya di tengah paragraf -->
+    <div class="text-center my-2">
+      <a class="text-white" data-bs-toggle="collapse" href="#moreText" role="button" aria-expanded="false" aria-controls="moreText" style="cursor: pointer; text-decoration: underline;">
+         baca selengkapnya ▼
+      </a>
+    </div>
+
+  
+  </p>
+</div>
+
+
 
     </div>
   </div>

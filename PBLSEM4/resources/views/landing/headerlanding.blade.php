@@ -1,5 +1,27 @@
 <header id="header" class="header d-flex align-items-center fixed-top bg-white">
-    <div class="container position-relative d-flex align-items-center justify-content-between">
+    <style>
+     .btn-gradient {
+  display: inline-block;
+  padding: 12px 24px;
+  background: linear-gradient(to right, #007bff, #1e90ff);
+  color: white;
+  text-decoration: none;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 16px;
+  font-family: sans-serif;
+  transition: background 0.3s ease; /* hanya transisi background */
+}
+
+.btn-gradient:hover {
+  background: linear-gradient(to right, #0056b3, #187bcd); /* warna baru saat hover */
+  color: white; /* ini penting agar font tetap putih */
+  text-decoration: none; /* pastikan tidak muncul underline */
+}
+      </style>
+
+<div class="container position-relative d-flex align-items-center justify-content-between">
 
       <a href="index.html" class="logo d-flex align-items-center me-auto me-xl-0">
         <!-- Uncomment the line below if you also wish to use an image logo -->
@@ -17,7 +39,7 @@
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>
 
-      <a class="btn-getstarted" href="/login">Masuk!</a>
-
+      <a class="btn-gradient" href="/login">Masuk!</a>
+      
     </div>
 </header>

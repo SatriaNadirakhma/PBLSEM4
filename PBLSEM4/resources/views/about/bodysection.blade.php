@@ -24,16 +24,16 @@
 <body>
 
   <!-- SECTION ABOUT -->
-  <section id="body">
-  <section class="mt-18 pb-16 px-4 md:px-16 max-w-7xl mx-auto">
-    <div class="custom-box p-10 md:p-14">
+<section id="body">
+  <section class="mt-18 pb-16 px-4 md:px-8 max-w-full mx-auto"  style="max-width: 95%"> <!-- max-w-7xl diganti max-w-full -->
+    <div class="custom-box p-6 md:p-12 lg:p-16"> <!-- padding disesuaikan -->
       <div class="grid md:grid-cols-2 gap-10 items-center">
         <div>
-          <h3 class="text-purple-200 font-semibold text-sm mb-3">About Us</h3>
+          <h3 class="text-purple-200 font-semibold text-sm mb-3">Tentang Kami</h3>
           <h2 class="text-3xl md:text-4xl font-bold text-white leading-tight mb-5">
             Solusi Digital untuk Pendaftaran TOEIC yang Lebih Rapi dan Cepat
           </h2>
-           <p class="text-purple-100 mb-5">
+          <p class="text-purple-100 mb-5">
             <strong>SIPINTA</strong> (Sistem Informasi Pendaftaran TOEIC Polinema) adalah platform digital yang dirancang khusus untuk mempermudah proses pendaftaran dan manajemen data TOEIC di Politeknik Negeri Malang.
           </p>
           <p class="text-purple-100 mb-5">
@@ -46,29 +46,29 @@
             Kami percaya bahwa transformasi digital bukan hanya soal teknologi, tapi juga tentang menghadirkan layanan yang lebih cepat, akurat, dan mudah diakses oleh semua pihak.
           </p>
         </div>
-        <div class="text-center">
-          <img src="img/ilustrasiAbout.png" alt="Sipinta Illustration" class="w-full max-w-md mx-auto rounded-xl" />
-        </div>
+       <div class="text-center md:text-right md:pl-50">
+  <img src="img/ilustrasiAbout.png" alt="Sipinta Illustration" class="w-full max-w-md mx-auto md:ml-auto rounded-xl" />
+</div>
       </div>
 
       <div class="grid md:grid-cols-3 text-center mt-12 gap-6">
-  <div>
-    <p class="text-5xl font-extrabold text-white">10k+</p>
-    <p class="text-sm text-purple-200 mt-1">Pengguna Aktif</p>
-  </div>
-  <div>
-    <p class="text-5xl font-extrabold text-white">5+</p>
-    <p class="text-sm text-purple-200 mt-1">Jurusan Terintegrasi</p>
-  </div>
-  <div>
-    <p class="text-5xl font-extrabold text-white">98%</p>
-    <p class="text-sm text-purple-200 mt-1">Kepuasan Pengguna</p>
-  </div>
-</div>
-
+        <div>
+          <p class="text-5xl font-extrabold text-white">10k+</p>
+          <p class="text-sm text-purple-200 mt-1">Pengguna Aktif</p>
+        </div>
+        <div>
+          <p class="text-5xl font-extrabold text-white">5+</p>
+          <p class="text-sm text-purple-200 mt-1">Jurusan Terintegrasi</p>
+        </div>
+        <div>
+          <p class="text-5xl font-extrabold text-white">98%</p>
+          <p class="text-sm text-purple-200 mt-1">Kepuasan Pengguna</p>
+        </div>
+      </div>
     </div>
   </section>
 </section>
+
 
 
    <!-- Visi & Misi -->
@@ -105,6 +105,34 @@
   </div>
 </section>
 
+<!-- Benefit Section -->
+<section id="benefit" class="relative position-relative" style="min-height: 450px; overflow: hidden;">
+  <!-- Background Image -->
+  <div style="background: url('{{ asset('img/gedung_polinema1.jpg') }}') center/cover no-repeat; 
+              position: absolute; 
+              inset: 0; 
+              z-index: 1;">
+  </div>
+
+  <!-- Overlay putih transparan -->
+  <div style="background: rgba(255, 255, 255, 0.28); position: absolute; inset: 0; z-index: 2;"></div>
+
+  <!-- Content -->
+  <div class="container h-100 d-flex align-items-center justify-content-center position-relative" style="z-index: 3;">
+    <div class="text-white text-center px-4 py-10" style="background: rgba(0, 0, 0, 0.6); max-width: 1000px; border-radius: 16px;">
+      <h2 class="fw-bold mb-4" style="color: #fff;">Apa <em>Benefit</em> dari TOEIC?</h2>
+      <p class="mb-0 fs-5" style="color: #f1f1f1;">
+        TOEIC membantu Anda meningkatkan kemampuan bahasa Inggris dalam konteks profesional. 
+        Dengan skor TOEIC, Anda dapat membuka peluang karier internasional, memperkuat CV, 
+        dan memenuhi persyaratan bahasa di berbagai institusi dan perusahaan global.
+      </p>
+    </div>
+  </div>
+</section>
+
+
+
+
 <!-- Team Section -->
 <section id="team" class="team section light-background">
 
@@ -137,7 +165,7 @@
 
   <!-- Section Title -->
   <div class="container section-title" data-aos="fade-up">
-    <h2>Team</h2>
+    <h2>Tim</h2>
     <p>Kolaborasi, inovasi, dan semangat kerja adalah kekuatan tim kami.</p>
   </div><!-- End Section Title -->
 
@@ -227,19 +255,7 @@
 </section>
 <!-- /Team Section -->
 
-<!-- Benefit Section -->
-<section id="benefit" class="position-relative" style="background: url('{{ asset('img/about_section3.jpg') }}') center/cover no-repeat; min-height: 350px;">
-  <div class="container h-100 d-flex align-items-center justify-content-center">
-    <div class="text-center text-white px-3 py-5" style="background: rgba(0, 0, 0, 0.5); max-width: 800px; border-radius: 10px;">
-      <h2 class="fw-bold mb-3">Apa <em>Benefit</em> dari TOEIC?</h2>
-      <p class="mb-0">
-        TOEIC membantu Anda meningkatkan kemampuan bahasa Inggris dalam konteks profesional. 
-        Dengan skor TOEIC, Anda dapat membuka peluang karier internasional, memperkuat CV, 
-        dan memenuhi persyaratan bahasa di berbagai institusi dan perusahaan global.
-      </p>
-    </div>
-  </div>
-</section>
+
 
 
    <!-- Lokasi -->
