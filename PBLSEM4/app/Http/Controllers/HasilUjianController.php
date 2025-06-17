@@ -452,24 +452,24 @@ public function import_ajax(Request $request)
 
                 $listening = (int) ($row['C'] ?? 0);
                 $reading = (int) ($row['D'] ?? 0);
-                $total = (int) ($row['E'] ?? 0);
-                $statusLulus = strtoupper(trim($row['F'] ?? '')) === 'LULUS' ? 'lulus' : 'tidak lulus';
-                $catatan = $row['G'] ?? null;
+                $total = $listening + $reading;
+                $statusLulus = $total >= 500 ? 'lulus' : 'tidak lulus';
 
-                if ($listening < 0 || $listening > 495 || $reading < 0 || $reading > 495 || $total != ($listening + $reading)) {
-                    $failedRows[] = "Baris $rowNumber: Nilai tidak valid";
+                if ($listening < 0 || $listening > 495 || $reading < 0 || $reading > 495) {
+                    $failedRows[] = "Baris $rowNumber: Nilai listening/reading tidak valid";
                     continue;
                 }
 
-               $insert[] = [
-    'nilai_listening' => $listening,
-    'nilai_reading' => $reading,
-    'nilai_total' => $total,
-    'status_lulus' => $statusLulus,
-    'jadwal_id' => $jadwalId,
-    'user_id' => $user->user_id,
-];
-
+                $insert[] = [
+                    'nilai_listening' => $listening,
+                    'nilai_reading' => $reading,
+                    'nilai_total' => $total,
+                    'status_lulus' => $statusLulus,
+                    'jadwal_id' => $jadwalId,
+                    'user_id' => $user->user_id,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
             }
 
             if (!empty($insert)) {
@@ -496,8 +496,6 @@ public function import_ajax(Request $request)
         }
     }
 }
-
-
 
     public function download_template()
     {
