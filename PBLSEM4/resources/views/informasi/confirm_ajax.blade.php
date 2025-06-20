@@ -40,7 +40,7 @@
                         </tr>
                         <tr>
                             <th class="text-right">Isi:</th>
-                            <td>{{ Str::limit($informasi->isi, 100) }}</td>
+                            <td>{{ Str::limit(strip_tags($informasi->isi), 100) }}</td>
                         </tr>
                     </table>
                 </div>
