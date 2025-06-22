@@ -95,14 +95,14 @@
             rules: {
                 nip: {
                     required: true,
-                    minlength: 2,
-                    maxlength: 20, 
+                    minlength: 18, // Changed from 2 to 18 based on controller
+                    maxlength: 20,
                     digits: true,
                 },
                 nik: {
                     required: true,
-                    minlength: 3,
-                    maxlength: 20, 
+                    minlength: 16, // Changed from 3 to 16 based on controller
+                    maxlength: 16, // Changed from 20 to 16 based on controller
                     digits: true,
                 },
                 tendik_nama: {
@@ -115,19 +115,19 @@
                 },
                 kampus_id: {
                     required: true
-                }
-                no_telp: { 
-                    required: false, 
-                    digits: true, 
-                    minlength: 10, 
-                    maxlength: 15 
+                },
+                no_telp: { // Corrected comma placement and added back
+                    required: false,
+                    digits: true,
+                    minlength: 11, // Changed from 10 to 11 based on controller
+                    maxlength: 13 // Changed from 15 to 13 based on controller
                 },
             },
             submitHandler: function (form) {
                 $.ajax({
                     url: form.action,
-                    type: 'POST',
-                    data: $(form).serialize() + '&_method=PUT',
+                    type: 'POST', // Keep as POST if using _method=PUT, or change to 'PUT'
+                    data: $(form).serialize() + '&_method=PUT', // This is good for sending PUT via POST
                     headers: {
                         'X-Requested-With': 'XMLHttpRequest'
                     },
@@ -158,11 +158,11 @@
                         Swal.fire({
                             icon: 'error',
                             title: 'AJAX Error',
-                            text: error
+                            text: error + ' (Status: ' + status + ', XHR ReadyState: ' + xhr.readyState + ', XHR Status: ' + xhr.status + ')'
                         });
                     }
                 });
-                return false;
+                return false; // Crucial: Prevent default form submission
             },
             errorElement: 'span',
             errorPlacement: function (error, element) {
