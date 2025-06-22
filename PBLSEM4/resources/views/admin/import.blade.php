@@ -55,8 +55,9 @@ $(document).ready(function() {
                             icon: 'success',
                             title: 'Berhasil',
                             text: response.message
+                        }).then(function() {
+                            location.reload();
                         });
-                        tableAdmin.ajax.reload(); // pastikan DataTable kamu bernama tableAdmin
                     } else {
                         $('.error-text').text('');
                         $.each(response.msgField, function(prefix, val) {

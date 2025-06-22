@@ -52,8 +52,8 @@
         </div>
     </form>
 
-   <script>
-   $(document).ready(function() {
+<script>
+$(document).ready(function() {
     // Validasi form delete admin
     $("#form-delete-admin").validate({
         rules: {},
@@ -75,16 +75,10 @@
                             text: response.message
                         });
 
-                        // Pastikan dataAdmin sudah didefinisikan sebelum reload
-                        if (typeof dataAdmin !== 'undefined') {
-                            console.log('Reload DataTables');
-                            dataAdmin.ajax.reload(null, true); // Reset DataTables dengan cara yang benar
-                        } else {
-                            // Jika dataAdmin belum didefinisikan, kita lakukan reload halaman
-                            setTimeout(function() {
-                                location.reload(); // Refresh halaman setelah penghapusan
-                            }, 1500); // Delay 1,5 detik sebelum refresh
-                        }
+                        // Reload halaman setelah konfirmasi berhasil
+                        setTimeout(function() {
+                            location.reload();
+                        }, 1500); // Delay 1,5 detik sebelum refresh
                     } else {
                         Swal.fire({
                             icon: 'error',
