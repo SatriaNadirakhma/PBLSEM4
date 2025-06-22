@@ -62,8 +62,7 @@
 <script>
     var currentPendaftaranId = null;
 
-    // Define the cutoff date for "Terkirim" status
-    const cutoffDate = new Date('2025-06-11'); // Month is 0-indexed (June is 5)
+    const cutoffDate = new Date('2025-06-11');
 
     function modalAction(url = '', pendaftaranId = null) {
         currentPendaftaranId = pendaftaranId;
@@ -72,7 +71,6 @@
         });
     }
 
-    // Fungsi untuk memperbarui tampilan status pengiriman di tabel
     function updateDeliveryStatusDisplay(pendaftaranId, statusPengiriman) {
         var targetCell = $('#status-pengiriman-' + pendaftaranId);
         if (targetCell.length) {
@@ -112,9 +110,10 @@
                 { data: "DT_RowIndex", className: "text-center", orderable: false, searchable: false },
                 { data: "nim", className: "text-nowrap" },
                 { data: "nama", className: "text-nowrap" },
-                { data: "tanggal_daftar", className: "text-nowrap text-center" }, // Pastikan ini adalah tanggal dalam format YYYY-MM-DD
+                { data: "tanggal_daftar", className: "text-nowrap text-center" },
                 { data: "no_telp", className: "text-nowrap text-center" },
-                { data: "status", className: "text-center text-capitalize" },
+                // *** PERUBAHAN DI SINI: Ganti 'status' menjadi 'pendaftaran_status' ***
+                { data: "pendaftaran_status", className: "text-center text-capitalize" },
                 {
                     data: "status_pengiriman",
                     className: "text-center text-capitalize",
@@ -122,22 +121,19 @@
                     searchable: false,
                     render: function(data, type, row) {
                         const pendaftaranId = row.pendaftaran_id;
-                        const pendaftaranDate = new Date(row.tanggal_pendaftaran); // Convert to Date object
+                        const pendaftaranDate = new Date(row.tanggal_pendaftaran);
 
-                        let displayText = 'Antrean'; // Default text
-                        let displayClass = 'badge bg-warning'; // Default class
+                        let displayText = 'Antrean';
+                        let displayClass = 'badge bg-warning';
 
-                        // Override if before cutoff date
                         if (pendaftaranDate < cutoffDate) {
                             displayText = 'Terkirim';
                             displayClass = 'badge bg-success';
-                            // Juga simpan ke Local Storage agar konsisten
                             if (!savedStatuses[pendaftaranId] || savedStatuses[pendaftaranId] !== 'terkirim') {
                                 savedStatuses[pendaftaranId] = 'terkirim';
                                 localStorage.setItem('whatsappDeliveryStatuses', JSON.stringify(savedStatuses));
                             }
                         } else {
-                            // If not before cutoff date, check saved status
                             const savedStatus = savedStatuses[pendaftaranId];
                             if (savedStatus) {
                                 if (savedStatus === 'antrean') {
@@ -151,7 +147,6 @@
                                     displayClass = 'badge bg-danger';
                                 }
                             }
-                            // Else, default remains 'Antrean'
                         }
 
                         return '<span id="status-pengiriman-' + pendaftaranId + '" class="' + displayClass + '">' + displayText + '</span>';
@@ -159,10 +154,8 @@
                 },
                 { data: "aksi", className: "text-center text-nowrap", orderable: false, searchable: false }
             ],
-            // drawCallback will ensure the initial display is correct based on logic
             drawCallback: function() {
-                 // No need for explicit loop here, as render function already handles initial display and local storage update
-                 // based on cutoff date. The 'whatsappSent' event handles post-send updates.
+                // Logic is mostly handled by the render function for status_pengiriman
             }
         });
 
@@ -174,11 +167,8 @@
             // Perbarui Local Storage
             savedStatuses[data.pendaftaran_id] = data.pengiriman_status;
             localStorage.setItem('whatsappDeliveryStatuses', JSON.stringify(savedStatuses));
-
-            // Perbarui tampilan di tabel
             updateDeliveryStatusDisplay(data.pendaftaran_id, data.pengiriman_status);
-
-            $('#myModal').modal('hide'); // Tutup modal
+            $('#myModal').modal('hide');
         });
     });
 </script>

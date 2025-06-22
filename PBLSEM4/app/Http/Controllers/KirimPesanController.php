@@ -35,7 +35,9 @@ class KirimPesanController extends Controller
                 if ($request->status_filter) {
                     $query->where('status', $request->status_filter);
                 }
-            });
+            })
+            // Tambahkan select untuk memastikan kolom pendaftaran_id dan tanggal_pendaftaran ada
+            ->select('pendaftaran.*');
 
         if ($request->filled('search.value')) {
             $search = $request->input('search.value');
@@ -53,8 +55,9 @@ class KirimPesanController extends Controller
             ->addColumn('nama', fn($r) => $r->mahasiswa->mahasiswa_nama ?? '')
             ->addColumn('tanggal_daftar', fn($r) => date('d-m-Y', strtotime($r->tanggal_pendaftaran)))
             ->addColumn('no_telp', fn($r) => $r->mahasiswa->no_telp ?? '-')
-            ->addColumn('status', fn($r) => ucfirst(optional($r->detail_terakhir)->status))
-            // Mengubah default status_pengiriman menjadi 'antrean'
+            // *** PERUBAHAN DI SINI: Ganti 'status' menjadi 'pendaftaran_status' ***
+            ->addColumn('pendaftaran_status', fn($r) => ucfirst(optional($r->detail_terakhir)->status ?? ''))
+            // --- AKHIR PERUBAHAN ---
             ->addColumn('status_pengiriman', function ($r) {
                 // Defaultnya 'antrean' jika belum ada status tersimpan
                 return '<span id="status-pengiriman-' . $r->pendaftaran_id . '" class="badge bg-warning">Antrean</span>';
@@ -66,7 +69,7 @@ class KirimPesanController extends Controller
                         <i class="fab fa-whatsapp me-1"></i> Kirim Pesan
                     </button>';
             })
-            ->rawColumns(['aksi', 'status_pengiriman'])
+            ->rawColumns(['aksi', 'status_pengiriman']) // pendaftaran_status tidak perlu raw
             ->make(true);
     }
 
@@ -76,19 +79,13 @@ class KirimPesanController extends Controller
         return view('kirimpesan.form', compact('data'));
     }
 
-    public function kirim(Request $request)
+    public function kirim($pendaftaranId, $nomor, $pesan)
     {
-        $request->validate([
-            'pendaftaran_id' => 'required|exists:pendaftaran,pendaftaran_id',
-            'nomor' => 'required',
-            'pesan' => 'required',
-        ]);
-
         $response = Http::withHeaders([
             'Authorization' => 'rZK1aYs5KDpcJ1EZWhDT',
         ])->asForm()->post('https://api.fonnte.com/send', [
-            'target' => $request->nomor,
-            'message' => $request->pesan,
+            'target' => $nomor,
+            'message' => $pesan,
         ]);
 
         Log::info('Response Fonnte: ', $response->json());
@@ -96,32 +93,45 @@ class KirimPesanController extends Controller
         if ($response->successful()) {
             $responseJson = $response->json();
 
-            // Asumsi: jika Fonnte merespons sukses (status: true) dan process bukan 'failed', berarti 'terkirim'.
-            // Jika process 'failed' atau status bukan true, berarti 'gagal'.
             if (isset($responseJson['status']) && $responseJson['status'] === true && (!isset($responseJson['process']) || $responseJson['process'] !== 'failed')) {
-                $message = 'Pesan berhasil dikirim dan masih dalam proses.';
                 $status = 'success';
-                $pengirimanStatus = 'terkirim'; // Berhasil terkirim ke Fonnte
+                $pengirimanStatus = 'terkirim';
             } else {
-                $message = 'Gagal mengirim pesan. Balasan API: ' . ($responseJson['message'] ?? 'Tidak diketahui.');
                 $status = 'error';
                 $pengirimanStatus = 'gagal';
             }
 
-            return response()->json([
+            return [
                 'status' => $status,
-                'message' => $message,
-                'pendaftaran_id' => $request->pendaftaran_id,
+                'pendaftaran_id' => $pendaftaranId,
                 'pengiriman_status' => $pengirimanStatus
-            ]);
+            ];
         }
 
-        // Jika respons HTTP tidak berhasil (misal: 500 server error, timeout)
-        return response()->json([
+        return [
             'status' => 'error',
-            'message' => 'Gagal terhubung ke layanan pengiriman pesan.',
-            'pendaftaran_id' => $request->pendaftaran_id,
+            'pendaftaran_id' => $pendaftaranId,
             'pengiriman_status' => 'gagal'
-        ], 500);
+        ];
+    }
+
+    public function kirimPesanDariForm(Request $request)
+    {
+        $request->validate([
+            'pendaftaran_id' => 'required|exists:pendaftaran,pendaftaran_id',
+            'nomor' => 'required',
+            'pesan' => 'required',
+        ]);
+
+        $response = $this->kirim($request->pendaftaran_id, $request->nomor, $request->pesan);
+
+        $message = ($response['status'] === 'success') ? 'Pesan berhasil dikirim.' : 'Gagal mengirim pesan.';
+
+        return response()->json([
+            'status' => $response['status'],
+            'message' => $message,
+            'pendaftaran_id' => $response['pendaftaran_id'],
+            'pengiriman_status' => $response['pengiriman_status']
+        ]);
     }
 }
