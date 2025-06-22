@@ -6,7 +6,6 @@
             <h3 class="card-title">{{ $page->title }}</h3>
         </div>
 
-        <!-- Filter Status -->
         <div class="form-horizontal p-2 border-bottom mb-2">
             <div class="row align-items-center">
                 <label for="filterStatus" class="col-md-2 col-form-label text-md-end">Filter Status</label>
@@ -45,7 +44,8 @@
                             <th>Nama Lengkap</th>
                             <th>Tanggal Pendaftaran</th>
                             <th>No. Telepon</th>
-                            <th>Status</th>
+                            <th>Pendaftaran</th>
+                            <th>Status Pengiriman</th>
                             <th style="width: 150px;">Aksi</th>
                         </tr>
                     </thead>
@@ -60,13 +60,41 @@
 
 @push('js')
 <script>
-    function modalAction(url = '') {
+    var currentPendaftaranId = null;
+
+    const cutoffDate = new Date('2025-06-11');
+
+    function modalAction(url = '', pendaftaranId = null) {
+        currentPendaftaranId = pendaftaranId;
         $('#myModal').load(url, function () {
             $('#myModal').modal('show');
         });
     }
 
+    function updateDeliveryStatusDisplay(pendaftaranId, statusPengiriman) {
+        var targetCell = $('#status-pengiriman-' + pendaftaranId);
+        if (targetCell.length) {
+            var statusText = '';
+            var statusClass = '';
+
+            if (statusPengiriman === 'antrean') {
+                statusText = 'Antrean';
+                statusClass = 'badge bg-warning';
+            } else if (statusPengiriman === 'terkirim') {
+                statusText = 'Terkirim';
+                statusClass = 'badge bg-success';
+            } else if (statusPengiriman === 'gagal') {
+                statusText = 'Gagal';
+                statusClass = 'badge bg-danger';
+            }
+            targetCell.html('<span class="' + statusClass + '">' + statusText + '</span>');
+        }
+    }
+
     $(document).ready(function () {
+        // Muat status pengiriman dari Local Storage saat halaman dimuat
+        const savedStatuses = JSON.parse(localStorage.getItem('whatsappDeliveryStatuses') || '{}');
+
         var dataRiwayat = $('#table_riwayat').DataTable({
             processing: true,
             serverSide: true,
@@ -84,13 +112,63 @@
                 { data: "nama", className: "text-nowrap" },
                 { data: "tanggal_daftar", className: "text-nowrap text-center" },
                 { data: "no_telp", className: "text-nowrap text-center" },
-                { data: "status", className: "text-center text-capitalize" },
+                // *** PERUBAHAN DI SINI: Ganti 'status' menjadi 'pendaftaran_status' ***
+                { data: "pendaftaran_status", className: "text-center text-capitalize" },
+                {
+                    data: "status_pengiriman",
+                    className: "text-center text-capitalize",
+                    orderable: false,
+                    searchable: false,
+                    render: function(data, type, row) {
+                        const pendaftaranId = row.pendaftaran_id;
+                        const pendaftaranDate = new Date(row.tanggal_pendaftaran);
+
+                        let displayText = 'Antrean';
+                        let displayClass = 'badge bg-warning';
+
+                        if (pendaftaranDate < cutoffDate) {
+                            displayText = 'Terkirim';
+                            displayClass = 'badge bg-success';
+                            if (!savedStatuses[pendaftaranId] || savedStatuses[pendaftaranId] !== 'terkirim') {
+                                savedStatuses[pendaftaranId] = 'terkirim';
+                                localStorage.setItem('whatsappDeliveryStatuses', JSON.stringify(savedStatuses));
+                            }
+                        } else {
+                            const savedStatus = savedStatuses[pendaftaranId];
+                            if (savedStatus) {
+                                if (savedStatus === 'antrean') {
+                                    displayText = 'Antrean';
+                                    displayClass = 'badge bg-warning';
+                                } else if (savedStatus === 'terkirim') {
+                                    displayText = 'Terkirim';
+                                    displayClass = 'badge bg-success';
+                                } else if (savedStatus === 'gagal') {
+                                    displayText = 'Gagal';
+                                    displayClass = 'badge bg-danger';
+                                }
+                            }
+                        }
+
+                        return '<span id="status-pengiriman-' + pendaftaranId + '" class="' + displayClass + '">' + displayText + '</span>';
+                    }
+                },
                 { data: "aksi", className: "text-center text-nowrap", orderable: false, searchable: false }
-            ]
+            ],
+            drawCallback: function() {
+                // Logic is mostly handled by the render function for status_pengiriman
+            }
         });
 
         $('#filterStatus').on('change', function () {
             dataRiwayat.ajax.reload();
+        });
+
+        $(document).on('whatsappSent', function(event, data) {
+            // Perbarui Local Storage
+            savedStatuses[data.pendaftaran_id] = data.pengiriman_status;
+            localStorage.setItem('whatsappDeliveryStatuses', JSON.stringify(savedStatuses));
+            updateDeliveryStatusDisplay(data.pendaftaran_id, data.pengiriman_status);
+            $('#myModal').modal('hide');
         });
     });
 </script>

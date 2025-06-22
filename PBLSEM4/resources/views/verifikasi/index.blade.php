@@ -25,7 +25,6 @@
     </div>
         
     <div class="card-body">
-        {{-- ... (sisa konten card-body tetap sama) ... --}}
         @if (session('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 {{ session('success') }}
@@ -64,8 +63,14 @@
 @endsection
 
 @push('js')
-{{-- ... (bagian JavaScript tetap sama) ... --}}
 <script>
+// Fungsi untuk menyimpan status pengiriman WA ke Local Storage
+function saveWaDeliveryStatus(pendaftaranId, status) {
+    let savedStatuses = JSON.parse(localStorage.getItem('whatsappDeliveryStatuses') || '{}');
+    savedStatuses[pendaftaranId] = status;
+    localStorage.setItem('whatsappDeliveryStatuses', JSON.stringify(savedStatuses));
+}
+
 function modalAction(url = '') {
     console.log("Memuat URL: ", url); // debug
     $('#myModal').load(url, function () {
@@ -93,7 +98,6 @@ $(document).ready(function () {
             { data: 'status', name: 'status', className: 'text-center' },
             { data: 'aksi', name: 'aksi', className: 'text-center', orderable: false, searchable: false },
         ]
-
     });
 
     // Event listener for the custom switch
@@ -145,6 +149,11 @@ function updateStatus(id, status) {
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
+                            // Jika ada status WA dari backend, simpan ke Local Storage
+                            if (data.pendaftaran_id && data.pengiriman_status_wa) {
+                                saveWaDeliveryStatus(data.pendaftaran_id, data.pengiriman_status_wa);
+                            }
+
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Berhasil',
@@ -155,7 +164,7 @@ function updateStatus(id, status) {
                                 },
                                 buttonsStyling: false
                             }).then(() => {
-                                location.reload();
+                                location.reload(); // Reload halaman untuk memuat ulang DataTable
                             });
                         } else {
                             Swal.fire({
@@ -169,6 +178,19 @@ function updateStatus(id, status) {
                                 buttonsStyling: false
                             });
                         }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Terjadi kesalahan saat memproses permintaan.',
+                            confirmButtonText: 'OKE',
+                            customClass: {
+                                confirmButton: 'btn btn-danger'
+                            },
+                            buttonsStyling: false
+                        });
                     });
                 }
             });
@@ -315,6 +337,13 @@ function verifyAll() {
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
+                            // Jika ada status WA dari backend (untuk verifyAll), simpan ke Local Storage
+                            if (data.wa_statuses && Array.isArray(data.wa_statuses)) {
+                                data.wa_statuses.forEach(wa_status => {
+                                    saveWaDeliveryStatus(wa_status.pendaftaran_id, wa_status.pengiriman_status);
+                                });
+                            }
+
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Berhasil!',
@@ -325,7 +354,7 @@ function verifyAll() {
                                 },
                                 buttonsStyling: false
                             }).then(() => {
-                                location.reload();
+                                location.reload(); // Reload halaman untuk memuat ulang DataTable
                             });
                         } else {
                             Swal.fire({
@@ -358,6 +387,5 @@ function verifyAll() {
         }
     });
 }
-
 </script>
 @endpush

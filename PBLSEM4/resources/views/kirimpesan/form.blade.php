@@ -1,5 +1,6 @@
 <form id="formKirimPesan" action="{{ url('kirimpesan/kirim') }}" method="POST">
     @csrf
+    <input type="hidden" name="pendaftaran_id" value="{{ $data->pendaftaran_id }}">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header bg-success text-white">
@@ -16,8 +17,12 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Nomor WhatsApp</label>
-                    <input type="text" name="nomor" class="form-control" value="{{ $data->mahasiswa->no_telp }}" readonly>
+                    <label for="nomorWhatsapp">Nomor WhatsApp</label>
+                    <input type="text" name="nomor" id="nomorWhatsapp" class="form-control" value="{{ $data->mahasiswa->no_telp }}"
+                           pattern="[0-9]*"
+                           inputmode="numeric">
+                    {{-- Tambahkan elemen untuk pesan error --}}
+                    <small id="nomorError" class="text-danger" style="display: none;">Hanya boleh diisi angka.</small>
                 </div>
 
                 <div class="form-group">
@@ -45,39 +50,86 @@
     </div>
 </form>
 
-<!-- SweetAlert2 -->
 <script>
-    $('#formKirimPesan').on('submit', function (e) {
-        e.preventDefault();
-        const form = $(this);
-        Swal.fire({
-            title: 'Kirim Pesan?',
-            text: "Pastikan isi pesan sudah benar.",
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonText: 'Ya, Kirim!',
-            cancelButtonText: 'Batal',
-            reverseButtons: true
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.post(form.attr('action'), form.serialize(), function (res) {
-                    Swal.fire({
-                        icon: res.status === 'success' ? 'success' : 'error',
-                        title: res.message,
-                        timer: 2000,
-                        showConfirmButton: false
-                    }).then(() => {
-                        $('#myModal').modal('hide');
-                        location.reload();
-                    });
-                }).fail(function (xhr) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Gagal',
-                        text: xhr.responseJSON?.message || 'Terjadi kesalahan.',
-                    });
-                });
+    $(document).ready(function() {
+        const nomorInput = $('#nomorWhatsapp');
+        const nomorError = $('#nomorError');
+
+        // Fungsi untuk validasi dan menampilkan/menyembunyikan pesan error
+        function validateNomorInput() {
+            const value = nomorInput.val();
+            // Periksa apakah nilai mengandung karakter non-angka
+            if (/[^0-9]/.test(value)) {
+                nomorError.show(); // Tampilkan pesan error
+                nomorInput.addClass('is-invalid'); // Tambahkan kelas validasi Bootstrap
+                return false; // Validasi gagal
+            } else {
+                nomorError.hide(); // Sembunyikan pesan error
+                nomorInput.removeClass('is-invalid'); // Hapus kelas validasi Bootstrap
+                return true; // Validasi berhasil
             }
+        }
+
+        // Jalankan validasi saat input berubah
+        nomorInput.on('input', function() {
+            validateNomorInput();
+        });
+
+        // Jalankan validasi saat form disubmit
+        $('#formKirimPesan').on('submit', function (e) {
+            // Pastikan validasi nomor berhasil sebelum melanjutkan submit
+            if (!validateNomorInput()) {
+                e.preventDefault(); // Mencegah form disubmit jika ada error
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Kesalahan Input',
+                    text: 'Nomor WhatsApp hanya boleh diisi angka.',
+                });
+                return; // Berhenti eksekusi fungsi
+            }
+
+            e.preventDefault();
+            const form = $(this);
+            Swal.fire({
+                title: 'Kirim Pesan?',
+                text: "Pastikan isi pesan sudah benar.",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, Kirim!',
+                cancelButtonText: 'Batal',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.post(form.attr('action'), form.serialize(), function (res) {
+                        Swal.fire({
+                            icon: res.status === 'success' ? 'success' : 'error',
+                            title: res.message,
+                            timer: 2000,
+                            showConfirmButton: false
+                        }).then(() => {
+                            $(document).trigger('whatsappSent', {
+                                pendaftaran_id: res.pendaftaran_id,
+                                status: res.status,
+                                message: res.message,
+                                pengiriman_status: res.pengiriman_status
+                            });
+                        });
+                    }).fail(function (xhr) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Gagal',
+                            text: xhr.responseJSON?.message || 'Terjadi kesalahan.',
+                        }).then(() => {
+                            $(document).trigger('whatsappSent', {
+                                pendaftaran_id: form.find('input[name="pendaftaran_id"]').val(),
+                                status: 'error',
+                                message: xhr.responseJSON?.message || 'Terjadi kesalahan.',
+                                pengiriman_status: 'gagal'
+                            });
+                        });
+                    });
+                }
+            });
         });
     });
 </script>
