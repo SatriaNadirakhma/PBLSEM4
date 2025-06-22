@@ -29,88 +29,66 @@
 </form>
 
 <script>
-   $(document).ready(function() {
-    $("#form-tambah-admin").validate({
-        // Rules tetap sama
-        rules: {
-            admin_nama: {
-                required: true,
-                minlength: 3,
-                maxlength: 100
-            },
-            no_telp: {
-                required: true,
-                minlength: 3,
-                maxlength: 15, 
-                digits: true,
-            }
-        },
-        submitHandler: function(form) {
-            $.ajax({
-                url: form.action,
-                type: form.method,
-                data: $(form).serialize(),
-                dataType: 'json', // Tambahkan ini untuk memastikan respons diparsing sebagai JSON
-                success: function(response) {
-                    console.log('Response:', response); // Tambahkan log untuk debugging
-                    
-                    if (response.status) {
-                        // Tutup modal dengan benar - pastikan selector sesuai dengan struktur HTML Anda
-                        $('#modal-tambah-admin').modal('hide'); // Sesuaikan dengan ID modal sebenarnya
-                        
-                        // Tampilkan pesan sukses
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Berhasil',
-                            text: response.message
-                        });
-                        
-                        // Pastikan variabel dataAdmin sudah didefinisikan sebelumnya
-                        if (typeof dataAdmin !== 'undefined') {
-                            dataAdmin.ajax.reload();
-                        } else {
-                            // Jika tidak ada datatables, refresh halaman
-                            setTimeout(function() {
-                                location.reload();
-                            }, 1500);
-                        }
-                    } else {
-                        // Reset pesan error sebelum menampilkan yang baru
-                        $('.error-text').text('');
-                        
-                        // Tampilkan pesan error validasi
-                        if (response.msgField) {
-                            $.each(response.msgField, function(prefix, val) {
-                                if (Array.isArray(val)) {
-                                    $('#error-' + prefix).text(val[0]);
-                                } else {
-                                    $('#error-' + prefix).text(val);
-                                }
-                            });
-                        }
-                        
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Terjadi Kesalahan',
-                            text: response.message || 'Gagal menyimpan data'
-                        });
-                    }
+    $(document).ready(function() {
+     $("#form-tambah-admin").validate({
+          rules: {
+                admin_nama: {
+                     required: true,
+                     minlength: 3,
+                     maxlength: 100
                 },
-                error: function(xhr, status, error) {
-                    console.error('Ajax Error:', error);
-                    console.log('Response Text:', xhr.responseText);
-                    
-                    // Tampilkan pesan error
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Terjadi Kesalahan',
-                        text: 'Gagal mengirim data. Silakan coba lagi.'
-                    });
+                no_telp: {
+                     required: true,
+                     minlength: 3,
+                     maxlength: 15, 
+                     digits: true,
                 }
-            });
-            return false;
-        },
-        // Error handling tetap sama
-    });
+          },
+          submitHandler: function(form) {
+                $.ajax({
+                     url: form.action,
+                     type: form.method,
+                     data: $(form).serialize(),
+                     dataType: 'json',
+                     success: function(response) {
+                          if (response.status) {
+                                $('#modal-tambah-admin').modal('hide');
+                                Swal.fire({
+                                     icon: 'success',
+                                     title: 'Berhasil',
+                                     text: response.message
+                                });
+                                setTimeout(function() {
+                                     location.reload();
+                                }, 1500);
+                          } else {
+                                $('.error-text').text('');
+                                if (response.msgField) {
+                                     $.each(response.msgField, function(prefix, val) {
+                                          if (Array.isArray(val)) {
+                                                $('#error-' + prefix).text(val[0]);
+                                          } else {
+                                                $('#error-' + prefix).text(val);
+                                          }
+                                     });
+                                }
+                                Swal.fire({
+                                     icon: 'error',
+                                     title: 'Terjadi Kesalahan',
+                                     text: response.message || 'Gagal menyimpan data'
+                                });
+                          }
+                     },
+                     error: function(xhr, status, error) {
+                          Swal.fire({
+                                icon: 'error',
+                                title: 'Terjadi Kesalahan',
+                                text: 'Gagal mengirim data. Silakan coba lagi.'
+                          });
+                     }
+                });
+                return false;
+          },
+     });
 });
 </script>

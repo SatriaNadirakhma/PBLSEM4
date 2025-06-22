@@ -49,8 +49,8 @@ class ProdiController extends Controller
         });
         }
 
-        if ($request->has('filter_jurusan') && $request->filter_jurusan != '') {
-            $prodi->where('jurusan_id', $request->filter_jurusan);
+        if ($request->has('filter_jurusan') && is_numeric($request->filter_jurusan) && $request->filter_jurusan != '') {
+            $prodi->where('jurusan_id', intval($request->filter_jurusan));
         }
 
         return DataTables::of($prodi)

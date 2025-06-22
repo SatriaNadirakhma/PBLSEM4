@@ -82,14 +82,18 @@
         </div>
     </div>
 
-    <div id="myModal" class="modal fade animate shake" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" data-width="75%" aria-hidden="true"></div>
+    <div id="myModal" class="modal fade animate shake" tabindex="-1" role="dialog" data-width="75%" aria-hidden="true"></div>
 @endsection
 
 @push('js')
     <script>
         function modalAction(url = '') {
             $('#myModal').load(url, function () {
-                $('#myModal').modal('show');
+                var myModal = new bootstrap.Modal(document.getElementById('myModal'), {
+                    backdrop: 'static',
+                    keyboard: false
+                });
+                myModal.show();
             });
         }
 
@@ -102,6 +106,7 @@
                     type: "POST",
                     data: function (d) {
                         d.search_query = $('#searchInput').val();
+                        d.filter_jurusan = $('#filter_jurusan').val();
                         d._token = '{{ csrf_token() }}';
                     }
                 },

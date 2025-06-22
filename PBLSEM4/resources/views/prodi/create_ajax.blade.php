@@ -1,6 +1,6 @@
 <form action="{{ url('/prodi/ajax') }}" method="POST" id="form-tambah-prodi">
     @csrf
-    <div id="modal-master" class="modal-dialog modal-lg" role="document">
+    <div id="modal-tambah-prodi" class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Tambah Data Program Studi</h5>
@@ -22,7 +22,7 @@
                 <div class="form-group">
                     <label>ID Jurusan</label>
                     <select name="jurusan_id" id="jurusan_id" class="form-control" required>
-                        <option value="">- Pilih Kategori -</option>
+                        <option value="">- Pilih Jurusan -</option>
                         @foreach($jurusan as $l)
                             <option value="{{ $l->jurusan_id }}">{{ $l->jurusan_nama }}</option>
                         @endforeach
@@ -54,7 +54,7 @@
                 maxlength: 100
             },
             jurusan_id: {
-                required: true,
+                required: true
             }
         },
         submitHandler: function(form) {
@@ -88,7 +88,7 @@
                         }
                     } else {
                         // Reset pesan error sebelum menampilkan yang baru
-                        $('.error-text').text('');
+                        $(form).find('.error-text').text('');
                         
                         // Tampilkan pesan error validasi
                         if (response.msgField) {
