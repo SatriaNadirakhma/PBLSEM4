@@ -13,7 +13,8 @@
                 </button>
                 <a href="{{ url('/user/export_excel') }}"    
                         class="btn btn-sm shadow-sm rounded-pill" 
-                        style="background-color: #004085; color: white; font-size: 0.95rem;"></i> Export Excel
+                        style="background-color: #004085; color: white; font-size: 0.95rem;">
+                        <i class="fa fa-file-excel me-1"></i> Export Excel
                 </a>
                 <a href="{{ url('/user/export_pdf') }}" 
                         class="btn btn-sm shadow-sm rounded-pill" 

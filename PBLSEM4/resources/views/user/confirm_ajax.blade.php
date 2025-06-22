@@ -43,13 +43,16 @@
                             <td class="col-9">{{ $user->username }}</td>
                         </tr>
                         <tr>
-                            <th class="text-right col-3">Password:</th>
-                            <td class="col-9">{{ $user->password }}</td>
-                        </tr>
-                        <tr>
                             <th class="text-right col-3">Foto Profil:</th>
-                            <td class="col-9">{{ $user->profile }}</td>
-                        </tr>
+                            <td class="col-9">
+                                @php
+                                    $profileUrl = $user->profile
+                                        ? asset('storage/' . $user->profile)
+                                        : asset('img/default-profile.png');
+                                @endphp
+                                <img src="{{ $profileUrl }}" alt="Foto Profil" style="max-width: 100px; max-height: 100px;" class="rounded border">
+                            </td>
+                        </tr></tr>
                         <tr>
                             <th class="text-right col-3">Role User:</th>
                             <td class="col-9">{{ $user->role }}</td>

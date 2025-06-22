@@ -104,11 +104,13 @@
                 <td>{{ $u->email }}</td>
                 <td>{{ $u->username }}</td>
                 <td class="text-center">
-                    @if ($u->profile && file_exists(public_path('storage/' . $u->profile)))
-                        <img src="{{ public_path('storage/' . $u->profile) }}" class="image">
-                    @else
-                        Tidak Ada
-                    @endif
+                    @php
+                        $profilePath = $u->profile ? public_path('storage/' . $u->profile) : null;
+                        $imgSrc = ($profilePath && file_exists($profilePath))
+                            ? $profilePath
+                            : public_path('img/default-profile.png');
+                    @endphp
+                    <img src="{{ $imgSrc }}" class="image">
                 </td>
                 <td>{{ $u->role }}</td>
                 <td>{{ $u->admin_id ?? '-' }}</td>

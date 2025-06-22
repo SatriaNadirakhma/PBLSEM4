@@ -485,7 +485,20 @@ class UserController extends Controller
                 $drawing->setWorksheet($sheet);
                 $sheet->getRowDimension($row)->setRowHeight(45); // Sesuaikan tinggi baris
             } else {
-                $sheet->setCellValue('D' . $row, 'No Image');
+                // Pakai default profile dari public/img/default-profile.png
+                $defaultProfilePath = public_path('img/default-profile.png');
+                if (file_exists($defaultProfilePath)) {
+                    $drawing = new Drawing();
+                    $drawing->setPath($defaultProfilePath);
+                    $drawing->setHeight(40);
+                    $drawing->setCoordinates('D' . $row);
+                    $drawing->setOffsetX(5);
+                    $drawing->setOffsetY(5);
+                    $drawing->setWorksheet($sheet);
+                    $sheet->getRowDimension($row)->setRowHeight(45);
+                } else {
+                    $sheet->setCellValue('D' . $row, 'No Image');
+                }
             }
 
             $sheet->setCellValue('E' . $row, $user->role);

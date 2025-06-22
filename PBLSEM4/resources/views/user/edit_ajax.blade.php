@@ -34,7 +34,7 @@
 
                     <!-- Kotak Informasi -->
                     <div class="alert alert-warning" role="alert">
-                        <strong>Informasi:</strong> Jika ingin mengubah role dan nama, harus diganti di menu Biodata User.
+                        <strong>Informasi:</strong> Jika ingin mengubah role dan nama, harus diganti di menu Biodata User. Password hanya diubah oleh User yang bersangkutan.
                     </div>
 
                     <div class="form-group">
@@ -70,7 +70,7 @@
 
                     <div class="form-group">
                         <label>Password </label>
-                        <input type="password" name="password" id="password" class="form-control">
+                        <input type="password" name="password" id="password" class="form-control" readonly value="*****">
                         <small id="error-password" class="error-text form-text text-danger"></small>
                     </div>
 

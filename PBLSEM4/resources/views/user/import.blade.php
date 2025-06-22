@@ -55,6 +55,8 @@ $(document).ready(function() {
                             icon: 'success',
                             title: 'Berhasil',
                             text: response.message
+                        }).then(function() {
+                            location.reload(); // Reload page after success
                         });
                         tableuser.ajax.reload(); // pastikan DataTable kamu bernama tableuser
                     } else {

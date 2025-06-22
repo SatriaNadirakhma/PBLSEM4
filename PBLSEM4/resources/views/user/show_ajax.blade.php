@@ -62,19 +62,19 @@
                     <td>
                         @php
                             $profileFilename = $user->profile ?? '';
-                            if (str_starts_with($profileFilename, 'profile/')) {
-                                $profilePath = storage_path('app/public/' . $profileFilename);
+                            if ($profileFilename) {
                                 $profileUrl = asset('storage/' . $profileFilename);
+                                $profilePath = storage_path('app/public/' . $profileFilename);
                             } else {
-                                $profilePath = storage_path('app/public/profile/' . $profileFilename);
-                                $profileUrl = asset('storage/profile/' . $profileFilename);
+                                $profileUrl = asset('img/default-profile.png');
+                                $profilePath = null;
                             }
                         @endphp
 
                         @if($profileFilename && file_exists($profilePath))
                             <img src="{{ $profileUrl }}" alt="Profile" style="max-height: 150px; border-radius: 8px;">
                         @else
-                            <em>Tidak ada foto profil</em>
+                            <img src="{{ asset('img/default-profile.png') }}" alt="Default Profile" style="max-height: 150px; border-radius: 8px;">
                         @endif
                     </td>
                 </tr>
