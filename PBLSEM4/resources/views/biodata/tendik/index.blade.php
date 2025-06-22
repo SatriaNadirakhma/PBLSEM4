@@ -126,18 +126,18 @@
                 ]
             });
 
-    let delayTimer;
-    $('#searchInput').on('keyup', function () {
-        clearTimeout(delayTimer);
-        delayTimer = setTimeout(() => {
-            dataTendik.ajax.reload();
-        }, 500);
-    });
+        let delayTimer;
+        $('#searchInput').on('keyup', function () {
+            clearTimeout(delayTimer);
+            delayTimer = setTimeout(() => {
+                dataTendik.ajax.reload();
+            }, 500);
+        });
 
-    $('#kampusFilter').on('change', function () {
-            dataTendik.ajax.reload();
-    });
-});
+        $('#kampusFilter').on('change', function () {
+                dataTendik.ajax.reload();
+        });
+        });
 
     </script>
 

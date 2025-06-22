@@ -361,7 +361,8 @@ class MahasiswaController extends Controller
         $mahasiswa = MahasiswaModel::select(
             'nim', 'nik', 'mahasiswa_nama', 'angkatan', 'no_telp',
             'alamat_asal', 'alamat_sekarang', 'jenis_kelamin',
-            'status', 'keterangan')
+            'status', 'keterangan', 'prodi_id')
+            ->with ('prodi')
             ->orderBy('mahasiswa_id')
             ->get();
 
@@ -397,7 +398,7 @@ class MahasiswaController extends Controller
             $sheet->setCellValue('I' . $baris, $value->jenis_kelamin);
             $sheet->setCellValue('J' . $baris, $value->status);
             $sheet->setCellValue('K' . $baris, $value->keterangan);
-            $sheet->setCellValue('K' . $baris, $value->prodi->prodi_nama ?? '-');
+            $sheet->setCellValue('L' . $baris, $value->prodi->prodi_nama ?? '-');
             $baris++;
         }
 
