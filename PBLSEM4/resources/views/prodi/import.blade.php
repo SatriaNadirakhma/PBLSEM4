@@ -55,8 +55,10 @@ $(document).ready(function() {
                             icon: 'success',
                             title: 'Berhasil',
                             text: response.message
+                        }).then(function() {
+                            location.reload();
                         });
-                        tableProdi.ajax.reload(); // pastikan DataTable kamu bernama tableProdi
+                        // tableProdi.ajax.reload(); // Jika ingin reload DataTable saja, hapus location.reload()
                     } else {
                         $('.error-text').text('');
                         $.each(response.msgField, function(prefix, val) {

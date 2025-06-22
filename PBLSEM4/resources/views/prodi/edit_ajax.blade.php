@@ -46,9 +46,7 @@
                         <select name="jurusan_id" id="jurusan_id" class="form-control" required>
                             <option value="">- Pilih Jurusan -</option>
                             @foreach($jurusan as $l)
-                                <option value="{{ $l->jurusan_id }}" {{ $l->jurusan_id == $l->jurusan_id ? 'selected' : '' }}>
-                                    {{ $l->jurusan_nama }}
-                                </option>
+                                <option value="{{ $l->jurusan_id }}">{{ $l->jurusan_nama }}</option>
                             @endforeach
                         </select>
                         <small id="error-jurusan_id" class="error-text form-text text-danger"></small>
@@ -95,13 +93,10 @@
                                 icon: 'success',
                                 title: 'Berhasil',
                                 text: response.message
+                            }).then(function() {
+                                // Reload halaman setelah edit berhasil
+                                location.reload();
                             });
-
-                            // Reload DataTables Prodi
-                            if (typeof dataProdi !== 'undefined') {
-                                console.log('Reload DataTables');
-                                dataProdi.ajax.reload(null, true);
-                            }
 
                             // Reset form setelah modal ditutup
                             $('#form-edit-prodi')[0].reset();
