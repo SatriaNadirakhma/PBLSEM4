@@ -11,6 +11,15 @@
         margin-top: 0.25rem;
         display: none;
     }
+    .invalid-feedback {
+        color: #dc3545;
+        font-size: 0.875em;
+        margin-top: 0.25rem;
+        display: none;
+    }
+    .is-invalid {
+        border-color: #dc3545 !important;
+    }
 </style>
 @endpush
 
@@ -77,7 +86,7 @@
                     <div class="alert alert-warning d-flex align-items-center" role="alert">
                         <i class="fas fa-exclamation-triangle mr-2"></i>
                         <div>
-                            Anda hanya bisa mengubah <strong>No. Telepon</strong>, <strong>Alamat Asal</strong>, dan <strong>Alamat Sekarang</strong>. 
+                            Anda hanya bisa mengubah <strong>No. Telepon</strong>, <strong>Alamat Asal</strong>, dan <strong>Alamat Sekarang</strong>.
                             Untuk mengubah data lainnya harap menghubungi admin.
                         </div>
                     </div>
@@ -100,8 +109,9 @@
                     </div>
 
                     <div class="form-group">
-                        <label>No. Telepon</label>
-                        <input type="text" name="no_telp" class="form-control" value="{{ $tendik->no_telp }}">
+                        <label for="no_telp">No. Telepon</label>
+                        <input type="text" name="no_telp" id="no_telp" class="form-control" value="{{ $tendik->no_telp }}" pattern="[0-9]*" title="Hanya angka yang diperbolehkan" data-minlength="10" data-maxlength="13">
+                        <div class="invalid-feedback" id="no_telp-error"></div>
                     </div>
 
                     <div class="form-group">
@@ -142,6 +152,9 @@
     $(document).ready(function () {
         $('#btn-edit').on('click', function () {
             $('#editModal').modal('show');
+            // Clear any previous validation errors when opening the modal
+            $('#no_telp').removeClass('is-invalid');
+            $('#no_telp-error').hide().text('');
         });
 
         $('.readonly-field').on('focus click', function () {
@@ -156,6 +169,29 @@
 
         $('#form-edit').on('submit', function (e) {
             e.preventDefault();
+
+            let noTelpInput = $('#no_telp');
+            let noTelp = noTelpInput.val();
+            let noTelpError = $('#no_telp-error');
+            let minLength = noTelpInput.data('minlength');
+            let maxLength = noTelpInput.data('maxlength');
+
+            // Clear previous errors
+            noTelpInput.removeClass('is-invalid');
+            noTelpError.hide().text('');
+
+            // Validate phone number
+            if (!/^[0-9]+$/.test(noTelp)) {
+                noTelpInput.addClass('is-invalid');
+                noTelpError.text('Nomor telepon hanya boleh mengandung angka.').show();
+                return;
+            }
+
+            if (noTelp.length < minLength || noTelp.length > maxLength) {
+                noTelpInput.addClass('is-invalid');
+                noTelpError.text(`Nomor telepon harus antara ${minLength} dan ${maxLength} digit.`).show();
+                return;
+            }
 
             Swal.fire({
                 title: 'Simpan perubahan?',
