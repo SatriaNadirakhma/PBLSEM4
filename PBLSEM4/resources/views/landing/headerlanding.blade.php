@@ -1,25 +1,51 @@
 <header id="header" class="header d-flex align-items-center fixed-top bg-white">
-    <style>
-     .btn-gradient {
-  display: inline-block;
-  padding: 12px 24px;
-  background: linear-gradient(to right, #007bff, #1e90ff);
-  color: white;
-  text-decoration: none;
-  border: none;
-  border-radius: 8px;
-  font-weight: bold;
-  font-size: 16px;
-  font-family: sans-serif;
-  transition: background 0.3s ease; /* hanya transisi background */
-}
+  <style>
+  .btn-gradient {
+    display: inline-block;
+    padding: 12px 32px;
+    background: linear-gradient(to right, #007bff, #1e90ff);
+    color: white;
+    text-decoration: none;
+    border: none;
+    border-radius: 999px; /* pill shape */
+    font-weight: bold;
+    font-size: 16px;
+    font-family: sans-serif;
+    transition: background 0.3s ease;
+    outline: 1px solid #1e90ff; /* outline color */
+    outline-offset: 4px; /* space around the button */
+  }
 
-.btn-gradient:hover {
-  background: linear-gradient(to right, #0056b3, #187bcd); /* warna baru saat hover */
-  color: white; /* ini penting agar font tetap putih */
-  text-decoration: none; /* pastikan tidak muncul underline */
-}
-      </style>
+  .btn-white {
+    display: inline-block;
+    padding: 12px 32px;
+    background: #fff;
+    color: #1e90ff;
+    text-decoration: none;
+    border: none;
+    border-radius: 999px; /* pill shape */
+    font-weight: bold;
+    font-size: 16px;
+    font-family: sans-serif;
+    transition: background 0.3s ease, color 0.3s ease;
+    outline: 1px solid #ffffff; /* outline color */
+    outline-offset: 4px; /* space around the button */
+  }
+
+  .btn-white:hover {
+    background: #f0f8ff;
+    color: #0056b3;
+    text-decoration: none;
+    outline: 3px solid #187bcd;
+  }
+
+  .btn-gradient:hover {
+    background: linear-gradient(to right, #0056b3, #187bcd);
+    color: white;
+    text-decoration: none;
+    outline: 3px solid #187bcd;
+  }
+  </style>
 
 <div class="container position-relative d-flex align-items-center justify-content-between">
 

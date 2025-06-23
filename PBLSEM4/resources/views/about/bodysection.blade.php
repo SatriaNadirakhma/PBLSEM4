@@ -8,6 +8,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Tentang Sipinta</title>
+  <link rel="icon" type="image/png" href="{{ asset('img/logo.png') }}">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
 
   <style>
@@ -185,7 +186,7 @@
       </div>
     <div class="team-content">
       <h4>Satria Rakhmadani</h4>
-      <span class="position">Project Manager</span>
+      <span class="position">Project Manager, UI/UX Designer, & Full-Stack</span>
     </div>
   </div>
 </div><!-- End Team Member -->
@@ -200,7 +201,7 @@
     </div>
     <div class="team-content">
       <h4>Aqila Nur Azza</h4>
-      <span class="position">Back End Developer</span>
+      <span class="position">Database Administrator & Full-Stack Developer</span>
     </div>
   </div>
 </div><!-- End Team Member -->
@@ -214,7 +215,7 @@
     </div>
     <div class="team-content">
       <h4>Faiza Anasthasya Eka Valen</h4>
-      <span class="position">Back End Developer</span>
+      <span class="position">Database Administrator & Back-End Developer</span>
     </div>
   </div>
 </div><!-- End Team Member -->
@@ -228,7 +229,7 @@
     </div>
     <div class="team-content">
       <h4>Lyra Faiqah Bilqis</h4>
-      <span class="position">Front End Developer</span>
+      <span class="position">UI/UX Designer & Front-End Developer</span>
     </div>
   </div>
 </div><!-- End Team Member -->
@@ -242,7 +243,7 @@
     </div>
     <div class="team-content">
       <h4>M. Reishi Fauzi</h4>
-      <span class="position">Front End Developer</span>
+      <span class="position">Full-Stack Developer</span>
     </div>
   </div>
 </div><!-- End Team Member -->

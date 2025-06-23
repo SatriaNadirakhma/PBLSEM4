@@ -18,7 +18,31 @@
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>
 
-      <a class="btn-getstarted" href="/login">Masuk!</a>
+      <a class="btn-gradient" href="/login">Masuk!</a>
+      <style>
+        .btn-gradient {
+          display: inline-block;
+          padding: 12px 32px;
+          background: linear-gradient(to right, #007bff, #1e90ff);
+          color: white;
+          text-decoration: none;
+          border: none;
+          border-radius: 999px; /* pill shape */
+          font-weight: bold;
+          font-size: 16px;
+          font-family: sans-serif;
+          transition: background 0.3s ease;
+          outline: 1px solid #1e90ff; /* outline color */
+          outline-offset: 4px; /* space around the button */
+        }
+
+        .btn-gradient:hover {
+          background: linear-gradient(to right, #0056b3, #187bcd);
+          color: white;
+          text-decoration: none;
+          outline: 3px solid #187bcd;
+        }
+      </style>
 
     </div>
 </header>

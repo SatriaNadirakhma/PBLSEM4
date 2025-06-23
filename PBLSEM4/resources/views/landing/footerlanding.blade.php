@@ -38,6 +38,7 @@
     display: inline-block;
     margin-right: 10px;
     color: white;
+    position: relative;
   }
 
   .footer .social-links a:hover {
@@ -66,6 +67,7 @@
     <div class="row gy-4">
       <!-- Kolom Kiri - Info Polinema -->
       <div class="col-lg-4 col-md-6 footer-about">
+        <img src="{{ asset('img/logo_polinema.png') }}" alt="Logo Polinema" style="max-width: 100px; margin-bottom: 28px;">
         <a href="index.html" class="logo d-flex align-items-center">
           <span class="sitename">Sipinta <br> Polinema</span>
         </a>
@@ -87,9 +89,9 @@
       <div class="col-lg-2 col-md-3 footer-links">
         <h4>Dukungan</h4>
         <ul>
-          <li><a href="#">Polinema</a></li>
-          <li><a href="#">UPA Bahasa</a></li>
-          <li><a href="#">ITC</a></li>
+          <li><a href="https://www.polinema.ac.id/" target="_blank" rel="noopener">Polinema</a></li>
+          <li><a href="https://www.instagram.com/upabahasa/" target="_blank" rel="noopener">UPA Bahasa</a></li>
+          <li><a href="https://itc-indonesia.com/" target="_blank" rel="noopener">ITC</a></li>
         </ul>
       </div>
 
@@ -97,9 +99,9 @@
       <div class="col-lg-3 col-md-3 footer-links">
         <h4>PSDKU Polinema</h4>
         <ul>
-          <li><a href="#">PSDKU Pamekasan</a></li>
-          <li><a href="#">PSDKU Kediri</a></li>
-          <li><a href="#">PSDKU Lumajang</a></li>
+          <li><a href="https://opac-pamekasan.polinema.ac.id/" target="_blank" rel="noopener">PSDKU Pamekasan</a></li>
+          <li><a href="https://opac-kediri.polinema.ac.id/" target="_blank" rel="noopener">PSDKU Kediri</a></li>
+          <li><a href="https://psdkulumajang.polinema.ac.id/" target="_blank" rel="noopener">PSDKU Lumajang</a></li>
         </ul>
       </div>
 
@@ -107,8 +109,8 @@
       <div class="col-lg-3 col-md-3 footer-links">
         <h4>Learning</h4>
         <ul>
-          <li><a href="#">LMS</a></li>
-          <li><a href="#">OKI Polinema</a></li>
+          <li><a href="https://lmsslc.polinema.ac.id/">LMS</a></li>
+          <li><a href="https://okipolinema.wordpress.com/about/">OKI Polinema</a></li>
           <li><a href="#">Cookies Policy</a></li>
         </ul>
       </div>
